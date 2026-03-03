@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('division_name');
             $table->time('checkin_time');
             $table->time('checkout_time');
-            $table->time('tollerance'); 
+            $table->time('tolerance');
             $table->timestamps();
         });
     }
