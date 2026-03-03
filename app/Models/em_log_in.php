@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class em_log_in extends Model
+class Em_log_in extends Model
 {
     protected $table = "employee_log_in";
 
@@ -18,6 +18,6 @@ class em_log_in extends Model
     public $timestamps = true;
 
     public function employee() {
-        return $this->hasMany(Employee::class);
+        return $this->belongsTo(Employee::class);
     }
 }

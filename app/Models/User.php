@@ -50,4 +50,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Employee::class);
     }
+
+    public $timestamps = true;
 }

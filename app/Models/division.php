@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class division extends Model
+class Division extends Model
 {
     //
     protected $table = "division";
@@ -17,8 +17,8 @@ class division extends Model
     ];
     public $timestamps = true;
 
-    public function division() {
-        return $this->belongsTo(Employee::class);
+    public function employee() {
+        return $this->hasMany(Employee::class);
     }
 
 }
