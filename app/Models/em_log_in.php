@@ -9,8 +9,8 @@ class Em_log_in extends Model
     protected $table = "employee_log_in";
 
     protected $fillable = [
-        "karyawan_id",
-        "time",
+        "employee_id",
+        "login_time",
         "status",
 
     ];

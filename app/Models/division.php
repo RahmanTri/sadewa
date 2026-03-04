@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Division extends Model
 {
-    //
     protected $table = "division";
     protected $fillable = [
-        "divison_name",
+        "division_name",
         "checkin_time",
         "checkout_time",
         "tolerance",
