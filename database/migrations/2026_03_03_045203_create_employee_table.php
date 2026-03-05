@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         Schema::create('employee', function (Blueprint $table) {
             $table->id();
+            $table->string('company_id')->unique();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->unsignedBigInteger('division_id');
-            $table->string('phone_number', 13);
-            $table->string('face_data');
+            $table->string('phone_number', 13)->unique();
+            $table->string('face_data')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
