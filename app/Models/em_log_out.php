@@ -9,8 +9,8 @@ class Em_log_out extends Model
   protected $table = "employee_log_out";
 
   protected $fillable = [
-    "karyawan_id",
-    "time",
+    "employee_id",
+    "logout_time",
     "status",
   ];                                                       
 

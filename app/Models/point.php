@@ -12,7 +12,7 @@ class Point extends Model
         [
             'employee_id',
             'checkin_point',
-            'early_cheackout_point',
+            'early_checkout_point',
             'late_point'
         ];
 
