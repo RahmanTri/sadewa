@@ -14,7 +14,7 @@ class em_log_in_controller extends Controller
         $retrieve = Em_log_in::all();
 
         return response()->json([
-            "Success" => true,
+            "success" => true,
             "message" => "Sukses mengambil data",
             "data" => $retrieve,
         ], 200);
