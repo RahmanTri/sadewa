@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
+use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Em_log_in;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use function PHPUnit\Framework\returnArgument;
 
 class em_log_in_controller extends Controller
 {
@@ -89,6 +95,49 @@ class em_log_in_controller extends Controller
         return response()->json([
             "success" => true,
             "message" => "Sukses menghapus data",
+        ], 200);
+    }
+
+    public function check_in(Request $request)
+    {
+        $time = Carbon::createFromFormat('H:i:s', $request->time);
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Unauthorized"
+            ], 401);
+        }
+
+        $employee = Employee::where('user_id', $user->id)->first();
+        $status = "";
+        $division = Division::where('id', $employee->division_id)->first();
+
+        $checkIn = Carbon::createFromFormat('H:i:s', $division->checkin_time);
+        $tolerance = (int) $division->tolerance;
+
+        $lowerBound = $checkIn->copy()->subMinutes($tolerance);
+        $upperBound = $checkIn->copy()->addMinutes($tolerance);
+
+        if ($time->between($lowerBound, $upperBound)) {
+            $status = "on_time";
+        } elseif ($time->gt($upperBound)) {
+            $status = "late";
+        }
+
+        $login_data = [
+            "employee_id" => $employee->id,
+            "login_time" => $time,
+            "status" => $status
+        ];
+
+        $data = Em_log_in::create($login_data);
+
+        return response()->json([
+            "success" => true,
+            "message" => "berhasil checkin dalam kondisi $status",
+            "data" => $data
         ], 200);
     }
 }

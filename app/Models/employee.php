@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model {
+class Employee extends Model
+{
 
   protected $table = "employee";
 
@@ -19,23 +20,28 @@ class Employee extends Model {
 
   public $timestamp = true;
 
-  public function division() {
-    return $this->hasMany(division::class);
+  public function division()
+  {
+    return $this->belongsTo(division::class, 'division_id', 'id');
   }
 
-  public function user() {
+  public function user()
+  {
     return $this->belongsTo(user::class);
   }
 
-  public function point() {
+  public function point()
+  {
     return $this->belongsTo(point::class);
   }
 
-  public function em_log_in() {
+  public function em_log_in()
+  {
     return $this->belongsTo(em_log_in::class);
   }
 
-  public function em_log_out() {
+  public function em_log_out()
+  {
     return $this->belongsTo(em_log_out::class);
   }
 }

@@ -29,10 +29,14 @@ Route::post('/em-log-in/store', [em_log_in_controller::class, 'store']);
 Route::post('/em-log-in/update/{id}', [em_log_in_controller::class, 'update']);
 Route::post('/em-log-in/delete/{id}', [em_log_in_controller::class, 'destroy']);
 
+Route::middleware("auth:sanctum")->group(function () {
+    Route::post('/em-login/chkin', [em_log_in_controller::class, 'check_in']);
+});
+
 //CRUD Employee
 Route::get('/employee', [employee_controller::class, 'index']);
-Route::post('/employee/add', [employee_controller::class,'store']);
-Route::post('/employee/update/{id}', [employee_controller::class,'update']);
-Route::post('/employee/delete/{id}', [employee_controller::class,'destroy']);
+Route::post('/employee/add', [employee_controller::class, 'store']);
+Route::post('/employee/update/{id}', [employee_controller::class, 'update']);
+Route::post('/employee/delete/{id}', [employee_controller::class, 'destroy']);
 
 //DST

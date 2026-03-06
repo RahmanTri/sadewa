@@ -48,9 +48,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function employee() 
+    public function employee()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class, "user_id", "id");
     }
 
     public $timestamps = true;
