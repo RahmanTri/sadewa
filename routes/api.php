@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\auth_controller;
 use App\Http\Controllers\division_controller;
 use App\Http\Controllers\em_log_in_controller;
 use App\Http\Controllers\employee_controller;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+//AUTH
+Route::post('/register', [auth_controller::class, 'register']);
+Route::post('/login', [auth_controller::class, 'login']);
 
 //CRUD Division
 Route::get('/division', [division_controller::class, 'index']);
