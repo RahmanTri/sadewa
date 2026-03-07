@@ -16,6 +16,8 @@ class Employee extends Model
     "division_id",
     "phone_number",
     "face_data",
+    "logged_in",
+    "logged_out"
   ];
 
   public $timestamp = true;
