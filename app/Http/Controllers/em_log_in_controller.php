@@ -10,6 +10,7 @@ use App\Models\Em_log_in;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Response;
 use function PHPUnit\Framework\returnArgument;
 
 class em_log_in_controller extends Controller
@@ -131,6 +132,13 @@ class em_log_in_controller extends Controller
             "login_time" => $time,
             "status" => $status
         ];
+
+        if ($time->lt($lowerBound)) {
+            return response()->json([
+                "success" => false,
+                "message" => "gagal check-in, diluar jam kerja"
+            ], 403);
+        }
 
         $data = Em_log_in::create($login_data);
 
