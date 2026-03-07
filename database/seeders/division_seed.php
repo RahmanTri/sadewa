@@ -23,11 +23,12 @@ class division_seed extends Seeder
             "tolerance" => "30"
         ]);
 
-        // User::create([
-        //     "role" => "employee",
-        //     "email" => "employee01@gmail.com",
-        //     "password" => Hash::make("employee123")
-        // ]);
+        User::create([
+            "role" => "employee",
+            "username" => "employee01",
+            "email" => "employee01@gmail.com",
+            "password" => Hash::make("employee123")
+        ]);
 
         Employee::create([
             "company_id" => "MP01",
