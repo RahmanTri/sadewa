@@ -5,9 +5,11 @@ use App\Http\Controllers\division_controller;
 use App\Http\Controllers\em_log_in_controller;
 use App\Http\Controllers\em_log_out_controller;
 use App\Http\Controllers\employee_controller;
+use App\Http\Controllers\point_controller;
 use App\Http\Controllers\user_controller;
 use App\Models\Division;
 use App\Models\Em_log_in;
+use App\Models\Point;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,11 +36,25 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/em-log-in/update/{id}', [em_log_in_controller::class, 'update']);
     Route::post('/em-log-in/delete/{id}', [em_log_in_controller::class, 'destroy']);
 
+    //CRUD Em_log_out
+    Route::get('/em-log-out', [em_log_out_controller::class, 'index']);
+    Route::post('/em-log-out/store', [em_log_out_controller::class, 'store']);
+    Route::post('/em-log-out/update/{id}', [em_log_out_controller::class, 'update']);
+    Route::post('/em-log-out/delete/{id}', [em_log_out_controller::class, 'delete']);
+
     //CRUD Employee
     Route::get('/employee', [employee_controller::class, 'index']);
     Route::post('/employee/add', [employee_controller::class, 'store']);
     Route::post('/employee/update/{id}', [employee_controller::class, 'update']);
     Route::post('/employee/delete/{id}', [employee_controller::class, 'destroy']);
+
+    //CRUD Point
+    Route::get('/point', [point_controller::class, 'index']);
+    Route::post('/point/store', [point_controller::class, 'store']);
+    Route::post('/point/update/{id}', [point_controller::class, 'update']);
+    Route::post('/point/delete/{id}', [point_controller::class, 'delete']);
+
+    //C
 
     //CHECK IN
     Route::post('/em-log/chkin', [em_log_in_controller::class, 'check_in']);
