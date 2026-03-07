@@ -115,6 +115,14 @@ class em_log_in_controller extends Controller
         $status = "";
         $division = Division::where('id', $employee->division_id)->first();
 
+        if ($employee->logged_in) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah melakukan log in hari ini',
+            ], 422);
+        }
+
+
         $checkIn = Carbon::createFromFormat('H:i:s', $division->checkin_time);
         $tolerance = (int) $division->tolerance;
 
@@ -141,6 +149,8 @@ class em_log_in_controller extends Controller
         }
 
         $data = Em_log_in::create($login_data);
+
+        $employee->update(["logged_in" => 1]);
 
         return response()->json([
             "success" => true,
