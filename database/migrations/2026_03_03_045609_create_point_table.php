@@ -13,9 +13,9 @@ return new class extends Migration {
         Schema::create('point', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->integer('point_value');
-            $table->integer('positive_streak');
-            $table->integer('negative_streak');
+            $table->integer('point_value')->default(75);
+            $table->integer('positive_streak')->default(0);
+            $table->integer('negative_streak')->default(0);
             $table->timestamps();
         });
     }

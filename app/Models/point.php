@@ -11,9 +11,9 @@ class Point extends Model
     protected $fillable =
         [
             'employee_id',
-            'checkin_point',
-            'early_checkout_point',
-            'late_point'
+            'point_value',
+            'psitive_streak',
+            'negative_streak'
         ];
 
     public function employee()

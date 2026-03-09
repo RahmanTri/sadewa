@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Point;
 
 class employee_controller extends Controller
 {
@@ -130,4 +133,100 @@ class employee_controller extends Controller
             "data" => $target,
         ], 200);
     }
+    public function emregister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "username" => "required|string|max:24",
+            "password" => "required|string|min:8",
+            "email" => "required|email",
+            "name" => "required|string|max:150",
+            "division_id" => "required",
+            "phone_number" => "required|string|max:13|min:12",
+
+        ], [
+            "username.required" => "Username harus diisi!",
+            "username.max" => "Username maksimal 24 karakter",
+            "password.required" => "Password harus diisi!",
+            "pasword.min" => "Buat password setidaknya 8 karakter",
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid",
+            "name.required" => "Nama tidak boleh kosong!",
+            "name.max" => "Nama maksimal 150 karakter!",
+            "division_id.required" => "ID divisi harus diisi!",
+            "phone_number.required" => "Nomor telepon harus diisi!",
+            "phone_number.max" => "Nomor telepon tidak valid",
+            "phone_number.min" => "Nomor telepon tidak valid",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal mendaftar!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validate();
+
+        $companyPrefix = 'KKS';
+        $divisonId = $validatedData['division_id'];
+        $idNumber = Employee::max('id') + 1 ?? 0;
+        $companyId = $companyPrefix . str_pad($divisonId, 2, '0', STR_PAD_LEFT) . str_pad($idNumber, 3, '0', STR_PAD_LEFT);
+
+        $createdUser = User::where('email', $validatedData['email'])->first();
+
+        if (!$createdUser) {
+
+            $data = User::create([
+                "username" => $validatedData["username"],
+                "password" => Hash::make($validatedData["password"]),
+                "email" => $validatedData["email"],
+                // "role" => $validatedData["role"],
+            ]);
+        } else {
+            $data = $createdUser;
+        }
+
+        $createdEmployee = Employee::where('user_id', $data["user_id"])->first();
+
+        if (!$createdEmployee) {
+
+            $employee = Employee::create([
+                "user_id" => $data->id,
+                "name" => $validatedData["name"],
+                "company_id" => $companyId,
+                "phone_number" => $validatedData["phone_number"],
+                "division_id" => $validatedData["division_id"],
+            ]);
+        } else {
+            $employee = $createdEmployee;
+        }
+
+        $createdPoint = Point::where("employee_id", $employee["id"])->first();
+
+        if (!$createdPoint) {
+
+            $point = Point::create([
+                "employee_id" => $employee->id,
+            ]);
+
+        } else {
+            $point = $createdPoint;
+        }
+
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Sukses membuat akun",
+                "data" => [
+                    "user_data" => $data,
+                    "employee_data" => $employee,
+                    "pont_data" => $point,
+                ],
+            ],
+            201
+        );
+    }
+
 }
