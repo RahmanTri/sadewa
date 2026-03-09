@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('division_id');
             $table->string('phone_number', 13)->unique();
             $table->string('face_data')->nullable();
+            $table->binary('profile_pic')->nullable();
             $table->boolean('logged_in')->default(false);
             $table->boolean('logged_out')->default(false);
             $table->timestamps();

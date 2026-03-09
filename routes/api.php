@@ -27,34 +27,33 @@ Route::middleware("auth:sanctum")->group(function () {
     //CRUD Division
     Route::get('/division', [division_controller::class, 'index']);
     Route::post('/division/store', [division_controller::class, 'store']);
-    Route::post('/division/update/{id}', [division_controller::class, 'update']);
-    Route::post('/division/delete/{id}', [division_controller::class, 'destroy']);
+    Route::put('/division/update/{id}', [division_controller::class, 'update']);
+    Route::delete('/duri: ivision/delete/{id}', [division_controller::class, 'destroy']);
 
     //CRUD Em_log_in
     Route::get('/em-log-in', [em_log_in_controller::class, 'index']);
     Route::post('/em-log-in/store', [em_log_in_controller::class, 'store']);
-    Route::post('/em-log-in/update/{id}', [em_log_in_controller::class, 'update']);
-    Route::post('/em-log-in/delete/{id}', [em_log_in_controller::class, 'destroy']);
+    Route::put('/em-log-in/update/{id}', [em_log_in_controller::class, 'update']);
+    Route::delete('/em-log-in/delete/{id}', [em_log_in_controller::class, 'destroy']);
 
     //CRUD Em_log_out
     Route::get('/em-log-out', [em_log_out_controller::class, 'index']);
     Route::post('/em-log-out/store', [em_log_out_controller::class, 'store']);
-    Route::post('/em-log-out/update/{id}', [em_log_out_controller::class, 'update']);
-    Route::post('/em-log-out/delete/{id}', [em_log_out_controller::class, 'delete']);
+    Route::put('/em-log-out/update/{id}', [em_log_out_controller::class, 'update']);
+    Route::delete('/em-log-out/delete/{id}', [em_log_out_controller::class, 'delete']);
 
     //CRUD Employee
     Route::get('/employee', [employee_controller::class, 'index']);
     Route::post('/employee/add', [employee_controller::class, 'store']);
-    Route::post('/employee/update/{id}', [employee_controller::class, 'update']);
-    Route::post('/employee/delete/{id}', [employee_controller::class, 'destroy']);
+    Route::put('/employee/update/{id}', [employee_controller::class, 'update']);
+    Route::delete('/employee/delete/{id}', [employee_controller::class, 'destroy']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);
     Route::post('/point/store', [point_controller::class, 'store']);
-    Route::post('/point/update/{id}', [point_controller::class, 'update']);
-    Route::post('/point/delete/{id}', [point_controller::class, 'delete']);
+    Route::put('/point/update/{id}', [point_controller::class, 'update']);
+    Route::delete('/point/delete/{id}', [point_controller::class, 'delete']);
 
-    //C
 
     //CHECK IN
     Route::post('/em-log/chkin', [em_log_in_controller::class, 'check_in']);
@@ -63,5 +62,5 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/em-log/chkout', [em_log_out_controller::class, 'check_out']);
 
     //USER
-    Route::get('/user', [user_controller::class,'index']);
+    Route::get('/user', [user_controller::class, 'index']);
 });

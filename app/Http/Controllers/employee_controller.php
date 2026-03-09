@@ -72,14 +72,12 @@ class employee_controller extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            "user_id" => "sometimes|required",
             "name" => "sometimes|required|string|max:150",
             "company_id" => "sometimes|required|string|max:8",
             "division_id" => "sometimes|required",
             "phone_number" => "sometimes|required|string|max:13",
             "face_data" => "sometimes|nullable",
         ], [
-            "user_id.required" => "ID user tidak boleh kosong",
             "name.required" => "Nama tidak boleh kosong",
             "name.max" => "Nama maksimal 150 karakter",
             "company_id.required" => "ID karyawan perushaan tidak boleh kosong",
