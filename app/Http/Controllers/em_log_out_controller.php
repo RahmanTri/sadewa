@@ -115,6 +115,13 @@ class em_log_out_controller extends Controller
 		$chkoutTime = Carbon::createFromFormat('H:i:s', $division->checkout_time);
 		$timeTolerance = (int) $division->tolerance;
 
+		if ($employee->logged_out) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Anda sudah  melakukan log out hari ini',
+			], 422);
+		}
+
 		$lowerBound = $chkoutTime->copy()->subMinutes($timeTolerance);
 		$upperBound = $chkoutTime->copy()->addMinutes($timeTolerance);
 
@@ -135,6 +142,8 @@ class em_log_out_controller extends Controller
 		];
 
 		$data = Em_log_out::create($logout_data);
+
+		$employee->update(["logged_out" => 1]);
 
 		return response()->json([
 			"success" => true,
