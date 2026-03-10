@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Em_log_in extends Model
 {
+    use HasFactory;
     protected $table = "employee_log_in";
 
     protected $fillable = [
@@ -17,7 +19,8 @@ class Em_log_in extends Model
 
     public $timestamps = true;
 
-    public function employee() {
+    public function employee()
+    {
         return $this->belongsTo(Employee::class);
     }
 }

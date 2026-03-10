@@ -3,26 +3,20 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Division;
-use App\Models\User;
-use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Seeder;
+use App\Models\Employee;
+use App\Models\User;
+use App\Models\Division;
 
-class division_seed extends Seeder
+
+class baseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Division::create([
-            "division_name" => "Mobile Production",
-            "checkin_time" => "09:00:00",
-            "checkout_time" => "17:00:00",
-            "tolerance" => "30"
-        ]);
-
         User::create([
             "role" => "employee",
             "username" => "employee01",
@@ -30,8 +24,22 @@ class division_seed extends Seeder
             "password" => Hash::make("employee123")
         ]);
 
+        User::create([
+            "role" => "admin",
+            "username" => "admin01",
+            "email" => "admin01@gmail.com",
+            "password" => Hash::make("admin12345")
+        ]);
+
+        Division::create([
+            "division_name" => "Mobile Production",
+            "checkin_time" => "09:00:00",
+            "checkout_time" => "17:00:00",
+            "tolerance" => "30"
+        ]);
+
         Employee::create([
-            "company_id" => "MP01",
+            "company_id" => 'KSS1001',
             "user_id" => 1,
             "name" => "David",
             "division_id" => 1,
