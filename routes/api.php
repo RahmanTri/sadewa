@@ -8,9 +8,7 @@ use App\Http\Controllers\em_log_out_controller;
 use App\Http\Controllers\employee_controller;
 use App\Http\Controllers\point_controller;
 use App\Http\Controllers\user_controller;
-use App\Models\Division;
-use App\Models\Em_log_in;
-use App\Models\Point;
+use App\Http\Controllers\history_log_controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -69,5 +67,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/register', [employee_controller::class, 'emregister']);
 
     //DASHBOARD
-    Route::get('/dashboard/fetch', [dashboard_controller::class,'fetch']);
+    Route::get('/dashboard/fetch', [dashboard_controller::class, 'fetch']);
+    Route::get('/dashboard/log', [history_log_controller::class, 'index']);
+    
 });
