@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Division;
 use App\Models\Employee;
 use App\Models\User;
+use App\Models\Point;
 use Illuminate\Http\Request;
 use App\Models\Em_log_in;
 use Illuminate\Support\Facades\Validator;
@@ -112,6 +113,17 @@ class em_log_in_controller extends Controller
         }
 
         $employee = Employee::where('user_id', $user->id)->first();
+        $userPoint = Point::where('employee_id', $employee->id)->first();
+
+        if (!$userPoint) {
+            $Point = Point::create([
+                'employee_id' => $employee->id,
+            ]);
+            $userPoint->save();
+        } else {
+            $Point = $userPoint;
+        }
+
         $status = "";
         $division = Division::where('id', $employee->division_id)->first();
 
@@ -150,12 +162,41 @@ class em_log_in_controller extends Controller
 
         $data = Em_log_in::create($login_data);
 
+        if ($Point->positive_streak >= 5) {
+            $Point->point_value += 2;
+        } elseif ($Point->negative_streak >= 3) {
+            $Point->point_value -= 2;
+        } elseif ($Point->positive_streak && $status == "late") {
+            $Point->point_value -= 1;
+        } else {
+            $Point->point_value += 1;
+        }
+
+        if ($Point->positive_streak != 0 && $status == "on_time") {
+            $Point->positive_streak += 1;
+        } elseif ($Point->positive_streak != 0 && $status == "late") {
+            $Point->positive_streak == 0;
+            $Point->negative_streak += 1;
+        } elseif ($Point->negative_streak != 0 && $status == "on_time") {
+            $Point->negative_streak == 0;
+            $Point->positive_streak += 1;
+        } elseif ($Point->negative_streak != 0 && $status == "late") {
+            $Point->negative_streak += 1;
+        } else {
+            $Point->positive_streak += 1;
+        }
+
+        $Point->save();
+
         $employee->update(["logged_in" => 1]);
 
         return response()->json([
             "success" => true,
             "message" => "berhasil checkin dalam kondisi $status",
-            "data" => $data
+            "data" => [
+                "employee" => $data,
+                "point" => $Point,
+            ]
         ], 200);
     }
 }
