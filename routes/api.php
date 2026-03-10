@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\auth_controller;
+use App\Http\Controllers\dashboard_controller;
 use App\Http\Controllers\division_controller;
 use App\Http\Controllers\em_log_in_controller;
 use App\Http\Controllers\em_log_out_controller;
@@ -66,4 +67,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //EM REGISTER (ADMIN ONLY)
     Route::post('/employee/register', [employee_controller::class, 'emregister']);
+
+    //DASHBOARD
+    Route::get('/dashboard/fetch', [dashboard_controller::class,'fetch']);
 });
