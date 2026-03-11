@@ -49,6 +49,14 @@ class Employee extends Model
     return $this->belongsTo(em_log_out::class);
   }
 
+  protected function casts(): array
+  {
+    return [
+      'created_at' => 'date:Y-m-d',
+      'updated_at' => 'date:Y-m-d',
+    ];
+  }
+
   public function scopeGetByDiv($query, $div_id, $day)
   {
     $query->where('division_id', '=', $div_id)
