@@ -20,4 +20,11 @@ class Division extends Model
         return $this->hasMany(Employee::class);
     }
 
+    protected function casts(): array
+    {
+        return [
+            'created_at'=> 'date:Y-m-d',
+            'updated_at'=> 'date:Y-m-d',
+        ];
+    }
 }

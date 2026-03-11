@@ -46,6 +46,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/add', [employee_controller::class, 'store']);
     Route::put('/employee/update/{id}', [employee_controller::class, 'update']);
     Route::delete('/employee/delete/{id}', [employee_controller::class, 'destroy']);
+    Route::delete('/employee/delete', [employee_controller::class,'deleteAccount']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);
@@ -70,4 +71,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('/dashboard/fetch', [dashboard_controller::class, 'fetch']);
     Route::get('/dashboard/log', [history_log_controller::class, 'index']);
     
+    //MONITOR
+    Route::post('/monitor/get', [dashboard_controller::class, 'monitorAll']);
+    Route::post('/monitor/div', [dashboard_controller::class,'monitorDivision']);
 });

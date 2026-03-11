@@ -32,4 +32,12 @@ class Em_log_in extends Model
     public function scopeLateCount($query, $employee_id) {
         return $query->where('created_at','>=', now()->subDays(30))->where('employee_id',$employee_id)->where('status', 'late')->count();
     }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at'=> 'date:Y-m-d',
+            'updated_at'=> 'date:Y-m-d',
+        ];
+    }
 }

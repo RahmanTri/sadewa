@@ -229,4 +229,54 @@ class employee_controller extends Controller
         );
     }
 
+    public function deleteAccount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "username" => "required|string|max:24",
+            "email" => "required|email",
+
+        ], [
+            "username.required" => "Username tidak boleh kosong!",
+            "username.max" => "Username maksimal 24 karakter",
+            "email.required" => "Email tidak boleh kosong!",
+            "email.email" => "Email tidak valid",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 403);
+        }
+
+        $validatedData = $validator->validate();
+
+
+        $user = User::where("email", $validatedData["email"])->first();
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Akun tidak ada atau belum terdaftar!",
+            ], 403);
+        }
+
+        $employee = Employee::where('user_id', $user->id)->first();
+        $point = Point::where('employee_id', $employee->id)->first();
+
+        $deletedData = [
+            "user" => $user,
+            "employee" => $employee,
+            "point" => $point,
+        ];
+
+        $point->delete();
+        $employee->delete();
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sukses menghapus akun!',
+            'deleted_data' => $deletedData,
+        ], 200);
+    }
 }

@@ -28,4 +28,12 @@ class Em_log_out extends Model
   {
     return $query->where('created_at', '>=', now()->subDays($day))->where('employee_id', $employee_id)->get();
   }
+
+  protected function casts(): array
+    {
+        return [
+            'created_at'=> 'date:Y-m-d',
+            'updated_at'=> 'date:Y-m-d',
+        ];
+    }
 }

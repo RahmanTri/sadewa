@@ -22,4 +22,12 @@ class Point extends Model
     }
 
     public $timestamps = true;
+
+    protected function casts(): array
+    {
+        return [
+            'created_at'=> 'date:Y-m-d',
+            'updated_at'=> 'date:Y-m-d',
+        ];
+    }
 }
