@@ -67,6 +67,7 @@ class Employee extends Model
       ->join('division', 'division.id', '=', 'employee.division_id')
       ->selectRaw('DATE(employee_log_in.created_at) as date')
       ->addSelect(
+        'employee.company_id as code',
         'employee.name as employee_name',
         'employee.id as employee_id',
         'division.division_name as division',
@@ -88,6 +89,7 @@ class Employee extends Model
       ->join('division', 'division.id', '=', 'employee.division_id')
       ->selectRaw('DATE(employee_log_in.created_at) as date')
       ->addSelect(
+        'employee.company_id as code',
         'employee.name as employee_name',
         'employee.id as employee_id',
         'division.division_name as division',
