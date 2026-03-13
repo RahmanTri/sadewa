@@ -374,13 +374,15 @@ class employee_controller extends Controller
         if (isset($validatedData['profile_pic'])) {
             $employee->profile_pic = $imageFile->hashName() ?? $employee->profile_pic;
             Storage::disk('public')->delete('profile_pics/' . $oldImage);
-        };
+        }
+        ;
         $employee->save();
 
         $oldUserData = $user->toArray();
 
         $user->email = $validatedData["email"] ?? $user->email;
-        if (isset($validatedData['password'])) $user->password = Hash::make($validatedData["password"]) ?? $user->password;
+        if (isset($validatedData['password']))
+            $user->password = Hash::make($validatedData["password"]) ?? $user->password;
         $user->save();
 
         return response()->json([
@@ -396,6 +398,52 @@ class employee_controller extends Controller
                 ]
             ]
         ], 200);
+    }
 
+    public function regFace(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ada!"
+            ], 200);
+        }
+
+        $employee = Employee::where('user_id',$user->id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda bukan karyawan!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(),[
+            "face_data" => "required"
+        ],[
+            "face_data.required" => "Face data diperlukan!"
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Terjadi kegagalan",
+                "error" => $validator->errors(),
+            ], 401);
+        }
+
+        $validatedData = $validator->validate();
+        
+        $employee->face_data = $validatedData["face_data"] ?? $employee->face_data;
+
+        $employee->save();
+
+        return response()->json([
+            "success"=> true,
+            "data"=> $employee,
+        ], 200);
     }
 }
+
