@@ -46,9 +46,11 @@ Route::middleware("auth:sanctum")->group(function () {
     //CRUD Employee
     Route::get('/employee', [employee_controller::class, 'index']);
     Route::post('/employee/add', [employee_controller::class, 'store']);
-    Route::put('/employee/update/{id}', [employee_controller::class, 'update']);
+    Route::put('/employee/update', [employee_controller::class, 'update']);
     Route::delete('/employee/delete/{id}', [employee_controller::class, 'destroy']);
-    Route::delete('/employee/delete', [employee_controller::class, 'deleteAccount']);
+    Route::delete('/employee/delete', [employee_controller::class,'deleteAccount']);
+    Route::post('/employee/profile',[employee_controller::class,'updateProfile']);
+    Route::post('/employee/regface',[employee_controller::class,'regFace']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);

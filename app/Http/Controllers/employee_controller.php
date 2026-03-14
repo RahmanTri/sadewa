@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Validator;
@@ -25,10 +27,17 @@ class employee_controller extends Controller
 
     public function store(Request $request)
     {
-        $valida = Validator::make($request->all(), [
-            "user_id" => "required",
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ada!",
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
             "name" => "required|string|max:150",
-            "company_id" => "required|string|max:8",
             "division_id" => "required",
             "phone_number" => "required|string|max:13",
             "face_data" => "sometimes|nullable",
@@ -36,55 +45,86 @@ class employee_controller extends Controller
             "user_id.required" => "ID user tidak boleh kosong",
             "name.required" => "Nama tidak boleh kosong",
             "name.max" => "Nama maksimal 150 karakter",
-            "company_id.required" => "ID karyawan perushaan tidak boleh kosong",
-            "company_id.max" => "ID keryawan perusahaan maksimal 8 karakter",
             "division_id.required" => "ID divisi tidak boleh kosong",
             "phone_number.required" => "Nomor telepon tidak boleh kosong",
             "phone_number.max" => "Nomor telepon maksimal 13 angka",
         ]);
 
-        if ($valida->fails()) {
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'gagal menyimpan data',
-                'errors' => $valida->errors(),
+                'errors' => $validator->errors(),
             ], 422);
         }
 
-        $validatedData = $valida->validate();
+        $validatedData = $validator->validate();
 
-        $employee = Employee::create($validatedData);
+        $companyPrefix = 'KKS';
+        $divisonId = $validatedData['division_id'];
+        $idNumber = Employee::max('id') + 1 ?? 0;
+        $companyId = $companyPrefix . str_pad($divisonId, 2, '0', STR_PAD_LEFT) . str_pad($idNumber, 3, '0', STR_PAD_LEFT);
+
+        $createdEmployee = Employee::where('user_id', $user->id)->first();
+
+        if (!$createdEmployee) {
+            $employee = Employee::create([
+                'user_id' => $user->id,
+                'company_id' => $companyId,
+                'division_id' => $divisonId,
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number'],
+            ]);
+        } else {
+            $employee = $createdEmployee;
+        }
+
+        $createdPoint = Point::where('employee_id', $employee->id)->first();
+
+        if (!$createdPoint) {
+            $point = Point::create([
+                'employee_id' => $employee->id,
+            ]);
+        } else {
+            $point = $createdPoint;
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'sukses menambahkan data',
             'data' => $employee,
-        ], 200);
+            'point' => $point,
+        ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $user = Auth::user();
 
-        $target = Employee::find($id);
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada'
+            ], 403);
+        }
+
+        $target = Employee::where('user_id', $user->id)->first();
 
         if (!$target) {
             return response()->json([
                 'success' => false,
-                'message' => "data dengan ID $id tidak ditemukan",
+                'message' => "data dengan ID $user->id tidak ditemukan",
             ], 404);
         }
 
         $validator = Validator::make($request->all(), [
             "name" => "sometimes|required|string|max:150",
-            "company_id" => "sometimes|required|string|max:8",
             "division_id" => "sometimes|required",
             "phone_number" => "sometimes|required|string|max:13",
             "face_data" => "sometimes|nullable",
         ], [
             "name.required" => "Nama tidak boleh kosong",
             "name.max" => "Nama maksimal 150 karakter",
-            "company_id.required" => "ID karyawan perushaan tidak boleh kosong",
-            "company_id.max" => "ID keryawan perusahaan maksimal 8 karakter",
             "division_id.required" => "ID divisi tidak boleh kosong",
             "phone_number.required" => "Nomor telepon tidak boleh kosong",
             "phone_number.max" => "Nomor telepon maksimal 13 angka",
@@ -102,9 +142,14 @@ class employee_controller extends Controller
 
         $validatedData = $validator->validate();
 
-        $oldData = $target;
+        $oldData = $target->toArray();
 
-        $target->update($validatedData);
+        $target->update([
+            "name" => $validatedData["name"] ?? $target->name,
+            'division_id' => $validatedData['division_id'] ?? $target->division_id,
+            'phone_number' => $validatedData['phone_number'] ?? $target->phone_number,
+            'face_data' => $validatedData['face_data'] ?? $target->face_data,
+        ]);
 
         return response()->json([
             "success" => true,
@@ -279,4 +324,126 @@ class employee_controller extends Controller
             'deleted_data' => $deletedData,
         ], 200);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string|max:150',
+            'email' => 'sometimes|required|email',
+            "phone_number" => "required|string|max:13|min:12",
+            "password" => "sometimes|required|string|min:8",
+            "profile_pic" => "sometimes|required|image|mimes:png,jpg,jpeg|max:4096",
+        ], [
+            "name.required" => "Kolom nama tidak boleh kosong",
+            "name.max" => "Nama maksimal 150 karakter",
+            "email.required" => "kolom email tidak boleh kosong",
+            "email.email" => "Email tidak valid",
+            "phone_number.required" => "kolom nomor telepon tidak boleh kosong",
+            "phone_number.max" => "Nomor telepon tidak valid",
+            "phone_number.min" => "Nomor telepon tidak valid",
+            "password.required" => "kolom password tidak boleh kosong",
+            "password.min" => "Password minimal 8 karakter",
+            "profile_pic.required" => "foto profil tidak boleh kosong",
+            "profile_pic.image" => "File harus berupa gambar",
+            "profile_pic.mimes" => "Format file yang didukung adalah PNG, JPG, dan JPEG",
+            "profile_pic.max" => "Ukuran file maksimal 4MB",
+        ]);
+
+        if ($request->hasFile("profile_pic")) {
+            $imageFile = $request->file("profile_pic");
+            $path = $imageFile->storeAs("profile_pics", $imageFile->hashName(), "public");
+        }
+
+        $validatedData = $validator->validated();
+
+        $oldEmployeeData = $employee->toArray();
+        $oldImage = $employee->profile_pic;
+
+        $employee->name = $validatedData["name"] ?? $employee->name;
+        $employee->phone_number = $validatedData["phone_number"] ?? $employee->phone_number;
+        if (isset($validatedData['profile_pic'])) {
+            $employee->profile_pic = $imageFile->hashName() ?? $employee->profile_pic;
+            Storage::disk('public')->delete('profile_pics/' . $oldImage);
+        }
+        ;
+        $employee->save();
+
+        $oldUserData = $user->toArray();
+
+        $user->email = $validatedData["email"] ?? $user->email;
+        if (isset($validatedData['password']))
+            $user->password = Hash::make($validatedData["password"]) ?? $user->password;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            "data" => [
+                "user" => [
+                    "old" => $oldUserData,
+                    "new" => $user,
+                ],
+                "employee" => [
+                    "old" => $oldEmployeeData,
+                    "new" => $employee,
+                ]
+            ]
+        ], 200);
+    }
+
+    public function regFace(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ada!"
+            ], 200);
+        }
+
+        $employee = Employee::where('user_id',$user->id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda bukan karyawan!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(),[
+            "face_data" => "required"
+        ],[
+            "face_data.required" => "Face data diperlukan!"
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Terjadi kegagalan",
+                "error" => $validator->errors(),
+            ], 401);
+        }
+
+        $validatedData = $validator->validate();
+        
+        $employee->face_data = $validatedData["face_data"] ?? $employee->face_data;
+
+        $employee->save();
+
+        return response()->json([
+            "success"=> true,
+            "data"=> $employee,
+        ], 200);
+    }
 }
+
