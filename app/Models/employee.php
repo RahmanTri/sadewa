@@ -41,12 +41,12 @@ class Employee extends Model
 
   public function em_log_in()
   {
-    return $this->belongsTo(em_log_in::class);
+    return $this->hasMany(em_log_in::class, 'employee_id', 'id');
   }
 
   public function em_log_out()
   {
-    return $this->belongsTo(em_log_out::class);
+    return $this->hasMany(em_log_out::class, 'employee_id', 'id');
   }
 
   protected function casts(): array

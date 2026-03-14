@@ -21,7 +21,7 @@ class Em_log_out extends Model
 
   public function employee()
   {
-    return $this->hasMany(Employee::class);
+    return $this->belongsTo(Employee::class);
   }
 
   public function scopeDay($query, $day, $employee_id)
@@ -30,10 +30,10 @@ class Em_log_out extends Model
   }
 
   protected function casts(): array
-    {
-        return [
-            'created_at'=> 'date:Y-m-d',
-            'updated_at'=> 'date:Y-m-d',
-        ];
-    }
+  {
+    return [
+      'created_at' => 'date:Y-m-d',
+      'updated_at' => 'date:Y-m-d',
+    ];
+  }
 }

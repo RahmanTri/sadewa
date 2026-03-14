@@ -9,6 +9,8 @@ use App\Http\Controllers\employee_controller;
 use App\Http\Controllers\point_controller;
 use App\Http\Controllers\user_controller;
 use App\Http\Controllers\history_log_controller;
+use App\Http\Controllers\export_controller;
+use App\Http\Controllers\devLogin_controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +48,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/add', [employee_controller::class, 'store']);
     Route::put('/employee/update/{id}', [employee_controller::class, 'update']);
     Route::delete('/employee/delete/{id}', [employee_controller::class, 'destroy']);
-    Route::delete('/employee/delete', [employee_controller::class,'deleteAccount']);
+    Route::delete('/employee/delete', [employee_controller::class, 'deleteAccount']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);
@@ -70,8 +72,11 @@ Route::middleware("auth:sanctum")->group(function () {
     //DASHBOARD
     Route::get('/dashboard/fetch', [dashboard_controller::class, 'fetch']);
     Route::get('/dashboard/log', [history_log_controller::class, 'index']);
-    
+
     //MONITOR
     Route::post('/monitor/get', [dashboard_controller::class, 'monitorAll']);
-    Route::post('/monitor/div', [dashboard_controller::class,'monitorDivision']);
+    Route::post('/monitor/div', [dashboard_controller::class, 'monitorDivision']);
+
+    // DEV TEST
+    Route::get('/export/all', [export_controller::class, 'allRecap']);
 });

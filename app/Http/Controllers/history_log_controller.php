@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Em_log_in;
 use App\Models\Em_log_out;
 use App\Models\Employee;
 use App\Models\Division;
+
 
 
 class history_log_controller extends Controller
@@ -32,12 +34,14 @@ class history_log_controller extends Controller
                 'employee_log_in.status as login_status',
                 'employee_log_out.logout_time as logout_time',
                 'employee_log_out.status as logout_status'
-            )
-
-        ;
+            );
 
 
-        $data = $query->get();
+        $data = $query->get()
+            ->map(function ($item) {
+                $item->date = Carbon::parse($item->date)->toDateString();
+                return $item;
+            });
 
         return response()->json([
             "success" => true,
