@@ -53,15 +53,65 @@ class auth_controller extends Controller
         ], 201);
     }
 
-    public function login(Request $request)
+    public function loginByEmail(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
-            "username" => "required|max:24",
             "password" => "required|string|min:8",
         ], [
             "email.email" => "Email tidak valid!",
             "email.required" => "Email harus diisi!",
+            "password.required" => "Password wajib diisi",
+            "password.min" => "Password tidak valid",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal login",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validate();
+
+        if (
+            Auth::attempt([
+                "email" => $validatedData["email"],
+                "password" => $validatedData["password"],
+            ])
+        ) {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "User tidak ditemukan",
+                ], 404);
+            }
+            $token = $user->createToken('token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login berhasil',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login Gagal',
+            ], 401);
+        }
+    }
+
+    public function loginByUsername(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "username" => "required|max:24",
+            "password" => "required|string|min:8",
+        ], [
             "username.required" => "Username harus diisi!",
             "username.max" => "Username tidak valid",
             "password.required" => "Password wajib diisi",
@@ -80,7 +130,6 @@ class auth_controller extends Controller
 
         if (
             Auth::attempt([
-                "email" => $validatedData["email"],
                 "username" => $validatedData["username"],
                 "password" => $validatedData["password"],
             ])

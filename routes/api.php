@@ -20,7 +20,8 @@ Route::get('/user', function (Request $request) {
 
 //AUTH
 Route::post('/register', [auth_controller::class, 'register']);
-Route::post('/login', [auth_controller::class, 'login']);
+Route::post('/email-login', [auth_controller::class, 'loginByEmail']);
+Route::post('/username-login', [auth_controller::class, 'loginByUsername']);
 
 //LOGIN REQUIRED
 Route::middleware("auth:sanctum")->group(function () {
@@ -29,7 +30,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('/division', [division_controller::class, 'index']);
     Route::post('/division/store', [division_controller::class, 'store']);
     Route::put('/division/update/{id}', [division_controller::class, 'update']);
-    Route::delete('/duri: ivision/delete/{id}', [division_controller::class, 'destroy']);
+    Route::delete('/division/delete/{id}', [division_controller::class, 'destroy']);
 
     //CRUD Em_log_in
     Route::get('/em-log-in', [em_log_in_controller::class, 'index']);
@@ -48,9 +49,9 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/add', [employee_controller::class, 'store']);
     Route::put('/employee/update', [employee_controller::class, 'update']);
     Route::delete('/employee/delete/{id}', [employee_controller::class, 'destroy']);
-    Route::delete('/employee/delete', [employee_controller::class,'deleteAccount']);
-    Route::post('/employee/profile',[employee_controller::class,'updateProfile']);
-    Route::post('/employee/regface',[employee_controller::class,'regFace']);
+    Route::delete('/employee/delete', [employee_controller::class, 'deleteAccount']);
+    Route::post('/employee/profile', [employee_controller::class, 'updateProfile']);
+    Route::post('/employee/regface', [employee_controller::class, 'regFace']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);
