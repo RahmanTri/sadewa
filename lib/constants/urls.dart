@@ -5,6 +5,7 @@ class AppUrls {
   static const String baseApiUrl = "https://localhost:8000/api/";
 
   // Auth URL
-  static const String login = "$baseApiUrl/login";
+  static const String loginByE = "$baseApiUrl/email-login";
+  static const String loginByU = "$baseApiUrl/username-login";
   static const String register = "$baseApiUrl/register";
 }
