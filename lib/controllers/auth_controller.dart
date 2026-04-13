@@ -25,12 +25,7 @@ class AuthController extends GetxController {
     super.onInit();
     emailUsername.addListener(_validateForm);
     password.addListener(_validateForm);
-<<<<<<< HEAD
-    confirmPassword.addListener(_validateForm);
     loadRememberMe();
-=======
-    _loadRememberMe();
->>>>>>> 99a72ac1979de7b0fdfeda3773415e11d3788dca
   }
 
   void _validateForm() {
@@ -61,23 +56,14 @@ class AuthController extends GetxController {
       loginData = {'email': emailUsername, 'password': password};
     }
     try {
-<<<<<<< HEAD
+      // print(loginData);
+      // print(loginEndpoint);
+
       final result = await _apiService.postRequest<Map<String, dynamic>>(
         endpoint: loginEndpoint,
         data: loginData,
         parser: (body) => jsonDecode(body),
         onError: (resp) => 'Login gagal: ${resp.statusCode}',
-=======
-      
-      // print(loginData);
-      // print(loginEndpoint);
-
-      final result = await _apiService.postRequest<Map<String,dynamic>>(
-      endpoint: loginEndpoint,
-      data: loginData,
-      parser: (body) => jsonDecode(body),  
-      onError: (resp) => 'Login gagal: ${resp.statusCode}'
->>>>>>> 99a72ac1979de7b0fdfeda3773415e11d3788dca
       );
 
       //Save token
@@ -110,7 +96,7 @@ class AuthController extends GetxController {
     // print(emailUsername.text.trim()+password.text.trim());
 
     isLoading.value = false;
-    if (!success) { 
+    if (!success) {
       Get.snackbar('Login gagal', 'Email atau password salah');
     }
     return;
