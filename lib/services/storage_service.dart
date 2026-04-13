@@ -1,14 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
-  static const _emailKey = 'user_enmail';
+  static const _emailUsernameKey = 'username_email';
   static const _passwordKey = 'user_password';
   static const _rememberKey = 'user_is_remember';
+  static const _userTokenKey = 'user_token';
+  static const _userRoleKey = 'user_role';
 
   // Save data
-  Future<void> saveEmail(String email) async {
+  Future<void> saveEmailUsername(String emailUsername) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_emailKey, email);
+    await prefs.setString(_emailUsernameKey, emailUsername);
   }
 
   Future<void> savePassword(String password) async {
@@ -21,10 +23,20 @@ class StorageService {
     await prefs.setBool(_rememberKey, isRemember);
   }
 
-  // Get data
-  Future<String?> getEmail() async {
+  Future<void> saveToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_emailKey);
+    await prefs.setString(_userTokenKey, token);
+  }
+
+  Future<void> saveRole(String role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userRoleKey, role);
+  }
+
+  // Get data
+  Future<String?> getEmailUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_emailUsernameKey);
   }
 
   Future<String?> getPassword() async {
@@ -37,10 +49,20 @@ class StorageService {
     return prefs.getBool(_rememberKey);
   }
 
-  // Delete data
-  Future<void> deleteEmail() async {
+  Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_emailKey);
+    return prefs.getString(_userTokenKey);
+  }
+
+  Future<String?> getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userRoleKey);
+  }
+
+  // Delete data
+  Future<void> deleteEmailUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_emailUsernameKey);
   }
 
   Future<void> deletePassword() async {
@@ -53,27 +75,46 @@ class StorageService {
     await prefs.remove(_rememberKey);
   }
 
+  Future<void> deleteToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userTokenKey);
+  }
+
+  Future<void> deleteRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userRoleKey);
+  }
+
   // RememberMe
   Future<void> setRememberMe(
     bool rememberValue,
-    String? email,
-    String? password,
+    String emailUsername,
+    String password,
   ) async {
     saveRemember(rememberValue);
 
     if (rememberValue) {
-      await saveEmail(email ?? '');
-      await savePassword(password ?? '');
+      await saveEmailUsername(emailUsername);
+      await savePassword(password);
     } else {
-      await deleteEmail();
+      await deleteEmailUsername();
       await deletePassword();
     }
   }
 
   // GetUserCredential
   Future<Map<String, String>> getUserCredential() async {
-    String? email = await getEmail();
-    String? password = await getPassword();
-    return {'email': email ?? '', 'password': password ?? ''};
+    String emailUsername =  getEmailUsername().toString();
+    String password = getPassword().toString();
+    return {'emailUsername': emailUsername, 'password': password};
+  }
+
+  //LogOut
+  Future<void> logOut() async {
+    await deleteEmailUsername();
+    await deletePassword();
+    await deleteRemember();
+    await deleteToken();
+    await deleteRole();
   }
 }
