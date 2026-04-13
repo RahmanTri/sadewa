@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+
+class LoginFieldForm extends StatefulWidget {
+  final String? title;
+  final String inputlabel;
+  final bool obscureText;
+  final TextEditingController controller;
+  final bool showTitle;
+  final TextInputType? inputType;
+  // final void Function()? submitField;
+  final Widget? prefixIcon;
+
+  const LoginFieldForm({
+    super.key,
+    this.title,
+    required this.inputlabel,
+    this.obscureText = false,
+    required this.controller,
+    this.showTitle = true,
+    this.inputType,
+    // this.submitField,
+    this.prefixIcon,
+  });
+
+  @override
+  State<LoginFieldForm> createState() => _LoginFieldFormState();
+}
+
+class _LoginFieldFormState extends State<LoginFieldForm> {
+  bool isPasswordVisible = false;
+  @override
+  Widget build(BuildContext context) {
+    final bool isPasswordField = widget.obscureText;
+    return Column(
+      children: [
+        if (widget.showTitle) Text(widget.title ?? widget.inputlabel),
+        TextFormField(
+          controller: widget.controller,
+          obscureText: isPasswordVisible,
+          keyboardType: widget.inputType,
+          decoration: InputDecoration(
+            prefixIcon: widget.prefixIcon,
+            label: Text(widget.inputlabel),
+            hintText: !widget.showTitle ? widget.inputlabel : null,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+            suffixIcon: isPasswordField
+                ? IconButton(
+                    icon: Icon(
+                      isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  )
+                : null,
+          ),
+        ),
+      ],
+    );
+  }
+}

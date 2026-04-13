@@ -12,7 +12,6 @@ class AuthController extends GetxController {
 
   final emailUsername = TextEditingController();
   final password = TextEditingController();
-  final confirmPassword = TextEditingController();
 
   final isFormValid = false.obs;
   final obscurePW = true.obs;
@@ -26,7 +25,6 @@ class AuthController extends GetxController {
     super.onInit();
     emailUsername.addListener(_validateForm);
     password.addListener(_validateForm);
-    confirmPassword.addListener(_validateForm);
     _loadRememberMe();
   }
 
@@ -59,6 +57,10 @@ class AuthController extends GetxController {
       loginData = {'email': emailUsername, 'password': password};
     } 
     try {
+      
+      // print(loginData);
+      // print(loginEndpoint);
+
       final result = await _apiService.postRequest<Map<String,dynamic>>(
       endpoint: loginEndpoint,
       data: loginData,
@@ -90,8 +92,10 @@ class AuthController extends GetxController {
     isLoading.value = true;
     final success = await login(emailUsername.text.trim(), password.text.trim());
 
+    // print(emailUsername.text.trim()+password.text.trim());
+
     isLoading.value = false;
-    if (!success) {
+    if (!success) { 
       Get.snackbar('Login gagal', 'Email atau password salah');
     }
     return;
@@ -105,7 +109,6 @@ class AuthController extends GetxController {
   void onClose() {
     emailUsername.dispose();
     password.dispose();
-    confirmPassword.dispose();
     super.onClose();
   }
 }

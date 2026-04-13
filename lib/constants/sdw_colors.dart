@@ -22,5 +22,9 @@ class SDWcolors {
   static const Color textL = Color.fromARGB(255, 255, 255, 255);
   static const Color textD = Color.fromARGB(255, 83, 65, 55);
 
+  //Neutral Color
+  static const Color white = Color.fromARGB(255, 255, 255, 255);
+  static const Color black = Color.fromARGB(255, 0, 0, 0);
+
   
 }
