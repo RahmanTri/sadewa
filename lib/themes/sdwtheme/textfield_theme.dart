@@ -8,25 +8,26 @@ class SdwTextFieldTheme {
 
   static InputDecorationTheme inputDecorationL = InputDecorationTheme(
     errorMaxLines: 3,
-    prefixIconColor: Colors.grey,
-    suffixIconColor: Colors.grey,
+    focusColor: SDWcolors.primary,
+    prefixIconColor: SDWcolors.essentialL,
+    suffixIconColor: SDWcolors.essentialL,
 
-    labelStyle: TextStyle().copyWith(color: Colors.grey),
-    hintStyle: TextStyle().copyWith(color: Colors.grey),
+    labelStyle: TextStyle().copyWith(color: SDWcolors.essentialL),
+    hintStyle: TextStyle().copyWith(color: SDWcolors.essentialL),
     errorStyle: TextStyle().copyWith(fontStyle: FontStyle.normal),
     floatingLabelStyle: TextStyle().copyWith(
       color: Colors.black.withValues(alpha: 0.8),
     ),
 
-    outlineBorder: BorderSide(width: 1, color: Colors.grey),
+    outlineBorder: BorderSide(width: 1, color: SDWcolors.essentialL),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(width: 2, color: Colors.grey),
+      borderSide: BorderSide(width: 2, color: SDWcolors.essentialL),
     ),
 
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(width: 2, color: Colors.grey),
+      borderSide: BorderSide(width: 2, color: SDWcolors.essentialL),
     ),
 
     focusedBorder: OutlineInputBorder(
@@ -47,25 +48,26 @@ class SdwTextFieldTheme {
 
   static InputDecorationTheme inputDecorationD = InputDecorationTheme(
     errorMaxLines: 3,
-    prefixIconColor: Colors.grey,
-    suffixIconColor: Colors.grey,
+    focusColor: SDWcolors.primary,
+    prefixIconColor: SDWcolors.essentialL,
+    suffixIconColor: SDWcolors.essentialL,
 
-    labelStyle: TextStyle().copyWith(color: Colors.grey),
-    hintStyle: TextStyle().copyWith(color: Colors.grey),
+    labelStyle: TextStyle().copyWith(color: SDWcolors.essentialL),
+    hintStyle: TextStyle().copyWith(color: SDWcolors.essentialL),
     errorStyle: TextStyle().copyWith(fontStyle: FontStyle.normal),
     floatingLabelStyle: TextStyle().copyWith(
       color: Colors.black.withValues(alpha: 0.8),
     ),
 
-    outlineBorder: BorderSide(width: 1, color: Colors.grey),
+    outlineBorder: BorderSide(width: 1, color: SDWcolors.essentialL),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(width: 2, color: Colors.grey),
+      borderSide: BorderSide(width: 2, color: SDWcolors.essentialL),
     ),
 
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(width: 2, color: Colors.grey),
+      borderSide: BorderSide(width: 2, color: SDWcolors.essentialL),
     ),
 
     focusedBorder: OutlineInputBorder(
