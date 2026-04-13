@@ -17,7 +17,7 @@ class AuthController extends GetxController {
   final isFormValid = false.obs;
   final obscurePW = true.obs;
   final rememberMe = false.obs;
-  
+
   var isLoading = false.obs;
   var token = ''.obs;
 
@@ -27,15 +27,15 @@ class AuthController extends GetxController {
     emailUsername.addListener(_validateForm);
     password.addListener(_validateForm);
     confirmPassword.addListener(_validateForm);
-    _loadRememberMe();
+    loadRememberMe();
   }
 
   void _validateForm() {
-    isFormValid.value = 
-    emailUsername.text.isNotEmpty && password.text.isNotEmpty;
+    isFormValid.value =
+        emailUsername.text.isNotEmpty && password.text.isNotEmpty;
   }
 
-  void _loadRememberMe() async {
+  Future<void> loadRememberMe() async {
     final remembered = await _storageService.getRemember() ?? false;
     if (remembered) {
       final userCreds = await _storageService.getUserCredential();
@@ -46,7 +46,6 @@ class AuthController extends GetxController {
       } catch (e) {
         isLoading.value = false;
       }
-      
     }
   }
 
@@ -57,13 +56,13 @@ class AuthController extends GetxController {
     if (emailUsername.contains('@') && emailUsername.contains('.')) {
       loginEndpoint = AppUrls.loginByE;
       loginData = {'email': emailUsername, 'password': password};
-    } 
+    }
     try {
-      final result = await _apiService.postRequest<Map<String,dynamic>>(
-      endpoint: loginEndpoint,
-      data: loginData,
-      parser: (body) => jsonDecode(body),  
-      onError: (resp) => 'Login gagal: ${resp.statusCode}'
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: loginEndpoint,
+        data: loginData,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Login gagal: ${resp.statusCode}',
       );
 
       //Save token
@@ -88,7 +87,10 @@ class AuthController extends GetxController {
 
   void loginAttempt() async {
     isLoading.value = true;
-    final success = await login(emailUsername.text.trim(), password.text.trim());
+    final success = await login(
+      emailUsername.text.trim(),
+      password.text.trim(),
+    );
 
     isLoading.value = false;
     if (!success) {

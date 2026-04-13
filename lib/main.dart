@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       initialBinding: AppBinding(),
       initialRoute: AppPages.splash,
-      getPages: AppPages.routes,
+      // getPages: AppPages.routes,
       theme: SdwAppTheme.themeL,
       darkTheme: SdwAppTheme.themeD,
 
