@@ -38,46 +38,44 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        backgroundColor: SDWcolors.bgL,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/logo.png', width: 400, height: 400),
+    return Scaffold(
+      backgroundColor: SDWcolors.bgL,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/logo.png', width: 400, height: 400),
 
-              SizedBox(height: 20),
+            SizedBox(height: 20),
 
-              Text(
-                'SADEWA',
-                style: TextStyle(
-                  fontSize: SDWsizes.lg,
-                  fontWeight: FontWeight.bold,
-                  color: SDWcolors.textD,
-                ),
+            Text(
+              'SADEWA',
+              style: TextStyle(
+                fontSize: SDWsizes.lg,
+                fontWeight: FontWeight.bold,
+                color: SDWcolors.textD,
               ),
+            ),
 
-              SizedBox(height: 10),
+            SizedBox(height: 10),
 
-              Text(
-                'Sistem Absensi Dengan Wajah',
-                style: TextStyle(
-                  fontSize: SDWsizes.sm,
-                  fontWeight: FontWeight.normal,
-                  color: SDWcolors.essentialD,
-                ),
+            Text(
+              'Sistem Absensi Dengan Wajah',
+              style: TextStyle(
+                fontSize: SDWsizes.sm,
+                fontWeight: FontWeight.normal,
+                color: SDWcolors.essentialD,
               ),
+            ),
 
-              SizedBox(height: 30),
+            SizedBox(height: 30),
 
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(SDWcolors.primary),
-              ),
-            ],
-          ),
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(SDWcolors.primary),
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }
