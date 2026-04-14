@@ -82,4 +82,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
     // DEV TEST
     Route::get('/export/all', [export_controller::class, 'allRecap']);
+
+    // Fetch History
+    Route::get('/fetch-history', [history_log_controller::class, 'fetch_histories']);
 });
