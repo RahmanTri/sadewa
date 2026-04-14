@@ -30,13 +30,13 @@ class _LoginFieldFormState extends State<LoginFieldForm> {
   bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
-    final bool isPasswordField = widget.obscureText;
+    final isPasswordField = widget.obscureText;
     return Column(
       children: [
         if (widget.showTitle) Text(widget.title ?? widget.inputlabel),
         TextFormField(
           controller: widget.controller,
-          obscureText: isPasswordVisible,
+          obscureText: isPasswordField ? !isPasswordVisible : false,
           keyboardType: widget.inputType,
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,

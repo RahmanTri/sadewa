@@ -28,6 +28,7 @@ class ApiService {
     }
   }
 
+
   Future<SDW> getRequest<SDW>({
     required String endpoint,
     required SDW Function(String body) parser,
@@ -59,13 +60,13 @@ class ApiService {
           url,
           headers: {
             'Content-Type': 'aplication/json',
+            'Accept' : 'application/json',
             if (headers != null) ...headers,
           },
           body: jsonEncode(data ?? {}),
         )
         .timeout(const Duration(seconds: 10));
-    print('BATAS PRINT');
-    print(response);
+
     return _handleResponse<SDW>(
       response,
       () => parser(response.body),

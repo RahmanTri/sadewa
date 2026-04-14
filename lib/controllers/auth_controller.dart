@@ -79,27 +79,40 @@ class AuthController extends GetxController {
         await _storageService.setRememberMe(true, emailUsername, password);
       }
       isLoading.value = false;
+
+      Get.snackbar(
+        'Login Berhasil',
+        'Selamat Datang ${result['user']['username']}',
+      );
+      print(result);
+
       return true;
     } catch (e) {
       isLoading.value = false;
+      Get.snackbar('Login gagal', e.toString());
       return false;
     }
   }
 
   void loginAttempt() async {
     isLoading.value = true;
-    final success = await login(
-      emailUsername.text.trim(),
-      password.text.trim(),
-    );
 
-    // print(emailUsername.text.trim()+password.text.trim());
-
-    isLoading.value = false;
-    if (!success) {
-      Get.snackbar('Login gagal', 'Email atau password salah');
+    try {
+      final success = await login(
+        emailUsername.text.trim(),
+        password.text.trim(),
+      );
+      if (!success) {
+        Get.snackbar('Login gagal', 'Email atau password salah');
+        isLoading.value = false;
+      }
+      return;
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Login gagal', e.toString());
+      return;
     }
-    return;
+    // print(emailUsername.text.trim()+password.text.trim());
   }
 
   void logOut() async {
