@@ -7,9 +7,9 @@ import 'package:sadewa_fe/constants/urls.dart';
 class ApiService {
   final String baseUrl = AppUrls.baseApiUrl;
 
-  Future<responseHandler> _handleResponse<responseHandler>(
+  Future<SDW> _handleResponse<SDW>(
     http.Response resp,
-    responseHandler Function() resultProvider,
+    SDW Function() resultProvider,
     String Function() errorProvider,
   ) async {
     if (resp.statusCode == 200 || resp.statusCode == 201) {
@@ -21,16 +21,16 @@ class ApiService {
       try {
         final body = jsonDecode(resp.body);
         errorMessage = body['message'] ?? errorProvider();
-      } catch (_) {
+      } catch (e) {
         errorMessage = errorProvider();
       }
       throw Exception(errorMessage);
     }
   }
 
-  Future<getReq> getRequest<getReq>({
+  Future<SDW> getRequest<SDW>({
     required String endpoint,
-    required getReq Function(String body) parser,
+    required SDW Function(String body) parser,
     required String Function(http.Response resp) onError,
     Map<String, String>? headers,
   }) async {
@@ -39,17 +39,17 @@ class ApiService {
         .get(url, headers: headers)
         .timeout(const Duration(seconds: 10));
 
-    return _handleResponse<getReq>(
+    return _handleResponse<SDW>(
       response,
       () => parser(response.body),
       () => onError(response),
     );
   }
 
-  Future<postReq> postRequest<postReq>({
+  Future<SDW> postRequest<SDW>({
     required String endpoint,
     Map<String, dynamic>? data,
-    required postReq Function(String body) parser,
+    required SDW Function(String body) parser,
     required String Function(http.Response resp) onError,
     Map<String, String>? headers,
   }) async {
@@ -64,19 +64,20 @@ class ApiService {
           body: jsonEncode(data ?? {}),
         )
         .timeout(const Duration(seconds: 10));
-
-    return _handleResponse<postReq>(
+    print('BATAS PRINT');
+    print(response);
+    return _handleResponse<SDW>(
       response,
       () => parser(response.body),
       () => onError(response),
     );
   }
 
-  Future<postMultiReq> postMultiRequest<postMultiReq>({
+  Future<SDW> postMultiRequest<SDW>({
     required String endpoint,
     required Map<String, String> fields,
     required List<http.MultipartFile> files,
-    required postMultiReq Function(String body) parser,
+    required SDW Function(String body) parser,
     required String Function(http.Response resp) onError,
     Map<String, String>? headers,
   }) async {
@@ -92,17 +93,17 @@ class ApiService {
     final streamed = await request.send().timeout(const Duration(seconds: 10));
     final response = await http.Response.fromStream(streamed);
 
-    return _handleResponse<postMultiReq>(
+    return _handleResponse<SDW>(
       response,
       () => parser(response.body),
       () => onError(response),
     );
   }
 
-  Future<putReq> putRequest<putReq>({
+  Future<SDW> putRequest<SDW>({
     required String endpoint,
     required Map<String, String>? body,
-    required putReq Function(String body) parser,
+    required SDW Function(String body) parser,
     required String Function(http.Response resp) onError,
     Map<String, dynamic>? headers,
   }) async {
@@ -119,16 +120,16 @@ class ApiService {
         )
         .timeout(const Duration(seconds: 10));
 
-    return _handleResponse<putReq>(
+    return _handleResponse<SDW>(
       response,
       () => parser(response.body),
       () => onError(response),
     );
   }
 
-  Future<delReq> deleteRequest<delReq>({
+  Future<SDW> deleteRequest<SDW>({
     required String endpoint,
-    required delReq Function(String body) parser,
+    required SDW Function(String body) parser,
     required String Function(http.Response resp) onError,
     Map<String, String>? headers,
   }) async {
@@ -144,7 +145,7 @@ class ApiService {
         )
         .timeout(const Duration(seconds: 10));
 
-    return _handleResponse<delReq>(
+    return _handleResponse<SDW>(
       response,
       () => parser(response.body),
       () => onError(response),
