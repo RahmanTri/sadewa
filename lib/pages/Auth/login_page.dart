@@ -31,12 +31,11 @@ class LoginPage extends StatelessWidget {
             children: [
               Center(
                 child: Container(
-                  margin: EdgeInsets.only(top: 60),
-                  width: 120,
-                  height: 120,
-                  decoration: const BoxDecoration(
-                    color: SDWcolors.essentialL,
-                    shape: BoxShape.circle,
+                  margin: const EdgeInsets.only(top: 70),
+                  child: Image(
+                    image: AssetImage('assets/images/logo.png'),
+                    width: 160,
+                    height: 160,
                   ),
                 ),
               ),
