@@ -31,11 +31,11 @@ class LoginPage extends StatelessWidget {
             children: [
               Center(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 70),
+                  margin: const EdgeInsets.only(top: 50),
                   child: Image(
                     image: AssetImage('assets/images/logo.png'),
-                    width: 160,
-                    height: 160,
+                    width: width * 0.45,
+                    height: height * 0.25,
                   ),
                 ),
               ),
@@ -44,7 +44,10 @@ class LoginPage extends StatelessWidget {
                 width: width * 0.82,
                 height: height * 0.48,
                 decoration: BoxDecoration(
-                  color: SDWcolors.bgL,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/form-auth-bg.png'),
+                    fit: BoxFit.cover,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -112,6 +115,7 @@ class LoginPage extends StatelessWidget {
                         SizedBox(width: 30),
                       ],
                     ),
+                    SizedBox(height: 20),
                     Obx(
                       () => Container(
                         width: width * 0.4,

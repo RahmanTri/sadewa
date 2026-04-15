@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'package:sadewa_fe/services/storage_service.dart';
@@ -84,7 +85,12 @@ class AuthController extends GetxController {
         'Login Berhasil',
         'Selamat Datang ${result['user']['username']}',
       );
+      print("BATAS RESLUT");
       print(result);
+      print('BATAS LOGIN');
+      (result['role'] == 'admin')
+          ? Get.offAllNamed(Routes.adminHome, arguments: result['userData'])
+          : Get.offAllNamed(Routes.home, arguments: result['userData']);
 
       return true;
     } catch (e) {
