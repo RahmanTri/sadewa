@@ -12,9 +12,10 @@ class LoginPage extends StatelessWidget {
     final authController = Get.find<AuthController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    // Future.microtask(() => authController.devAutoLogin());
 
     return Scaffold(
-      backgroundColor: SDWcolors.bgL,
+      backgroundColor: SDWcolors.bgD,
       body: Stack(
         children: [
           Container(
@@ -51,7 +52,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withAlpha(50),
+                      color: SDWcolors.essentialDR.withAlpha(50),
                       spreadRadius: 0,
                       blurRadius: 4,
                       offset: const Offset(0, 4), // changes position of shadow

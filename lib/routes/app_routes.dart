@@ -5,4 +5,6 @@ class Routes {
   static const adminHome = '/adminHome';
   static const login = '/login';
   static const point = '/register';
+  static const riwayat = '/riwayat';
+
 }
