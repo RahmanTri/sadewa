@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'SADEWA',
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       initialBinding: AppBinding(),
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
