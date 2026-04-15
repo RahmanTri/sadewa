@@ -8,34 +8,34 @@ class SdwTexTheme {
 
     //Headline
     headlineLarge: TextStyle(
-      fontSize: 48,
+      fontSize: 60,
       fontWeight: FontWeight.bold,
       color: SDWcolors.textD,
     ),
     headlineMedium: TextStyle(
-      fontSize: 32,
+      fontSize: 48,
       fontWeight: FontWeight.bold,
       color: SDWcolors.textD,
     ),
     headlineSmall: TextStyle(
-      fontSize: 24,
+      fontSize: 32,
       fontWeight: FontWeight.normal,
       color: SDWcolors.textD,
     ),
 
     //Title
     titleLarge: TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.bold,
       color: SDWcolors.textD,
     ),
     titleMedium: TextStyle(
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
       color: SDWcolors.textD,
     ),
     titleSmall: TextStyle(
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: FontWeight.normal,
       color: SDWcolors.textD,
     ),

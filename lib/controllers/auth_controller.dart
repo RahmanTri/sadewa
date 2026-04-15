@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'package:sadewa_fe/services/storage_service.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class AuthController extends GetxController {
   final StorageService _storageService = StorageService();
@@ -18,6 +19,7 @@ class AuthController extends GetxController {
   final rememberMe = false.obs;
 
   var isLoading = false.obs;
+  var userRole = ''.obs;
   var token = ''.obs;
 
   @override
@@ -25,7 +27,7 @@ class AuthController extends GetxController {
     super.onInit();
     emailUsername.addListener(_validateForm);
     password.addListener(_validateForm);
-    loadRememberMe();
+    // loadRememberMe();
   }
 
   void _validateForm() {
@@ -71,20 +73,36 @@ class AuthController extends GetxController {
       await _storageService.saveToken(token.value);
 
       //Save role
-      final role = result['role'] ?? '';
+      final role = result['user']['role'] ?? '';
       await _storageService.saveRole(role);
+      userRole.value = role;
 
       //If remember me is checked
       if (rememberMe.value) {
         await _storageService.setRememberMe(true, emailUsername, password);
       }
+
       isLoading.value = false;
 
       Get.snackbar(
         'Login Berhasil',
         'Selamat Datang ${result['user']['username']}',
       );
-      print(result);
+
+      if (userRole.value == 'employee') {
+        Get.offNamed(Routes.riwayat);
+      } else if (userRole.value == 'admin') {
+        // Get.offNamed(Routes.adminHome);
+
+        //Test Only
+        Get.snackbar('Memasuki Halaman', 'Anda Dipindahkan ke halaman admin');
+
+      } else {
+        Get.snackbar('Error', 'Anda belum memiliki role');
+      }
+
+      // Test
+      // print(result);
 
       return true;
     } catch (e) {
@@ -117,6 +135,22 @@ class AuthController extends GetxController {
 
   void logOut() async {
     await _storageService.logOut();
+  }
+
+  void devAutoLogin() async {
+    isLoading.value = true;
+    try {
+      final success = await login('BambangSutejo', 'bamsutejo1234');
+      if (!success) {
+        Get.snackbar('Login gagal', 'Ada yang Keliru');
+        isLoading.value = false;
+      }
+      return;
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Login gagal', e.toString());
+      return;
+    }
   }
 
   @override
