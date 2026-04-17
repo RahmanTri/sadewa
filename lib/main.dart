@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/binding/app_binding.dart';
 import 'package:sadewa_fe/routes/app_pages.dart';
+import 'package:sadewa_fe/themes/sdwtheme/scroll_theme.dart';
 import 'package:sadewa_fe/themes/theme.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.routes,
       theme: SdwAppTheme.themeL,
       darkTheme: SdwAppTheme.themeD,
+      scrollBehavior: SDWScrollTheme(),
     );
   }
 }
