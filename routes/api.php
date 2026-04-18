@@ -85,4 +85,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
     // Fetch History
     Route::get('/fetch-history', [history_log_controller::class, 'fetch_histories']);
+
+    // profile
+    Route::get('/profile', [user_controller::class, 'profile']);
 });
