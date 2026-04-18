@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Em_log_in;
@@ -68,7 +69,7 @@ class history_log_controller extends Controller
 
         $data = Em_log_in::where("employee_log_in.employee_id", $employee->id)
             ->where('employee_log_in.created_at', '>=', now()->subDays(364))
-            ->join('employee_log_out', 'employee_log_out.employee_id', '=', 'employee_log_in.employee_id')
+            ->join('employee_log_out', DB::raw('DATE(employee_log_in.created_at)'), '=', DB::raw('DATE(employee_log_out.created_at)'))
             ->select(
                 'employee_log_in.created_at as date',
                 'employee_log_in.login_time as waktu_masuk',
@@ -80,19 +81,21 @@ class history_log_controller extends Controller
             ->filter(function ($item) {
                 return Carbon::parse($item->date)->toDateString();
             })
-            ->map(function ($item) {
-                $tanggal = Carbon::parse($item->date)->locale('id');
-                return [
-                    'hari' => $tanggal->translatedFormat('l'),
-                    'tanggal' => $tanggal->format('d'),
-                    'bulan' => $tanggal->format('F'),
-                    'tahun' => $tanggal->format('Y'),
-                    'waktu_masuk' => $item->waktu_masuk,
-                    'status_masuk' => $item->status_masuk,
-                    'waktu_keluar' => $item->waktu_keluar,
-                    'status_keluar' => $item->status_keluar,
-                ];
-            });
+            ->map(
+                function ($item) {
+                    $tanggal = Carbon::parse($item->date)->locale('id');
+                    return [
+                        'hari' => $tanggal->translatedFormat('l'),
+                        'tanggal' => $tanggal->format('d'),
+                        'bulan' => $tanggal->format('F'),
+                        'tahun' => $tanggal->format('Y'),
+                        'waktu_masuk' => $item->waktu_masuk,
+                        'status_masuk' => $item->status_masuk,
+                        'waktu_keluar' => $item->waktu_keluar,
+                        'status_keluar' => $item->status_keluar,
+                    ];
+                }
+            );
 
         return response()->json([
             "success" => true,
