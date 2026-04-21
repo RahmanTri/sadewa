@@ -68,6 +68,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //USER
     Route::get('/user', [user_controller::class, 'index']);
+    Route::get('/get-user', [user_controller::class, 'getUser']);
 
     //EM REGISTER (ADMIN ONLY)
     Route::post('/employee/register', [employee_controller::class, 'emregister']);

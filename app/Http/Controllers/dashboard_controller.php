@@ -34,6 +34,7 @@ class dashboard_controller extends Controller
 
         return response()->json([
             "success" => true,
+            "test" => $employee,
             "data" => [
                 "employee" => $employee,
                 "logIn" => $weekInData,

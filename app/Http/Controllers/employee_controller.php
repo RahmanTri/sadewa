@@ -411,7 +411,7 @@ class employee_controller extends Controller
             ], 200);
         }
 
-        $employee = Employee::where('user_id',$user->id)->first();
+        $employee = Employee::where('user_id', $user->id)->first();
 
         if (!$employee) {
             return response()->json([
@@ -420,9 +420,9 @@ class employee_controller extends Controller
             ], 403);
         }
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             "face_data" => "required"
-        ],[
+        ], [
             "face_data.required" => "Face data diperlukan!"
         ]);
 
@@ -435,14 +435,14 @@ class employee_controller extends Controller
         }
 
         $validatedData = $validator->validate();
-        
+
         $employee->face_data = $validatedData["face_data"] ?? $employee->face_data;
 
         $employee->save();
 
         return response()->json([
-            "success"=> true,
-            "data"=> $employee,
+            "success" => true,
+            "data" => $employee,
         ], 200);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Em_log_in;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -94,21 +95,11 @@ class auth_controller extends Controller
             }
             $token = $user->createToken('token')->plainTextToken;
 
-            $data = User::find($user->id)
-                ->join('employee', 'employee.user_id', '=', 'users.id')
-                ->join('division', 'division.id', '=', 'employee.division_id')
-                ->select(
-                    'username',
-                    'email',
-                    'employee.name as nama',
-                )->first();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil',
                 'token' => $token,
                 'user' => $user,
-                'userData' => $data
             ], 200);
         } else {
             return response()->json([
@@ -156,30 +147,15 @@ class auth_controller extends Controller
                 ], 404);
             }
             $token = $user->createToken('token')->plainTextToken;
-
-            $data = User::find($user->id)
-                ->join('employee', 'employee.user_id', '=', 'users.id')
-                ->join('division', 'division.id', '=', 'employee.division_id')
-                ->select(
-                    'username',
-                    'email',
-                    'employee.name as nama',
-                )->first();
-
-            $latestAbsen = User::find($user->id)
-                ->join('employee', 'employee.user_id', '=', 'users.id')
-                ->join('employee_log_in', 'employee_log_in.employee_id', '=', 'employee.user_id')
-                // ->whereDate('created_at', '>=', Carbon::now()->subDays(7))
-                ->first()
-            ;
+            $rawFaceData = Employee::where('user_id', $user->id)->first();
+            $faceData = json_decode($rawFaceData->face_data);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil',
                 'token' => $token,
                 'user' => $user,
-                'userData' => $data,
-                'latestAbsen' => $latestAbsen
+                'face_data' => $faceData
 
             ], 200);
         } else {
