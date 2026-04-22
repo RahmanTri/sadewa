@@ -23,6 +23,8 @@ class AuthController extends GetxController {
   var userRole = ''.obs;
   var token = ''.obs;
 
+  var embeddings = <List<double>>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -77,6 +79,11 @@ class AuthController extends GetxController {
       final role = result['user']['role'] ?? '';
       await _storageService.saveRole(role);
       userRole.value = role;
+
+      //Save Embeddings
+      final embeddingsData = result['user']['embeddings'] ?? <List<double>>[];
+      await _storageService.saveEmbeddings(embeddingsData);
+      embeddings.value = embeddingsData;
 
       //If remember me is checked
       if (rememberMe.value) {

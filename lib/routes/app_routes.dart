@@ -6,5 +6,5 @@ class Routes {
   static const login = '/login';
   static const point = '/register';
   static const riwayat = '/riwayat';
-
+  static const absen = '/absen';
 }

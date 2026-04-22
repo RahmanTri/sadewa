@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                       color: SDWcolors.essentialDR.withAlpha(50),
                       spreadRadius: 0,
                       blurRadius: 4,
-                      offset: const Offset(0, 4), // changes position of shadow
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),

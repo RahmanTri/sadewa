@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -6,6 +8,7 @@ class StorageService {
   static const _rememberKey = 'user_is_remember';
   static const _userTokenKey = 'user_token';
   static const _userRoleKey = 'user_role';
+  static const _faceEmbeddings = 'face_embeddings';
 
   // Save data
   Future<void> saveEmailUsername(String emailUsername) async {
@@ -33,6 +36,12 @@ class StorageService {
     await prefs.setString(_userRoleKey, role);
   }
 
+  Future<void> saveEmbeddings(List<double> embeddings) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String embeddingJson = jsonEncode(embeddings);
+    await prefs.setString(_faceEmbeddings, embeddingJson);
+  }
+
   // Get data
   Future<String?> getEmailUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -57,6 +66,16 @@ class StorageService {
   Future<String?> getRole() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userRoleKey);
+  }
+
+  Future<List<double>> getEmbeddings() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? embeddingJson = pref.getString(_faceEmbeddings);
+    if (embeddingJson != null) {
+      return jsonDecode(embeddingJson);
+    } else {
+      return [];
+    }
   }
 
   // Delete data
@@ -104,7 +123,7 @@ class StorageService {
 
   // GetUserCredential
   Future<Map<String, String>> getUserCredential() async {
-    String emailUsername =  getEmailUsername().toString();
+    String emailUsername = getEmailUsername().toString();
     String password = getPassword().toString();
     return {'emailUsername': emailUsername, 'password': password};
   }

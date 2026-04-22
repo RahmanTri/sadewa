@@ -6,7 +6,7 @@ class SDWcolors {
   //main theme
   static const Color bgL = Color.fromARGB(255, 250, 243, 225);
   static const Color bgD = Color.fromARGB(255, 245, 231, 198);
-  static const Color primary = Color.fromARGB(255, 255, 109, 31);
+  static const Color primary = Color.fromARGB(255, 255, 123, 53);
   static const Color primaryL = Color.fromARGB(255, 255, 117, 94);
   static const Color essential = Color.fromARGB(255, 160, 144, 132);
   static const Color essentialL = Color.fromARGB(255, 176, 173, 171);
@@ -25,6 +25,4 @@ class SDWcolors {
   //Neutral Color
   static const Color white = Color.fromARGB(255, 255, 255, 255);
   static const Color black = Color.fromARGB(255, 0, 0, 0);
-
-  
 }
