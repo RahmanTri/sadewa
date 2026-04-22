@@ -2,7 +2,7 @@ class AppUrls {
   AppUrls._();
 
   // Base URL
-  static const String baseApiUrl = emulator;
+  static const String baseApiUrl = ngrok;
 
   //Platform URL
   static const String emulator = "http://10.0.2.2:8000/api";
