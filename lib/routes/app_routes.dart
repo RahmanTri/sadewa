@@ -7,6 +7,5 @@ class Routes {
   static const point = '/register';
   static const riwayat = '/riwayat';
   static const notice = '/pesan';
-   static const absen = '/absen';
-
+  static const absen = '/absen';
 }
