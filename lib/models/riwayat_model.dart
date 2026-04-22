@@ -3,10 +3,11 @@ class Riwayat {
   final String tanggal;
   final String bulan;
   final String tahun;
-  final String statusMasuk;
+  String statusMasuk;
   final String waktuMasuk;
-  final String statusKeluar;
+  String statusKeluar;
   final String waktuKeluar;
+  bool translated = false;
 
   Riwayat({
     required this.hari,
@@ -18,6 +19,34 @@ class Riwayat {
     required this.statusKeluar,
     required this.waktuKeluar,
   });
+
+  void transStatusIn() {
+    if (statusMasuk == 'on_time') {
+      statusMasuk = 'Tepat Waktu';
+    } else if (statusMasuk == 'late') {
+      statusMasuk = 'Terlambat';
+    } else {
+      statusMasuk = 'Tidak Hadir';
+    }
+  }
+
+  void transStatusOut() {
+    if (statusKeluar == 'on_time') {
+      statusKeluar = 'Tepat Waktu';
+    } else if (statusKeluar == 'late') {
+      statusKeluar = 'Terlambat';
+    } else if (statusKeluar == 'early') {
+      statusKeluar = 'Lebih Awal';
+    } else {
+      statusKeluar = 'Tidak Hadir';
+    }
+  }
+
+  void translateStatuses() {
+    transStatusIn();
+    transStatusOut();
+    translated = true;
+  }
 
   factory Riwayat.fromJson(Map<String, dynamic> json) {
     return Riwayat(

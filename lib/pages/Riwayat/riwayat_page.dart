@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/riwayat_controller.dart';
+import 'package:sadewa_fe/pages/Riwayat/widgets/history_card.dart';
+import '../effect/box_shadow.dart';
+// import 'package:sadewa_fe/controllers/notice_controller.dart';
+// import 'package:sadewa_fe/models/notice_model.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
+
+
 
 class RiwayatPage extends StatelessWidget {
   const RiwayatPage({super.key});
@@ -11,7 +18,10 @@ class RiwayatPage extends StatelessWidget {
     final riwayatController = Get.find<RiwayatController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    // Future.microtask(() => riwayatController.fetchRiwayat());
+    Future.microtask(() => riwayatController.fetchRiwayat());
+
+    // Dummy
+    // Future.microtask(() => riwayatController.dummyHistory());
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +35,7 @@ class RiwayatPage extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: Get.back,
+          onPressed: () => Get.toNamed(Routes.notice),
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),
@@ -55,12 +65,7 @@ class RiwayatPage extends StatelessWidget {
                   color: SDWcolors.bgL,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
-                    BoxShadow(
-                      color: SDWcolors.essentialDR.withAlpha(50),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
+                    SDWboxShadow.shadow,
                   ],
                 ),
                 child: Row(
@@ -110,7 +115,7 @@ class RiwayatPage extends StatelessWidget {
                                 ),
                           ),
                           Text(
-                            riwayatController.jumlahOnTime.value.toString(),
+                            riwayatController.jumlahLate.value.toString(),
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
                                   color: SDWcolors.primary,
@@ -140,7 +145,7 @@ class RiwayatPage extends StatelessWidget {
                                 ),
                           ),
                           Text(
-                            riwayatController.jumlahOnTime.value.toString(),
+                            riwayatController.jumlahAbsen.value.toString(),
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
                                   color: SDWcolors.primary,
@@ -164,56 +169,55 @@ class RiwayatPage extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 12),
-                    height: double.infinity,
-                    width: width * 0.4,
+                    height: 32,
+                    width: width * 0.36,
                     decoration: BoxDecoration(
                       color: SDWcolors.bgL,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
-                        BoxShadow(
-                          color: SDWcolors.essentialDR.withAlpha(50),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
+                        SDWboxShadow.shadow,
                       ],
                     ),
                     child: Center(
                       child: Obx(
                         () => Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            DropdownButton(
-                              dropdownColor: SDWcolors.bgL,
-                              menuWidth: width * 0.36,
-                              value: riwayatController.selectedFilter.value,
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isDense: true,
+                                dropdownColor: SDWcolors.bgL,
+                                menuWidth: width * 0.36,
+                                value: riwayatController.selectedFilter.value,
+                                style: Theme.of(context).textTheme.bodyLarge
+                                    ?.copyWith(
+                                      color: SDWcolors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                icon: Transform.rotate(
+                                  angle: 3.14 / -2,
+                                  child: Icon(
+                                    Icons.chevron_left_outlined,
                                     color: SDWcolors.primary,
-                                    fontWeight: FontWeight.bold,
+                                    size: 24,
                                   ),
-                              icon: Transform.rotate(
-                                angle: 3.14 / -2,
-                                child: Icon(
-                                  Icons.chevron_left_outlined,
-                                  color: SDWcolors.primary,
-                                  size: 24,
                                 ),
+                                items: riwayatController.filteroptions.map((
+                                  filter,
+                                ) {
+                                  return DropdownMenuItem<String>(
+                                    value: filter,
+                                    child: Text(filter),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  if (newValue != null) {
+                                    riwayatController.selectedFilter.value =
+                                        newValue;
+                                    riwayatController.applyFilter(newValue);
+                                  }
+                                },
                               ),
-                              items: riwayatController.filteroptions.map((
-                                filter,
-                              ) {
-                                return DropdownMenuItem<String>(
-                                  value: filter,
-                                  child: Text(filter),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                if (newValue != null) {
-                                  riwayatController.selectedFilter.value =
-                                      newValue;
-                                  riwayatController.applyFilter(newValue);
-                                }
-                              },
                             ),
                           ],
                         ),
@@ -221,6 +225,22 @@ class RiwayatPage extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 12),
+              Obx(
+                () => Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(left: 12, right: 12),
+                    physics: BouncingScrollPhysics(),
+                    itemCount: riwayatController.filteredhistories.length,
+                    itemBuilder: (context, index) => HistoryCard(
+                      height: height,
+                      width: width,
+                      gap: 12,
+                      riwayat: riwayatController.filteredhistories[index],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
