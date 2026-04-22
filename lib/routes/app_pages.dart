@@ -5,6 +5,8 @@ import 'package:sadewa_fe/pages/Auth/login_page.dart';
 import 'package:sadewa_fe/binding/app_binding.dart';
 import 'package:sadewa_fe/pages/splash_page.dart';
 import 'package:sadewa_fe/pages/Riwayat/riwayat_page.dart';
+import 'package:sadewa_fe/pages/Home/home_page.dart';
+import 'package:sadewa_fe/pages/Notice/notice_page.dart';
 
 class AppPages {
   // static const initial = Routes.splash;
@@ -23,6 +25,14 @@ class AppPages {
     GetPage(
     name: Routes.riwayat,
     page: () => RiwayatPage(), 
+    ),
+    GetPage(
+      name: Routes.home,
+      page: () => HomePage(),
+    ),
+    GetPage(
+      name: Routes.notice,
+      page: () => NoticePage(),
     ),
   ];
 }
