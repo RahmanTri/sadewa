@@ -5,12 +5,13 @@ import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'package:sadewa_fe/services/storage_service.dart';
-import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/controllers/user_controller.dart';
 
 class AuthController extends GetxController {
   final StorageService _storageService = StorageService();
   final ApiService _apiService = ApiService();
   final formKey = GlobalKey<FormState>();
+  final userController = Get.find<UserController>();
 
   final emailUsername = TextEditingController();
   final password = TextEditingController();
@@ -74,7 +75,7 @@ class AuthController extends GetxController {
       await _storageService.saveToken(token.value);
 
       //Save role
-      final role = result['user']['role'] ?? '';
+      final role = result['user_data']['role'] ?? '';
       await _storageService.saveRole(role);
       userRole.value = role;
 
@@ -85,14 +86,19 @@ class AuthController extends GetxController {
 
       isLoading.value = false;
 
+      //Assign user data to userController
+      userController.assignUserData(result['user_data']);
+      userController.setUserToken(token.value);
+
       Get.snackbar(
         'Login Berhasil',
-        'Selamat Datang ${result['user']['username']}',
+        'Selamat Datang ${result['user_data']['username']}',
       );
 
+      //employee page can be changed during development
       if (userRole.value == 'employee') {
         // Get.offNamed(Routes.riwayat);
-        Get.offAllNamed(Routes.home, arguments: result['userData']);
+        Get.offAllNamed(Routes.riwayat);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
         Get.offAllNamed(Routes.adminHome, arguments: result['userData']);
