@@ -8,6 +8,6 @@ class SDWboxShadow {
     color: SDWcolors.essentialDR.withAlpha(50),
     spreadRadius: 0,
     blurRadius: 4,
-    offset: const Offset(0, 4),
+    offset: const Offset(0, 2),
   );
 }
