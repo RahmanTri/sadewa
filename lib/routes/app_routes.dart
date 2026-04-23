@@ -8,4 +8,5 @@ class Routes {
   static const riwayat = '/riwayat';
   static const notice = '/pesan';
   static const absen = '/absen';
+  static const registWajah = '/registWajah';
 }

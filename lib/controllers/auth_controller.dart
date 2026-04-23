@@ -81,10 +81,10 @@ class AuthController extends GetxController {
       await _storageService.saveRole(role);
       userRole.value = role;
 
-      //Save Embeddings
-      final embeddingsData = result['user']['embeddings'] ?? <List<double>>[];
-      await _storageService.saveEmbeddings(embeddingsData);
-      embeddings.value = embeddingsData;
+      // //Save Embeddings
+      // final embeddingsData = result['user']['embeddings'] ?? <List<double>>[];
+      // await _storageService.saveEmbeddings(embeddingsData);
+      // embeddings.value = embeddingsData;
 
       //If remember me is checked
       if (rememberMe.value) {
@@ -105,10 +105,10 @@ class AuthController extends GetxController {
       //employee page can be changed during development
       if (userRole.value == 'employee') {
         // Get.offNamed(Routes.riwayat);
-        Get.offAllNamed(Routes.riwayat);
+        Get.offAllNamed(Routes.home);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
-        Get.offAllNamed(Routes.adminHome, arguments: result['userData']);
+        Get.offAllNamed(Routes.adminHome);
 
         //Test Only
         Get.snackbar('Memasuki Halaman', 'Anda Dipindahkan ke halaman admin');
@@ -123,6 +123,7 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Login gagal', e.toString());
+      print(e);
       return false;
     }
   }

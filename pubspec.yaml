@@ -77,6 +77,8 @@ flutter:
     - assets/icons/peringkat_karyawan.png
     - assets/icons/peringatan.png
 
+    - assets/models/mobilefacenet.tflite
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -1,5 +1,8 @@
 // import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'dart:math';
 import 'package:camera/camera.dart';
 import 'dart:io';
@@ -15,32 +18,35 @@ class AbsenController extends GetxController {
   final ApiService _apiService = ApiService();
   final StorageService _storageService = StorageService();
   final UserController _userController = UserController();
-  CameraController? _cameraController;
 
   late FaceDetector _faceDetector;
   Interpreter? _interpreter;
 
   final bool _isLoading = false;
-  final _statusText = "".obs;
+  final statusText = "".obs;
 
-  final _registeredFaces = <Map<String, dynamic>>[].obs;
-  final _faceEmbeddings = <List<double>>[].obs;
+  List<double>? _registEmbeddings = [];
+  List<double>? _userEmbeddings = [];
 
   final _faceRect = Rect.zero.obs;
   final _token = ''.obs;
 
   bool _isCapturing = false;
 
+  late List<CameraDescription> cameras;
+  final cameraController = Rxn<CameraController>();
+
   @override
   void onInit() async {
     super.onInit();
-    _faceEmbeddings.value = await _userController.userData['face'] ?? '';
+    cameras = await availableCameras();
+    _userEmbeddings = _userController.user.value?.dataWajah;
     _token.value = await _storageService.getToken() ?? '';
     _faceDetector = FaceDetector(
       options: FaceDetectorOptions(performanceMode: FaceDetectorMode.fast),
     );
-    _loadModel();
-    _initCamera();
+    await _loadModel();
+    await _initCamera();
 
     void updateFaceRect(Rect scalledRect) {
       _faceRect.value = scalledRect;
@@ -59,111 +65,148 @@ class AbsenController extends GetxController {
   }
 
   Future<void> _initCamera() async {
-    final frontCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
+    try {
+      final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
 
-    _cameraController = CameraController(
-      frontCamera,
-      ResolutionPreset.low,
-      enableAudio: false,
-      imageFormatGroup: Platform.isAndroid
-          ? ImageFormatGroup.yuv420
-          : ImageFormatGroup.bgra8888,
-    );
+      cameraController.value = CameraController(
+        frontCamera,
+        ResolutionPreset.low,
+        enableAudio: false,
+        imageFormatGroup: Platform.isAndroid
+            ? ImageFormatGroup.yuv420
+            : ImageFormatGroup.bgra8888,
+      );
 
-    await _cameraController!.initialize();
+      await cameraController.value!.initialize();
+      cameraController.refresh();
 
-    _cameraController!.startImageStream((CameraImage image) {
-      if (!_isLoading) {
-        _processCameraImage(image);
-      }
-    });
+      cameraController.value!.startImageStream((CameraImage image) {
+        if (!_isLoading) {
+          _getEmbedding(image);
+        }
+      });
+
+      print("kamera berhasil dimuat");
+    } catch (e) {
+      print('gagal memuat kamera: $e');
+    }
   }
 
-  Future<void> _processCameraImage(CameraImage image) async {
+  Future<void> _registFaceData(List<double> faceData) async {
+    final embeddingsData = {'face_data': _registEmbeddings};
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: 'employee/regface',
+        data: embeddingsData,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+      );
+
+      Get.snackbar(
+        "Registrasi Wajah Berhasil",
+        "Registrasi data wajah berhasil",
+      );
+      Get.offAllNamed("home");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _getEmbedding(CameraImage image) async {
+    final _cameraController = cameraController.value;
     if (_cameraController != null &&
-        _cameraController!.value.isInitialized &&
+        _cameraController.value.isInitialized &&
         !_isCapturing) {
       _isCapturing = true;
+
       try {
-        XFile file = await _cameraController!.takePicture();
+        XFile file = await _cameraController.takePicture();
 
         final inputImage = InputImage.fromFilePath(file.path);
         final faces = await _faceDetector.processImage(inputImage);
 
         if (faces.isNotEmpty) {
-          final face = faces.first;
-          final bytes = await File(inputImage.filePath!).readAsBytes();
-          final img = imeg.decodeImage(bytes);
+          int countdown = 5;
 
-          Rect scaledReact;
+          Timer.periodic(Duration(seconds: 1), (timer) async {
+            countdown--;
+            statusText.value =
+                "Wajah Terdeteksi! Akan mengambil foto dalam $countdown detik";
 
-          Size imageSize = Size(img!.width.toDouble(), img.height.toDouble());
-          Size previewSize = _cameraController!.value.previewSize!;
+            if (countdown == 0) {
+              final face = faces.first;
+              final bytes = await File(inputImage.filePath!).readAsBytes();
+              final img = imeg.decodeImage(bytes);
 
-          double scaleX = previewSize.width / imageSize.width;
-          double scaleY = previewSize.height / imageSize.height;
+              Rect scaledReact;
 
-          final double mirrorLeft = imageSize.width - face.boundingBox.right;
-          final double mirrorRight = imageSize.width - face.boundingBox.left;
+              Size imageSize = Size(
+                img!.width.toDouble(),
+                img.height.toDouble(),
+              );
+              Size previewSize = _cameraController.value.previewSize!;
 
-          scaledReact = Rect.fromLTRB(
-            mirrorLeft * scaleX,
-            face.boundingBox.top * scaleY,
-            mirrorRight * scaleX,
-            face.boundingBox.bottom * scaleY,
-          );
+              double scaleX = previewSize.width / imageSize.width;
+              double scaleY = previewSize.height / imageSize.height;
 
-          final faceCrop = imeg.copyCrop(
-            img,
-            x: face.boundingBox.left.toInt(),
-            y: face.boundingBox.top.toInt(),
-            width: face.boundingBox.width.toInt(),
-            height: face.boundingBox.height.toInt(),
-          );
+              final double mirrorLeft =
+                  imageSize.width - face.boundingBox.right;
+              final double mirrorRight =
+                  imageSize.width - face.boundingBox.left;
 
-          final resized = imeg.copyResize(faceCrop, width: 112, height: 112);
+              scaledReact = Rect.fromLTRB(
+                mirrorLeft * scaleX,
+                face.boundingBox.top * scaleY,
+                mirrorRight * scaleX,
+                face.boundingBox.bottom * scaleY,
+              );
 
-          var input = List.generate(1 * 112 * 112 * 3, (i) => 0.0);
-          int pixelIndex = 0;
-          for (int y = 0; y < 112; y++) {
-            for (int x = 0; x < 112; x++) {
-              final pixel = resized.getPixel(x, y);
-              int r = pixel.r.toInt();
-              int g = pixel.g.toInt();
+              final faceCrop = imeg.copyCrop(
+                img,
+                x: face.boundingBox.left.toInt(),
+                y: face.boundingBox.top.toInt(),
+                width: face.boundingBox.width.toInt(),
+                height: face.boundingBox.height.toInt(),
+              );
 
-              int b = pixel.b.toInt();
+              final resized = imeg.copyResize(
+                faceCrop,
+                width: 112,
+                height: 112,
+              );
 
-              input[pixelIndex++] = (r - 128) / 128.0;
-              input[pixelIndex++] = (g - 128) / 128.0;
-              input[pixelIndex++] = (b - 128) / 128.0;
+              var input = List.generate(1 * 112 * 112 * 3, (i) => 0.0);
+              int pixelIndex = 0;
+              for (int y = 0; y < 112; y++) {
+                for (int x = 0; x < 112; x++) {
+                  final pixel = resized.getPixel(x, y);
+                  int r = pixel.r.toInt();
+                  int g = pixel.g.toInt();
+
+                  int b = pixel.b.toInt();
+
+                  input[pixelIndex++] = (r - 128) / 128.0;
+                  input[pixelIndex++] = (g - 128) / 128.0;
+                  input[pixelIndex++] = (b - 128) / 128.0;
+                }
+              }
+
+              var output = List.filled(192, 0.0).reshape([1, 192]);
+              _interpreter!.run(input.reshape([1, 112, 112, 3]), output);
+
+              List<double> embedding = List<double>.from(output[0]);
+              _registEmbeddings = embedding;
+
+              statusText.value = "selesai";
+              _isCapturing = false;
+              timer.cancel();
             }
-          }
-
-          var output = List.filled(192, 0.0).reshape([1, 192]);
-          _interpreter!.run(input.reshape([1, 112, 112, 3]), output);
-
-          List<double> embedding = List<double>.from(output[0]);
-
-          String? matchedName;
-          double maxSimilarity = 0.0;
-          const double threshold = 0.9;
-
-          for (var entry in _registeredFaces) {
-            double sim = cosineSimilarity(embedding, entry['embedding']);
-            if (sim > maxSimilarity && sim > threshold) {
-              maxSimilarity = sim;
-              matchedName = entry['name'];
-            }
-          }
-
-          if (matchedName != null) {
-            _statusText.value = "Wajah Dikenali sebagai : $matchedName";
-          }
+          });
         } else {
-          _statusText.value = "Arahkan Wajah Ke Kamera";
+          statusText.value = "Arahkan Wajah Ke Kamera";
         }
       } catch (e) {
         print("Error ambil foto: $e");
@@ -185,5 +228,13 @@ class AbsenController extends GetxController {
     }
 
     return dot / (sqrt(normA) * sqrt(normB));
+  }
+
+  @override
+  void onClose() {
+    final _cameraController = cameraController.value;
+    _cameraController?.stopImageStream();
+    _cameraController?.dispose();
+    super.onClose();
   }
 }

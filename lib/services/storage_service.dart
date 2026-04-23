@@ -36,11 +36,11 @@ class StorageService {
     await prefs.setString(_userRoleKey, role);
   }
 
-  Future<void> saveEmbeddings(List<double> embeddings) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String embeddingJson = jsonEncode(embeddings);
-    await prefs.setString(_faceEmbeddings, embeddingJson);
-  }
+  // Future<void> saveEmbeddings(List<double> embeddings) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String embeddingJson = jsonEncode(embeddings);
+  //   await prefs.setString(_faceEmbeddings, embeddingJson);
+  // }
 
   // Get data
   Future<String?> getEmailUsername() async {
@@ -68,15 +68,15 @@ class StorageService {
     return prefs.getString(_userRoleKey);
   }
 
-  Future<List<double>> getEmbeddings() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? embeddingJson = pref.getString(_faceEmbeddings);
-    if (embeddingJson != null) {
-      return jsonDecode(embeddingJson);
-    } else {
-      return [];
-    }
-  }
+  // Future<List<double>> getEmbeddings() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   String? embeddingJson = pref.getString(_faceEmbeddings);
+  //   if (embeddingJson != null) {
+  //     return jsonDecode(embeddingJson);
+  //   } else {
+  //     return [];
+  //   }
+  // }
 
   // Delete data
   Future<void> deleteEmailUsername() async {
