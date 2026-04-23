@@ -2,14 +2,16 @@ class AppUrls {
   AppUrls._();
 
   // Base URL
-  static const String baseApiUrl = emulator;
+  static const String usedUrl = ngrok;
+
+  static const String baseApiUrl = '${usedUrl}api';
+  static const String imgProfileUrl = '${usedUrl}storage/profile_pics/';
 
   //Platform URL
-  static const String emulator = "http://10.0.2.2:8000/api";
-  static const String local = "http://localhost:8000/api";
-  static const String physical = "http://127.0.0.1:8000/api";
-  static const String ngrok =
-      "https://shaunda-unpolitic-maeve.ngrok-free.dev/api";
+  static const String emulator = "http://10.0.2.2:8000/";
+  static const String local = "http://localhost:8000/";
+  static const String physical = "http://127.0.0.1:8000/";
+  static const String ngrok = "https://shaunda-unpolitic-maeve.ngrok-free.dev/";
 
   // ENDPOINTS
   static const String loginByE = "email-login";
