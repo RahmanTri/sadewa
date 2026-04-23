@@ -69,7 +69,10 @@ class history_log_controller extends Controller
 
         $data = Em_log_in::where("employee_log_in.employee_id", $employee->id)
             ->where('employee_log_in.created_at', '>=', now()->subDays(364))
-            ->join('employee_log_out', DB::raw('DATE(employee_log_in.created_at)'), '=', DB::raw('DATE(employee_log_out.created_at)'))
+            ->join('employee_log_out', 'employee_log_out.employee_id', '=', 'employee_log_in.employee_id')
+            ->where('employee_log_out.employee_id', $employee->id)
+            ->where('employee_log_in.employee_id', $employee->id)
+            ->whereRaw('DATE(employee_log_out.created_at) = DATE(employee_log_in.created_at)')
             ->select(
                 'employee_log_in.created_at as date',
                 'employee_log_in.login_time as waktu_masuk',
@@ -96,7 +99,7 @@ class history_log_controller extends Controller
                     ];
                 }
             );
-
+            
         return response()->json([
             "success" => true,
             "message" => "data berhasil di dapatkan",
