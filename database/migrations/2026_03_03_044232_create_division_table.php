@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->time('checkin_time');
             $table->time('checkout_time');
             $table->integer('tolerance');
-            $table->float('latitude');
-            $table->float('longitude');
-            $table->int('r_tolerance')->default(100);
+            $table->float('latitude')->nullable();
+            $table->float('longitude')->nullable();
+            $table->integer('r_tolerance')->default(100);
             $table->timestamps();
         });
     }

@@ -31,7 +31,7 @@ class employeeFactory extends Factory
             "name" => $this->faker->name(),
             "division_id" => $this->faker->numberBetween(1, 7),
             "phone_number" => '08' . $this->faker->numberBetween(1111111111, 9999999999),
-            "face_data" => $this->faker->randomNumber(),
+            // "face_data" => $this->faker->randomNumber(),
         ];
     }
 }

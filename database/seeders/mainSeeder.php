@@ -97,7 +97,7 @@ class mainSeeder extends Seeder
             "name" => "David",
             "division_id" => 1,
             "phone_number" => "089635412765",
-            "face_data" => "265868 - 6969696 - 6537"
+            // "face_data" => "265868 - 6969696 - 6537"
         ]);
 
         Employee::factory()->count(50)->create();
