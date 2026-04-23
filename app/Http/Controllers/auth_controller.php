@@ -99,7 +99,7 @@ class auth_controller extends Controller
                 'success' => true,
                 'message' => 'Login berhasil',
                 'token' => $token,
-                'user' => $user,
+                'user_data' => $user,
             ], 200);
         } else {
             return response()->json([
@@ -147,15 +147,12 @@ class auth_controller extends Controller
                 ], 404);
             }
             $token = $user->createToken('token')->plainTextToken;
-            $rawFaceData = Employee::where('user_id', $user->id)->first();
-            $faceData = json_decode($rawFaceData->face_data);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil',
                 'token' => $token,
-                'user' => $user,
-                'face_data' => $faceData
+                'user_data' => $user,
 
             ], 200);
         } else {

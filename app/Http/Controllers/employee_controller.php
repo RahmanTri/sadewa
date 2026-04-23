@@ -436,9 +436,11 @@ class employee_controller extends Controller
 
         $validatedData = $validator->validate();
 
-        $employee->face_data = $validatedData["face_data"] ?? $employee->face_data;
+        $faceDataEncode = json_encode($validatedData["face_data"]);
 
-        $employee->save();
+        $employee->face_data = $faceDataEncode ?? $employee->face_data;
+
+        $employee->save();  
 
         return response()->json([
             "success" => true,

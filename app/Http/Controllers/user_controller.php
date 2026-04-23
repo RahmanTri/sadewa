@@ -48,19 +48,20 @@ class user_controller extends Controller
             ->join('division', 'employee.division_id', 'division.id')
             ->join('point', 'employee.id', 'point.employee_id')
             ->select(
-                'employee.id',
+                'users.id as user_id',
                 'users.username as username',
                 'users.email as email',
+                'users.role as role',
                 'employee.company_id as id_perusahaan',
-                'employee.name as nama_karyawan',
-                'employee.phone_number as no_hp',
-                'employee.profile_pic as foto_profil',
-                'employee.logged_in as status_masuk',
-                'employee.logged_out as status_keluar',
+                'employee.division_id as id_divisi',
                 'division.division_name as nama_divisi',
+                'employee.name as nama_lengkap',
+                'employee.phone_number as no_telp',
+                'employee.face_data as data_wajah',
+                'employee.profile_pic as foto_profil',
                 'point.point_value as poin',
-                'point.positive_streak as streak_positif',
-                'point.negative_streak as streak_negatif',
+                'employee.logged_in',
+                'employee.logged_out',
             )
             ->first();
 
@@ -73,13 +74,13 @@ class user_controller extends Controller
             ->where('created_at', '>=', Carbon::now()->subDays(6))
             ->get();
 
-        $faceData = Employee::where('employee.id', $user->id)->first()->face_data;
+        // $faceData = Employee::where('employee.id', $user->id)->first()->face_data;
 
 
         return response()->json([
             "success" => true,
             "data" => $employee,
-            "face_data" => json_decode($faceData),
+            // "face_data" => json_decode($faceData),
             "latest_login" => $latestLogin
         ], 200);
     }
