@@ -67,6 +67,9 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/form-auth-bg.png
+    - assets/images/blank-page-img.png
+    - assets/images/point-box.png
+    - assets/images/default-profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
