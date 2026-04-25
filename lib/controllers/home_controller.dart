@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
-import 'package:sadewa_fe/constants/urls.dart';
+// import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'package:sadewa_fe/services/storage_service.dart';
 
@@ -21,9 +20,9 @@ class HomeController extends GetxController {
   var absenMessage = ''.obs;
   var absenIcons = Rxn<Widget>();
   var pointText = Rxn<Widget>();
+  var latestLoginWidget = Rxn<Widget>();
   var pointMessage = ''.obs;
   var token = ''.obs;
-  var latestLoginDay = [].obs;
 
   @override
   void onInit() async {
@@ -135,8 +134,9 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> _loadLatestLogin() async {
+  Future<void> _loadLatestLogin(double height, double width) async {
     final String authToken = token.value;
+    List<Map<String, dynamic>> latestLoginData = [];
 
     String getOnlyDay(DateTime date) {
       switch (date.weekday) {
@@ -173,8 +173,43 @@ class HomeController extends GetxController {
 
         return {'hari': dayAbbr, 'status': item['status']};
       }).toList();
-      print("BErhasil mendapatkan Data Latest Login");
-      print(data);
+      print("Berhasil mendapatkan Data Latest Login");
+      latestLoginData = data;
+
+      latestLoginWidget.value = ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: latestLoginData.length,
+        itemBuilder: (context, index) {
+          final item = latestLoginData[index];
+          final status = item['status'];
+          final hari = item['hari'];
+
+          switch (status) {
+            case 'on_time':
+              final bgColor = SDWcolors.success;
+              final iconData = Icons.check_circle_outline;
+            case 'late':
+              final bgColor = SDWcolors.warning;
+              final iconData = Icons.warning_amber_outlined;
+            case 'absent':
+              final bgColor = SDWcolors.error;
+              final iconData = Icons.cancel_outlined;
+          }
+
+          return Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: height * 0.4,
+                  width: width * 0.9,
+                  decoration: BoxDecoration(color: bgColor),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      print(latestLoginData);
     } catch (e) {
       print('Gagal Mendapatkan Latest Logi : $e');
     }
