@@ -65,78 +65,97 @@ class MyPointPage extends StatelessWidget {
             ),
             Column(
               children: [
-                SizedBox(height: height * 0.06),
-                Container(
-                  height: height * 0.24,
+                SizedBox(height: height * 0.006),
+                SizedBox(
+                  height: height * 0.32,
                   width: width * 0.48,
-                  decoration: BoxDecoration(
-                    color: SDWcolors.transparent,
-                    image: DecorationImage(
-                      image: AssetImage('${AppUrls.imgAssets}point-box.png'),
-                      fit: BoxFit.fill,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [SDWboxShadow.shadow],
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(height: height * 0.008),
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: SDWcolors.essentialD, width: 8),
-                    shape: BoxShape.circle,
-                    color: SDWcolors.essentialL,
-                    image: DecorationImage(
-                      // image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
-                      image: poinController.profilePic.value == ''
-                          ? AssetImage(
-                              '${AppUrls.imgAssets}default-profile.png',
-                            )
-                          : NetworkImage(
-                              '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(height: 40),
+                          Container(
+                            height: height * 0.24,
+                            width: width * 0.48,
+                            decoration: BoxDecoration(
+                              color: SDWcolors.transparent,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  '${AppUrls.imgAssets}point-box.png',
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [SDWboxShadow.shadow],
                             ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: height * 0.02),
-                IntrinsicWidth(
-                  child: Container(
-                    height: height * 0.106,
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    decoration: BoxDecoration(
-                      color: SDWcolors.primary.withAlpha(50),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: Text(
-                        poinController.point.value.toString(),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineLarge
-                            ?.copyWith(
-                              color: SDWcolors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                      Column(
+                        children: [
+                          Container(
+                            height: 80,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: SDWcolors.essentialD,
+                                width: 8,
+                              ),
+                              shape: BoxShape.circle,
+                              color: SDWcolors.essentialL,
+                              image: DecorationImage(
+                                // image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
+                                image: poinController.profilePic.value == ''
+                                    ? AssetImage(
+                                        '${AppUrls.imgAssets}default-profile.png',
+                                      )
+                                    : NetworkImage(
+                                        '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
+                                      ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: height * 0.02),
+                          IntrinsicWidth(
+                            child: Container(
+                              height: height * 0.106,
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              decoration: BoxDecoration(
+                                color: SDWcolors.primary.withAlpha(50),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  poinController.point.value.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge
+                                      ?.copyWith(
+                                        color: SDWcolors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: height * 0.02),
+                          Text(
+                            'POIN',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(color: SDWcolors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: height * 0.02),
-                Text(
-                  'POIN',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(color: SDWcolors.white),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: height * 0.032),
                 Expanded(
                   child: Column(
                     children: [
+                      SizedBox(height: height * 0.002),
                       Container(
                         height: height * 0.15,
                         width: width * 0.92,
@@ -602,10 +621,10 @@ class MyPointPage extends StatelessWidget {
                               child: Container(
                                 height: height * 0.2,
                                 decoration: BoxDecoration(
-                                  color: SDWcolors.primary
+                                  color: SDWcolors.primary,
                                 ),
-                              )
-                            )
+                              ),
+                            ),
                           ],
                         ),
                       ),
