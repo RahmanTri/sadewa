@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
+import 'package:sadewa_fe/controllers/point_controller.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class PointAbsent extends StatelessWidget {
   final double width;
   final double height;
   PointAbsent({required this.width, required this.height});
   final homeController = Get.put(HomeController());
+  final pointController = Get.put(PointController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,57 +59,67 @@ class PointAbsent extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 20, left: 10),
-          height: height * 0.14,
-          width: width * 0.3,
-          decoration: BoxDecoration(
-            color: SDWcolors.bgL,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: SDWcolors.essentialDR.withAlpha(50),
-                spreadRadius: 0,
-                blurRadius: 4,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Poin Saya",
-                style: TextStyle(
-                  fontSize: SDWsizes.lg * 0.9,
-                  fontWeight: FontWeight.bold,
-                  color: SDWcolors.textD,
+          onPressed: () {
+            Get.offAllNamed(Routes.myPoint);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 20, left: 10),
+            height: height * 0.14,
+            width: width * 0.3,
+            decoration: BoxDecoration(
+              color: SDWcolors.bgL,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: SDWcolors.essentialDR.withAlpha(50),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: const Offset(0, 4),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              homeController.pointText.value!,
-              Text(
-                homeController.pointMessage.value,
-                style: TextStyle(
-                  fontSize: SDWsizes.md * 1,
-                  fontWeight: FontWeight.w500,
-                  color: SDWcolors.textD,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Poin Saya",
+                  style: TextStyle(
+                    fontSize: SDWsizes.lg * 0.9,
+                    fontWeight: FontWeight.bold,
+                    color: SDWcolors.textD,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                "lihat benefit",
-                style: TextStyle(
-                  fontSize: SDWsizes.md * 1.2,
-                  fontWeight: FontWeight.w300,
-                  color: SDWcolors.textD,
-                  decoration: TextDecoration.underline,
-                  decorationColor: SDWcolors.essentialD,
+                homeController.pointText.value!,
+                Text(
+                  homeController.pointMessage.value,
+                  style: TextStyle(
+                    fontSize: SDWsizes.md * 1,
+                    fontWeight: FontWeight.w500,
+                    color: SDWcolors.textD,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                Text(
+                  "lihat benefit",
+                  style: TextStyle(
+                    fontSize: SDWsizes.md * 1.2,
+                    fontWeight: FontWeight.w300,
+                    color: SDWcolors.textD,
+                    decoration: TextDecoration.underline,
+                    decorationColor: SDWcolors.essentialD,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ],

@@ -3,11 +3,13 @@ import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/controllers/notice_controller.dart';
 
 class QuickAction extends StatelessWidget {
   final double width;
   final double height;
   QuickAction({required this.width, required this.height});
+  final noticeController = Get.put(NoticeController());
 
   @override
   Widget build(BuildContext context) {
@@ -86,19 +88,30 @@ class QuickAction extends StatelessWidget {
                 ],
               ),
               SizedBox(width: width * 0.1),
+
               Column(
                 children: [
-                  Container(
-                    width: width * 0.2,
-                    height: height * 0.09,
-                    decoration: BoxDecoration(
-                      color: SDWcolors.bgD,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/icons/peringkat_karyawan.png',
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      // Get.offAllNamed(Routes.riwayat);
+                    },
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.09,
+                      decoration: BoxDecoration(
+                        color: SDWcolors.bgD,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/icons/peringkat_karyawan.png',
+                          ),
+                          fit: BoxFit.fill,
                         ),
-                        fit: BoxFit.fill,
                       ),
                     ),
                   ),
@@ -120,18 +133,29 @@ class QuickAction extends StatelessWidget {
               SizedBox(width: width * 0.1),
               Column(
                 children: [
-                  Container(
-                    width: width * 0.2,
-                    height: height * 0.09,
-                    decoration: BoxDecoration(
-                      color: SDWcolors.bgD,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: AssetImage('assets/icons/peringatan.png'),
-                        fit: BoxFit.fill,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Get.offAllNamed(Routes.readNotice);
+                    },
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.09,
+                      decoration: BoxDecoration(
+                        color: SDWcolors.bgD,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage('assets/icons/peringatan.png'),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
+
                   Container(
                     width: width * 0.2,
                     margin: EdgeInsets.only(top: 10),
