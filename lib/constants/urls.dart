@@ -13,6 +13,9 @@ class AppUrls {
   static const String physical = "http://127.0.0.1:8000/";
   static const String ngrok = "https://shaunda-unpolitic-maeve.ngrok-free.dev/";
 
+  //ImageAssets
+  static const String imgAssets = "assets/images/";
+
   // ENDPOINTS
   static const String loginByE = "email-login";
   static const String loginByU = "username-login";

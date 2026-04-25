@@ -72,6 +72,9 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/form-auth-bg.png
+    - assets/images/blank-page-img.png
+    - assets/images/point-box.png
+    - assets/images/default-profile.png
 
     - assets/icons/riwayat_kehadiran.png
     - assets/icons/peringkat_karyawan.png

@@ -8,8 +8,6 @@ import '../effect/box_shadow.dart';
 // import 'package:sadewa_fe/models/notice_model.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 
-
-
 class RiwayatPage extends StatelessWidget {
   const RiwayatPage({super.key});
 
@@ -64,9 +62,7 @@ class RiwayatPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: SDWcolors.bgL,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    SDWboxShadow.shadow,
-                  ],
+                  boxShadow: [SDWboxShadow.shadow],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -174,9 +170,7 @@ class RiwayatPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: SDWcolors.bgL,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        SDWboxShadow.shadow,
-                      ],
+                      boxShadow: [SDWboxShadow.shadow],
                     ),
                     child: Center(
                       child: Obx(
@@ -228,19 +222,73 @@ class RiwayatPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Obx(
-                () => Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(left: 12, right: 12),
-                    physics: BouncingScrollPhysics(),
-                    itemCount: riwayatController.filteredhistories.length,
-                    itemBuilder: (context, index) => HistoryCard(
-                      height: height,
-                      width: width,
-                      gap: 12,
-                      riwayat: riwayatController.filteredhistories[index],
-                    ),
-                  ),
-                ),
+                () => riwayatController.isLoading.value
+                    ? Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(color: SDWcolors.primary),
+                            SizedBox(height: 10),
+                            Text(
+                              'Memuat Data...',
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    color: SDWcolors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Obx(
+                        () => riwayatController.isLoading.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: SDWcolors.primary,
+                                ),
+                              )
+                            : riwayatController.filteredhistories.isEmpty
+                            ? Center(
+                                child: Column(
+                                  children: [
+                                    Image(
+                                      image: AssetImage(
+                                        'assets/images/blank-page-img.png',
+                                      ),
+                                      height: height * 0.5,
+                                      width: width * 0.4,
+                                    ),
+                                    Text(
+                                      'Belum ada riwayat',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: SDWcolors.textD,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Expanded(
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(left: 12, right: 12),
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: riwayatController
+                                      .filteredhistories
+                                      .length,
+                                  itemBuilder: (context, index) => HistoryCard(
+                                    height: height,
+                                    width: width,
+                                    gap: 12,
+                                    riwayat: riwayatController
+                                        .filteredhistories[index],
+                                  ),
+                                ),
+                              ),
+                      ),
               ),
             ],
           ),
