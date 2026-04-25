@@ -1,86 +1,128 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 
-class BaseDialog {
-  static void show({
+class PopUp {
+  static OverlayEntry? _overlayEntry;
+
+  static void show(
+    BuildContext, {
     required String title,
     required String message,
-    required height,
-    required width,
-    String cancelText = "Batal",
-    String confirmText = "Lanjut",
-    IconData icon = Icons.notifications,
+    required double height,
+    required double width,
+    IconData icon = Icons.info,
+    String confirmText = 'Lanjut',
+    String cancelText = 'Batal',
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
   }) {
-    Get.defaultDialog(
-      content: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(color: const Color.fromRGBO(0, 0, 0, 0.5)),
-        child: Stack(
+    if (_overlayEntry != null) return;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Material(
+        color: Colors.black.withAlpha(150),
+        child: Center(
+          child: _popUpContent(
+            title: title,
+            message: message,
+            icon: icon,
+            confirmText: confirmText,
+            cancelText: cancelText,
+            height: height,
+            width: width,
+            onConfirm: onConfirm,
+            onCancel: onCancel,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void hide() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+}
+
+class _popUpContent extends StatelessWidget {
+  final String title;
+  final String message;
+  final IconData icon;
+  final String confirmText;
+  final String cancelText;
+  final VoidCallback? onConfirm;
+  final VoidCallback? onCancel;
+  final double height;
+  final double width;
+
+  _popUpContent({
+    required this.title,
+    required this.message,
+    required this.icon,
+    required this.confirmText,
+    required this.cancelText,
+    required this.height,
+    required this.width,
+    this.onConfirm,
+    this.onCancel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+      duration: const Duration(milliseconds: 250),
+      tween: Tween(begin: 0.8, end: 1.0),
+      builder: (context, scale, child) {
+        return Transform.scale(scale: scale, child: child);
+      },
+      child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: width * 0.5,
-              height: height * 0.5,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: SDWcolors.primary,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Icon(icon, color: SDWcolors.bgL),
+            Icon(icon, size: 50, color: Colors.blue),
+            const SizedBox(height: 16),
+
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Container(
-              width: width * 0.7,
-              height: height * 0.3,
-              decoration: BoxDecoration(
-                color: SDWcolors.bgD,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(title),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: onCancel,
-                        child: Container(
-                          height: height * 0.02,
-                          width: width * 0.4,
-                          decoration: BoxDecoration(
-                            color: SDWcolors.bgL,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            cancelText,
-                            style: TextStyle(color: SDWcolors.primary),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: onConfirm,
-                        child: Container(
-                          height: height * 0.02,
-                          width: width * 0.4,
-                          decoration: BoxDecoration(
-                            color: SDWcolors.primary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            confirmText,
-                            style: TextStyle(color: SDWcolors.bgL),
-                          ),
-                        ),
-                      ),
-                    ],
+
+            const SizedBox(height: 10),
+
+            Text(message, textAlign: TextAlign.center),
+
+            const SizedBox(height: 20),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      PopUp.hide();
+                      onCancel?.call();
+                    },
+                    child: Text(cancelText),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      PopUp.hide();
+                      onConfirm?.call();
+                    },
+                    child: Text(confirmText),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

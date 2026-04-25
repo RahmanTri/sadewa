@@ -156,7 +156,7 @@ class AuthController extends GetxController {
   void devAutoLogin() async {
     isLoading.value = true;
     try {
-      final success = await login('BambangSutejo', 'bamsutejo1234');
+      final success = await login('employee01', 'employee123');
       if (!success) {
         Get.snackbar('Login gagal', 'Ada yang Keliru');
         isLoading.value = false;

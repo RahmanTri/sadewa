@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
+import 'package:get/get.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class QuickAction extends StatelessWidget {
   final double width;
@@ -44,15 +46,27 @@ class QuickAction extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Container(
-                    width: width * 0.2,
-                    height: height * 0.09,
-                    decoration: BoxDecoration(
-                      color: SDWcolors.bgD,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: AssetImage('assets/icons/riwayat_kehadiran.png'),
-                        fit: BoxFit.fill,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Get.offAllNamed(Routes.riwayat);
+                    },
+                    child: Container(
+                      width: width * 0.2,
+                      height: height * 0.09,
+                      decoration: BoxDecoration(
+                        color: SDWcolors.bgD,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/icons/riwayat_kehadiran.png',
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),

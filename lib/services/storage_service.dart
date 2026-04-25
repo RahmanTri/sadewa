@@ -8,7 +8,7 @@ class StorageService {
   static const _rememberKey = 'user_is_remember';
   static const _userTokenKey = 'user_token';
   static const _userRoleKey = 'user_role';
-  static const _faceEmbeddings = 'face_embeddings';
+  // static const _faceEmbeddings = 'face_embeddings';
 
   // Save data
   Future<void> saveEmailUsername(String emailUsername) async {

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
+import 'package:get/get.dart';
 
 class PointAbsent extends StatelessWidget {
   final double width;
   final double height;
   PointAbsent({required this.width, required this.height});
+  final homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +34,9 @@ class PointAbsent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.check_circle,
-                color: SDWcolors.success,
-                size: SDWsizes.iconsXL * 1.5,
-              ),
+              homeController.absenIcons.value!,
               Text(
-                "Anda Sudah Absen Hari Ini",
+                homeController.absentText.value,
                 style: TextStyle(
                   fontSize: SDWsizes.lg * 0.8,
                   fontWeight: FontWeight.bold,
@@ -46,7 +45,7 @@ class PointAbsent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "Laksanakan Tugas Anda Dengan Sepenuh Hati",
+                homeController.absenMessage.value,
                 style: TextStyle(
                   fontSize: SDWsizes.md * 1,
                   fontWeight: FontWeight.w300,
@@ -86,17 +85,9 @@ class PointAbsent extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
+              homeController.pointText.value!,
               Text(
-                "92",
-                style: TextStyle(
-                  fontSize: SDWsizes.lg * 2,
-                  fontWeight: FontWeight.w800,
-                  color: SDWcolors.success,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                "Pertahankan Terus!",
+                homeController.pointMessage.value,
                 style: TextStyle(
                   fontSize: SDWsizes.md * 1,
                   fontWeight: FontWeight.w500,
