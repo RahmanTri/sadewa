@@ -9,5 +9,6 @@ class Routes {
   static const notice = '/pesan';
   static const readNotice = '/readNotice';
   static const myPoint = '/myPoint';
-
+  static const registWajah = '/faceRegist';
+  static const absen = '/absen';
 }

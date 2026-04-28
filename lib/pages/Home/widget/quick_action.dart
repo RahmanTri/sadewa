@@ -4,6 +4,8 @@ import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/controllers/notice_controller.dart';
+import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class QuickAction extends StatelessWidget {
   final double width;

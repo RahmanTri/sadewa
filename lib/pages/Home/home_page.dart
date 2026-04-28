@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import '../Effect/box_shadow.dart';
-import '../Effect/popup.dart';
+import '../Effect/SDWOverlay.dart';
 import 'widget/header_page.dart';
 import 'widget/activity_log.dart';
 import 'widget/point_n_absent.dart';
 import 'widget/quick_action.dart';
 import 'widget/recent_absent.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -41,6 +43,25 @@ class HomePage extends StatelessWidget {
             child: CircularProgressIndicator(),
           ),
         );
+      }
+
+      if (homeController.userData.user.value?.dataWajah == null ||
+          homeController.userData.user.value!.dataWajah.isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Sdwoverlay.showOverlay(
+            context: context,
+            title: 'Data Wajah Kosong, Silahkan Registrasi Wajah Anda Dahulu!',
+            iconData: FontAwesomeIcons.userXmark,
+            height: height,
+            width: width,
+            onCancel: () {
+              Get.offAllNamed(Routes.login);
+            },
+            onConfirm: () {
+              Get.offAllNamed(Routes.registWajah);
+            },
+          );
+        });
       }
 
       return Scaffold(

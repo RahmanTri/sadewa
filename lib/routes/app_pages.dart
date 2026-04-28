@@ -22,29 +22,13 @@ class AppPages {
       page: () => SplashPage(),
       binding: AppBinding(),
     ),
-    GetPage(
-      name: Routes.login,
-      page: () => LoginPage(),
-    ),
-    GetPage(
-      name: Routes.riwayat,
-      page: () => RiwayatPage(), 
-    ),
-    GetPage(
-      name: Routes.home,
-      page: () => HomePage(),
-    ),
-    GetPage(
-      name: Routes.notice,
-      page: () => NoticePage(),
-    ),
-    GetPage(
-      name: Routes.readNotice,
-      page: () => ReadNoticePage(),
-    ),
-    GetPage(
-      name: Routes.myPoint,
-      page: () => MyPointPage(), 
-    ),
+    GetPage(name: Routes.login, page: () => LoginPage()),
+    GetPage(name: Routes.riwayat, page: () => RiwayatPage()),
+    GetPage(name: Routes.home, page: () => HomePage()),
+    GetPage(name: Routes.notice, page: () => NoticePage()),
+    GetPage(name: Routes.readNotice, page: () => ReadNoticePage()),
+    GetPage(name: Routes.myPoint, page: () => MyPointPage()),
+    GetPage(name: Routes.registWajah, page: () => RegistWajah()),
+    GetPage(name: Routes.absen, page: () => AbsenPage()),
   ];
 }
