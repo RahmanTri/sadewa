@@ -6,7 +6,7 @@ import 'package:sadewa_fe/pages/Riwayat/widgets/history_card.dart';
 import '../effect/box_shadow.dart';
 // import 'package:sadewa_fe/controllers/notice_controller.dart';
 // import 'package:sadewa_fe/models/notice_model.dart';
-import 'package:sadewa_fe/routes/app_routes.dart';
+
 
 class RiwayatPage extends StatelessWidget {
   const RiwayatPage({super.key});
@@ -33,7 +33,7 @@ class RiwayatPage extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Get.toNamed(Routes.notice),
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/controllers/point_controller.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/pages/Poin/widget/histori_poin_card.dart';
 import '../../constants/sdw_colors.dart';
 import '../../constants/urls.dart';
 import '../Effect/box_shadow.dart';
@@ -13,6 +14,8 @@ class MyPointPage extends StatelessWidget {
     final poinController = Get.put<PointController>(PointController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    // Future.microtask(() => poinController.getPointHistoryLog());
 
     return Container(
       height: height,
@@ -100,7 +103,7 @@ class MyPointPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: SDWcolors.essentialD,
-                                width: 8,
+                                width: 6,
                               ),
                               shape: BoxShape.circle,
                               color: SDWcolors.essentialL,
@@ -131,10 +134,11 @@ class MyPointPage extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headlineLarge
+                                      .bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.primary,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: height * 0.072
                                       ),
                                 ),
                               ),
@@ -185,10 +189,10 @@ class MyPointPage extends StatelessWidget {
                             SizedBox(height: height * 0.008),
                             Text(
                               'Peforma Anda Bulan Ini ${poinController.performanceCredit.value}!',
-                              style: Theme.of(context).textTheme.titleLarge
+                              style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(
                                     color: SDWcolors.textD,
-                                    fontSize: width * 0.032,
+                                    fontSize: width * 0.028,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -198,10 +202,10 @@ class MyPointPage extends StatelessWidget {
                               child: Text(
                                 poinController.performanceMsg.value,
                                 textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.titleLarge
+                                style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(
                                       color: SDWcolors.textD,
-                                      fontSize: width * 0.028,
+                                      fontSize: width * 0.024,
                                       fontWeight: FontWeight.normal,
                                     ),
                               ),
@@ -230,7 +234,7 @@ class MyPointPage extends StatelessWidget {
                             SizedBox(height: height * 0.008),
                             Text(
                               'Benefit',
-                              style: Theme.of(context).textTheme.titleLarge
+                              style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(
                                     color: SDWcolors.textD,
                                     fontSize: width * 0.040,
@@ -254,7 +258,7 @@ class MyPointPage extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge
+                                                  .bodyLarge
                                                   ?.copyWith(
                                                     color:
                                                         poinController
@@ -273,7 +277,7 @@ class MyPointPage extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge
+                                                  .bodyLarge
                                                   ?.copyWith(
                                                     color:
                                                         poinController
@@ -324,7 +328,7 @@ class MyPointPage extends StatelessWidget {
                                                       'min 85 Poin',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .titleLarge
+                                                          .bodyLarge
                                                           ?.copyWith(
                                                             color:
                                                                 poinController
@@ -371,7 +375,7 @@ class MyPointPage extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge
+                                                  .bodyLarge
                                                   ?.copyWith(
                                                     color:
                                                         poinController
@@ -390,7 +394,7 @@ class MyPointPage extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge
+                                                  .bodyLarge
                                                   ?.copyWith(
                                                     color:
                                                         poinController
@@ -441,7 +445,7 @@ class MyPointPage extends StatelessWidget {
                                                       'min 95 Poin',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .titleLarge
+                                                          .bodyLarge
                                                           ?.copyWith(
                                                             color:
                                                                 poinController
@@ -507,7 +511,7 @@ class MyPointPage extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .titleLarge
+                                                  .bodyLarge
                                                   ?.copyWith(
                                                     color:
                                                         poinController
@@ -558,7 +562,7 @@ class MyPointPage extends StatelessWidget {
                                                       'min 110 Poin',
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .titleLarge
+                                                          .bodyLarge
                                                           ?.copyWith(
                                                             color:
                                                                 poinController
@@ -618,12 +622,22 @@ class MyPointPage extends StatelessWidget {
                             SizedBox(height: height * 0.012),
                             SizedBox(
                               width: width * 0.92,
-                              child: Container(
-                                height: height * 0.2,
-                                decoration: BoxDecoration(
-                                  color: SDWcolors.primary,
-                                ),
-                              ),
+                              height: height * 0.2,
+                              child: poinController.isLoading.value
+                                  ? Center(child: CircularProgressIndicator())
+                                  : ListView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      itemCount:
+                                          poinController.historyPoint.length,
+                                      itemBuilder: (context, index) {
+                                        return HistoriPoinCard(
+                                          height: height,
+                                          width: width,
+                                          riwayatPoin: poinController
+                                              .historyPoint[index],
+                                        );
+                                      },
+                                    ),
                             ),
                           ],
                         ),

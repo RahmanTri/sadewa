@@ -57,7 +57,7 @@ class QuickAction extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      Get.offAllNamed(Routes.riwayat);
+                      Get.toNamed(Routes.riwayat);
                     },
                     child: Container(
                       width: width * 0.2,
@@ -142,7 +142,7 @@ class QuickAction extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      Get.offAllNamed(Routes.readNotice);
+                      Get.toNamed(Routes.notice);
                     },
                     child: Container(
                       width: width * 0.2,
