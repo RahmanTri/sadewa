@@ -96,31 +96,31 @@ class auth_controller extends Controller
             $token = $user->createToken('token')->plainTextToken;
 
             $data = User::where("email", $validatedData["email"])
-            ->join('employee', 'employee.user_id', '=', 'users.id')
-            ->join('division', 'division.id', '=', 'employee.division_id')
-            ->join('point', 'point.employee_id', '=', 'employee.id')
-            ->select(
-                'users.id as user_id',
-                'users.username as username',
-                'users.email as email',
-                'users.role as role',
-                'employee.company_id as id_perusahaan',
-                'employee.name as nama_lengkap',
-                'employee.phone_number as no_telp',
-                'employee.division_id as id_divisi',
-                'division.name as nama_divisi',
-                'employee.face_data as data_wajah',
-                'employee.profile_pic as foto_profil',
-                'point.point_value as poin',
-                'employee.logged_in as logged_in',
-                'employee.logged_out as logged_out',
-            )
-            ->get()
-            ->map(function ($item) {
-                $item->data_wajah = json_decode($item->data_wajah);
-                return $item;
-            })
-            ->first()
+                ->join('employee', 'employee.user_id', '=', 'users.id')
+                ->join('division', 'division.id', '=', 'employee.division_id')
+                ->join('point', 'point.employee_id', '=', 'employee.id')
+                ->select(
+                    'users.id as user_id',
+                    'users.username as username',
+                    'users.email as email',
+                    'users.role as role',
+                    'employee.company_id as id_perusahaan',
+                    'employee.name as nama_lengkap',
+                    'employee.phone_number as no_telp',
+                    'employee.division_id as id_divisi',
+                    'division.division_name as nama_divisi',
+                    'employee.face_data as data_wajah',
+                    'employee.profile_pic as foto_profil',
+                    'point.point_value as poin',
+                    'employee.logged_in as logged_in',
+                    'employee.logged_out as logged_out',
+                )
+                ->get()
+                ->map(function ($item) {
+                    $item->data_wajah = json_decode($item->data_wajah);
+                    return $item;
+                })
+                ->first()
             ;
 
             return response()->json([
@@ -177,31 +177,31 @@ class auth_controller extends Controller
             $token = $user->createToken('token')->plainTextToken;
 
             $data = User::where("username", $validatedData["username"])
-            ->join('employee', 'employee.user_id', '=', 'users.id')
-            ->join('division', 'division.id', '=', 'employee.division_id')
-            ->join('point', 'point.employee_id', '=', 'employee.id')
-            ->select(
-                'users.id as user_id',
-                'users.username as username',
-                'users.email as email',
-                'users.role as role',
-                'employee.company_id as id_perusahaan',
-                'employee.name as nama_lengkap',
-                'employee.phone_number as no_telp',
-                'employee.division_id as id_divisi',
-                'division.division_name as nama_divisi',
-                'employee.face_data as data_wajah',
-                'employee.profile_pic as foto_profil',
-                'point.point_value as poin',
-                'employee.logged_in as logged_in',
-                'employee.logged_out as logged_out',
-            )
-            ->get()
-            ->map(function ($item) {
-                $item->data_wajah = json_decode($item->data_wajah);
-                return $item;
-            })
-            ->first()
+                ->join('employee', 'employee.user_id', '=', 'users.id')
+                ->join('division', 'division.id', '=', 'employee.division_id')
+                ->join('point', 'point.employee_id', '=', 'employee.id')
+                ->select(
+                    'users.id as user_id',
+                    'users.username as username',
+                    'users.email as email',
+                    'users.role as role',
+                    'employee.company_id as id_perusahaan',
+                    'employee.name as nama_lengkap',
+                    'employee.phone_number as no_telp',
+                    'employee.division_id as id_divisi',
+                    'division.division_name as nama_divisi',
+                    'employee.face_data as data_wajah',
+                    'employee.profile_pic as foto_profil',
+                    'point.point_value as poin',
+                    'employee.logged_in as logged_in',
+                    'employee.logged_out as logged_out',
+                )
+                ->get()
+                ->map(function ($item) {
+                    $item->data_wajah = json_decode($item->data_wajah);
+                    return $item;
+                })
+                ->first()
             ;
 
             return response()->json([
