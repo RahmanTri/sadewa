@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Point;
+use App\Models\point_log;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +19,7 @@ class BambangSutejoSeeder extends Seeder
     public function run(): void
     {
 
-        $employeeId = '53';
+        $employeeId = '52';
         //
         Em_log_in::create([
             'employee_id' => $employeeId,
@@ -172,6 +174,83 @@ class BambangSutejoSeeder extends Seeder
             'employee_id' => $employeeId,
             'logout_time' => '16:24:28',
             'status' => 'early',
+            'created_at' => now(),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 75,
+            'added_value' => 1,
+            'created_at' => now()->subDays(10),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 76,
+            'added_value' => 1,
+            'created_at' => now()->subDays(9),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 77,
+            'added_value' => 1,
+            'created_at' => now()->subDays(8),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 78,
+            'added_value' => 1,
+            'created_at' => now()->subDays(7),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 79,
+            'added_value' => 1,
+            'created_at' => now()->subDays(6),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 80,
+            'added_value' => 1,
+            'created_at' => now()->subDays(5),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 81,
+            'added_value' => 1,
+            'created_at' => now()->subDays(4),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 82,
+            'added_value' => 2,
+            'created_at' => now()->subDays(3),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 84,
+            'added_value' => 2,
+            'created_at' => now()->subDays(2),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 86,
+            'added_value' => 2,
+            'created_at' => now()->subDays(1),
+        ]);
+
+        Point_log::create([
+            'employee_id' => $employeeId,
+            'previous_value' => 88,
+            'added_value' => 2,
             'created_at' => now(),
         ]);
 

@@ -338,51 +338,67 @@ class employee_controller extends Controller
         $employee = Employee::where('user_id', $user->id)->first();
 
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|max:150',
-            'email' => 'sometimes|required|email',
-            "phone_number" => "required|string|max:13|min:12",
-            "password" => "sometimes|required|string|min:8",
-            "profile_pic" => "sometimes|required|image|mimes:png,jpg,jpeg|max:4096",
+            'name' => 'sometimes|string|max:150',
+            'email' => 'sometimes|email',
+            "phone_number" => "sometimes|string|max:13|min:12",
+            "password" => "sometimes|string|min:8",
+            "profile_pic" => "sometimes|image|max:4096",
         ], [
-            "name.required" => "Kolom nama tidak boleh kosong",
             "name.max" => "Nama maksimal 150 karakter",
-            "email.required" => "kolom email tidak boleh kosong",
             "email.email" => "Email tidak valid",
-            "phone_number.required" => "kolom nomor telepon tidak boleh kosong",
             "phone_number.max" => "Nomor telepon tidak valid",
             "phone_number.min" => "Nomor telepon tidak valid",
-            "password.required" => "kolom password tidak boleh kosong",
             "password.min" => "Password minimal 8 karakter",
-            "profile_pic.required" => "foto profil tidak boleh kosong",
             "profile_pic.image" => "File harus berupa gambar",
-            "profile_pic.mimes" => "Format file yang didukung adalah PNG, JPG, dan JPEG",
+            // "profile_pic.mimetypes" => "Format file yang didukung adalah PNG, JPG, dan JPEG",
             "profile_pic.max" => "Ukuran file maksimal 4MB",
         ]);
 
+        // dd($request->file('profile_pic'));
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $oldUserData = $user->toArray();
+        $oldImage = $employee->profile_pic;
+        $oldEmployeeData = $employee->toArray();
+
         if ($request->hasFile("profile_pic")) {
             $imageFile = $request->file("profile_pic");
+            if ($oldImage) {
+                Storage::disk("public")->delete("profile_pics/" . $oldImage);
+            }
             $path = $imageFile->storeAs("profile_pics", $imageFile->hashName(), "public");
+            $employee->profile_pic = $imageFile->hashName();
         }
 
         $validatedData = $validator->validated();
 
-        $oldEmployeeData = $employee->toArray();
-        $oldImage = $employee->profile_pic;
-
-        $employee->name = $validatedData["name"] ?? $employee->name;
-        $employee->phone_number = $validatedData["phone_number"] ?? $employee->phone_number;
-        if (isset($validatedData['profile_pic'])) {
-            $employee->profile_pic = $imageFile->hashName() ?? $employee->profile_pic;
-            Storage::disk('public')->delete('profile_pics/' . $oldImage);
+        // If password is not empty
+        if (isset($validatedData['password'])) {
+            $user->password = Hash::make($validatedData["password"]);
         }
-        ;
+
+        // If email is not empty
+        if (isset($validatedData['email'])) {
+            $user->email = $validatedData["email"];
+        }
+
+        // If phone number is not empty
+        if (isset($validatedData['phone_number'])) {
+            $employee->phone_number = $validatedData["phone_number"];
+        }
+
+        // If name is not empty
+        if (isset($validatedData['name'])) {
+            $employee->name = $validatedData["name"];
+        }
+
         $employee->save();
-
-        $oldUserData = $user->toArray();
-
-        $user->email = $validatedData["email"] ?? $user->email;
-        if (isset($validatedData['password']))
-            $user->password = Hash::make($validatedData["password"]) ?? $user->password;
         $user->save();
 
         return response()->json([
@@ -411,7 +427,7 @@ class employee_controller extends Controller
             ], 200);
         }
 
-        $employee = Employee::where('user_id',$user->id)->first();
+        $employee = Employee::where('user_id', $user->id)->first();
 
         if (!$employee) {
             return response()->json([
@@ -420,9 +436,9 @@ class employee_controller extends Controller
             ], 403);
         }
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             "face_data" => "required"
-        ],[
+        ], [
             "face_data.required" => "Face data diperlukan!"
         ]);
 
@@ -435,14 +451,14 @@ class employee_controller extends Controller
         }
 
         $validatedData = $validator->validate();
-        
+
         $employee->face_data = $validatedData["face_data"] ?? $employee->face_data;
 
         $employee->save();
 
         return response()->json([
-            "success"=> true,
-            "data"=> $employee,
+            "success" => true,
+            "data" => $employee,
         ], 200);
     }
 }

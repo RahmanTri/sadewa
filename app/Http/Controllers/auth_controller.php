@@ -105,7 +105,7 @@ class auth_controller extends Controller
                 'employee.name as nama_lengkap',
                 'employee.phone_number as no_telp',
                 'employee.division_id as id_divisi',
-                'division.name as nama_divisi',
+                'division.division_name as nama_divisi',
                 'employee.face_data as data_wajah',
                 'employee.profile_pic as foto_profil',
                 'point.point_value as poin',
