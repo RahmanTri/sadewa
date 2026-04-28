@@ -49,6 +49,11 @@ class Employee extends Model
     return $this->hasMany(em_log_out::class, 'employee_id', 'id');
   }
 
+  public function point_log()
+  {
+    return $this->hasMany(point_log::class, 'employee_id', 'id');
+  }
+
   protected function casts(): array
   {
     return [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Division;
 use App\Models\Employee;
+use App\Models\point_log;
 use App\Models\User;
 use App\Models\Point;
 use Illuminate\Http\Request;
@@ -164,12 +165,32 @@ class em_log_in_controller extends Controller
 
         if ($Point->positive_streak >= 5) {
             $Point->point_value += 2;
+            point_log::create([
+                'employee_id' => $employee->id,
+                'previous_value' => $Point->point_value,
+                'point_value' => 2
+            ]);
         } elseif ($Point->negative_streak >= 3) {
             $Point->point_value -= 2;
+            point_log::create([
+                'employee_id' => $employee->id,
+                'previous_value' => $Point->point_value,
+                'point_value' => -2
+            ]);
         } elseif ($Point->positive_streak && $status == "late") {
             $Point->point_value -= 1;
+            point_log::create([
+                'employee_id' => $employee->id,
+                'previous_value' => $Point->point_value,
+                'point_value' => -1
+            ]);
         } else {
             $Point->point_value += 1;
+            point_log::create([
+                'employee_id' => $employee->id,
+                'previous_value' => $Point->point_value,
+                'point_value' => 1
+            ]);
         }
 
         if ($Point->positive_streak != 0 && $status == "on_time") {

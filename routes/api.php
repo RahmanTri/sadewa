@@ -10,6 +10,7 @@ use App\Http\Controllers\point_controller;
 use App\Http\Controllers\user_controller;
 use App\Http\Controllers\history_log_controller;
 use App\Http\Controllers\export_controller;
+use App\Http\Controllers\point_log_controller;
 use App\Http\Controllers\devLogin_controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +88,8 @@ Route::middleware("auth:sanctum")->group(function () {
     // Fetch History
     Route::get('/fetch-history', [history_log_controller::class, 'fetch_histories']);
 
-    // profile
+    //Fetch Pont History
+    Route::get('/point/get-history', [point_log_controller::class, 'getData']);
+
     Route::get('/profile', [user_controller::class, 'profile']);
 });
