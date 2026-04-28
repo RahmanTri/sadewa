@@ -20,6 +20,7 @@ class NoticeController extends GetxController {
   
 
   var isLoading = true.obs;
+  var dummyNoticesInject = false;
 
   // Future<void> fetchNotices() async {
   //   isLoading.value = true;
@@ -114,7 +115,9 @@ class NoticeController extends GetxController {
   void dummyNotices() {
     isLoading.value = true;
 
-    notices.clear();
+    if (!dummyNoticesInject) {
+
+      notices.clear();
 
       Notice noticemsg1 = Notice(
         id: 1,
@@ -156,7 +159,11 @@ class NoticeController extends GetxController {
       notices.add(noticemsg3);
       notices.add(noticemsg4);
       notices.add(noticemsg5);
+      dummyNoticesInject = true;
       applyFilter(selectedFilter.value);
+    }
+
+    applyFilter(selectedFilter.value);
 
       isLoading.value = false;
   }

@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
+import 'package:sadewa_fe/services/api_service.dart';
+import '../models/riawayat_poin.dart';
 
 class PointController extends GetxController {
   final _userController = Get.find<UserController>();
+  final _apiService = ApiService();
 
   var profilePic = ''.obs;
   var point = 0.obs;
@@ -12,6 +17,10 @@ class PointController extends GetxController {
   var performanceColor = SDWcolors.essentialDR.obs;
   var performanceIcon = Icons.cancel_outlined.obs;
   var performanceMsg = 'Nothing To See Here :)'.obs;
+
+  var historyPoint = <RiwayatPoin>[].obs;
+
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -21,6 +30,7 @@ class PointController extends GetxController {
     // point.value = 120;
     getUserPerformance();
     getPerformanceMsg();
+    getPointHistoryLog();
   }
 
 
@@ -81,6 +91,43 @@ class PointController extends GetxController {
         performanceMsg.value = 'Anda harus jauh lebih Disiplin dalam bekerja. Kedisiplinan dan Kejujuran saat berkerja membawa berkah bagi anda dan keluarga';
       default:
         performanceMsg.value = 'Kedisiplinan dan kejujuran adalah cerminan dari insan yang baik';
+    }
+  }
+
+  void getPointHistoryLog() async {
+    isLoading.value = true;
+
+    historyPoint.clear();
+
+    String endpoint = 'point/get-history';
+
+    try {
+    final result = await _apiService.getRequest<Map<String, dynamic>>(
+      endpoint: endpoint,
+      parser: (body) => jsonDecode(body),
+      onError: (resp) => 'Gagal Memuat Data: ${resp.statusCode}',
+      headers: {
+        'Authorization': 'Bearer ${_userController.userToken.value}'
+      },
+    );
+
+    final jsonData = result['data'];
+    final data = jsonData
+        .map((item) => RiwayatPoin.fromJson(item))
+        .toList();
+    for (int i = 0; i < data.length; i++) {
+      RiwayatPoin addedRiwayat = data[i];
+      addedRiwayat.setStatusKehadiran();
+      addedRiwayat.translateStatus();
+      Get.snackbar('Menambahkan', addedRiwayat.hari.toString());
+      historyPoint.add(addedRiwayat);
+    }
+    isLoading.value = false;
+
+
+    } catch (e) {
+      isLoading.value = false;
+      throw Exception(e);
     }
   }
 

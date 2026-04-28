@@ -66,7 +66,7 @@ class PointAbsent extends StatelessWidget {
             shadowColor: Colors.transparent,
           ),
           onPressed: () {
-            Get.offAllNamed(Routes.myPoint);
+            Get.toNamed(Routes.myPoint);
           },
           child: Container(
             margin: const EdgeInsets.only(top: 20, left: 10),

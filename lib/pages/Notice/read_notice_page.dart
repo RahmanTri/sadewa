@@ -80,7 +80,7 @@ class ReadNoticePage extends StatelessWidget {
                       width: width * 0.8,
                       child: Text(
                         noticeController.beingRead.value?.content ?? '',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: SDWcolors.textD,
                           fontWeight: FontWeight.normal,
                           fontSize: width * 0.03,
@@ -103,7 +103,7 @@ class ReadNoticePage extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'Saya Mengerti',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: SDWcolors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: width * 0.04,
@@ -112,26 +112,26 @@ class ReadNoticePage extends StatelessWidget {
                   ),
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: SDWcolors.primary,
-                ),
-                onPressed: () => {Get.toNamed(Routes.myPoint)},
-                child: SizedBox(
-                  height: height * 0.04,
-                  width: width * 0.5,
-                  child: Center(
-                    child: Text(
-                      'Poin Saya',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: SDWcolors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: width * 0.04,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: SDWcolors.primary,
+              //   ),
+              //   onPressed: () => {Get.toNamed(Routes.myPoint)},
+              //   child: SizedBox(
+              //     height: height * 0.04,
+              //     width: width * 0.5,
+              //     child: Center(
+              //       child: Text(
+              //         'Poin Saya',
+              //         style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              //           color: SDWcolors.white,
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: width * 0.04,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

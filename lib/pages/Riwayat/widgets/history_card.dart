@@ -104,9 +104,10 @@ class HistoryCard extends StatelessWidget {
                 ),
                 Text(
                   riwayat.tanggal,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: SDWcolors.primary,
                     fontSize: 32,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
