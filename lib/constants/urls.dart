@@ -2,7 +2,7 @@ class AppUrls {
   AppUrls._();
 
   // Base URL
-  static const String usedUrl = emulator;
+  static const String usedUrl = ngrok;
 
   static const String baseApiUrl = '${usedUrl}api';
   static const String imgProfileUrl = '${usedUrl}storage/profile_pics/';

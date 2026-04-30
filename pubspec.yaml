@@ -77,6 +77,7 @@ flutter:
     - assets/images/blank-page-img.png
     - assets/images/point-box.png
     - assets/images/default-profile.png
+    - assets/images/image-loading.png
 
     - assets/icons/riwayat_kehadiran.png
     - assets/icons/peringkat_karyawan.png

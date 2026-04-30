@@ -11,6 +11,7 @@ import 'package:sadewa_fe/pages/Home/home_page.dart';
 import 'package:sadewa_fe/pages/Notice/notice_page.dart';
 import 'package:sadewa_fe/pages/Absen/regist_wajah.dart';
 import 'package:sadewa_fe/pages/Absen/absen_page.dart';
+import 'package:sadewa_fe/pages/Admin_ViewKaryawan/karyawan_page.dart';
 
 class AppPages {
   // static const initial = Routes.splash;
@@ -30,5 +31,6 @@ class AppPages {
     GetPage(name: Routes.myPoint, page: () => MyPointPage()),
     GetPage(name: Routes.registWajah, page: () => RegistWajah()),
     GetPage(name: Routes.absen, page: () => AbsenPage()),
+    GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
   ];
 }

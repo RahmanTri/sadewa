@@ -6,7 +6,7 @@ import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 class ActivityLog extends StatelessWidget {
   final double width;
   final double height;
-  ActivityLog({required this.width, required this.height});
+  const ActivityLog({super.key, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +17,14 @@ class ActivityLog extends StatelessWidget {
         itemCount: 10,
         itemBuilder: (context, index) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10),
             height: height * 0.1,
             width: width,
-            padding: EdgeInsets.all(10),
             child: Row(
               children: [
                 Container(
-                  width: width * 0.67,
-                  height: height,
+                  width: width * 0.68,
+                  height: height * 0.1,
                   decoration: BoxDecoration(
                     color: SDWcolors.bgL,
                     borderRadius: BorderRadius.circular(20),
@@ -43,7 +43,7 @@ class ActivityLog extends StatelessWidget {
                         child: Icon(
                           Icons.exit_to_app,
                           color: SDWcolors.primary,
-                          size: 70,
+                          size: width * 0.16,
                         ),
                       ),
                       Column(
@@ -52,43 +52,53 @@ class ActivityLog extends StatelessWidget {
                         children: [
                           Text(
                             "Absen Keluar",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: SDWcolors.textD,
-                              decoration: TextDecoration.underline,
-                              decorationColor: SDWcolors.textD,
-                              fontSize: SDWsizes.lg * 0.65,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  color: SDWcolors.textD,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: height * 0.02,
+                                  decoration: TextDecoration.underline,
+                                ),
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.ring_volume_outlined,
                                 color: SDWcolors.textD,
+                                size: height * 0.024,
                               ),
                               SizedBox(width: 10),
                               Text(
                                 "Tepat Waktu",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: SDWcolors.textD,
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge
+                                    ?.copyWith(
+                                      color: SDWcolors.textD,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: height * 0.016,
+                                    ),
                               ),
                             ],
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.date_range_outlined,
                                 color: SDWcolors.textD,
+                                size: height * 0.024,
                               ),
                               SizedBox(width: 10),
                               Text(
                                 "data",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: SDWcolors.textD,
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge
+                                    ?.copyWith(
+                                      color: SDWcolors.textD,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: height * 0.016,
+                                    ),
                               ),
                             ],
                           ),
@@ -97,19 +107,26 @@ class ActivityLog extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 10),
-                Container(
-                  width: width * 0.175,
-                  height: height,
-                  decoration: BoxDecoration(
-                    color: SDWcolors.bgL,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [SDWboxShadow.shadow],
-                  ),
-                  child: Icon(
-                    Icons.check_circle,
-                    color: SDWcolors.success,
-                    size: 70,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: height * 0.1,
+                        height: height * 0.1,
+                        decoration: BoxDecoration(
+                          color: SDWcolors.bgL,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [SDWboxShadow.shadow],
+                        ),
+                        child: Icon(
+                          Icons.check_circle,
+                          color: SDWcolors.success,
+                          size: width * 0.16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

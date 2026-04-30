@@ -112,6 +112,7 @@ class RiwayatController extends GetxController {
     }
   }
 
+  //For Development Only Please delete on production
   void dummyHistory() {
     histories.clear();
     Riwayat histori1 = Riwayat(

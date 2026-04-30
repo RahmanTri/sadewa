@@ -37,11 +37,11 @@ class QuickAction extends StatelessWidget {
         children: [
           Text(
             "Quick Action",
-            style: TextStyle(
-              fontSize: SDWsizes.lg,
-              fontWeight: FontWeight.bold,
-              color: SDWcolors.textD,
-            ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.024,
+                      ),
           ),
           SizedBox(height: 15),
           Row(
@@ -79,10 +79,10 @@ class QuickAction extends StatelessWidget {
                     margin: EdgeInsets.only(top: 10),
                     child: Text(
                       "Riwayat Kehadiran",
-                      style: TextStyle(
-                        fontSize: SDWsizes.lg * 0.75,
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.016,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -122,10 +122,10 @@ class QuickAction extends StatelessWidget {
                     margin: EdgeInsets.only(top: 10),
                     child: Text(
                       "Peringkat Karyawan",
-                      style: TextStyle(
-                        fontSize: SDWsizes.lg * 0.75,
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.016,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -161,14 +161,20 @@ class QuickAction extends StatelessWidget {
                   Container(
                     width: width * 0.2,
                     margin: EdgeInsets.only(top: 10),
-                    child: Text(
-                      "Peringatan",
-                      style: TextStyle(
-                        fontSize: SDWsizes.lg * 0.75,
-                        fontWeight: FontWeight.bold,
-                        color: SDWcolors.textD,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      children: [
+                        SizedBox(height: height * 0.008,),
+                        Text(
+                          "Peringatan",
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
+                                color: SDWcolors.textD,
+                                fontWeight: FontWeight.bold,
+                                fontSize: height * 0.016,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],

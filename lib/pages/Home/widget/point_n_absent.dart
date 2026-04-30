@@ -4,6 +4,7 @@ import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/controllers/point_controller.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 
 class PointAbsent extends StatelessWidget {
@@ -19,7 +20,7 @@ class PointAbsent extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 20),
-          height: height * 0.14,
+          height: height * 0.15,
           width: width * 0.59,
           decoration: BoxDecoration(
             color: SDWcolors.bgL,
@@ -40,19 +41,19 @@ class PointAbsent extends StatelessWidget {
               homeController.absenIcons.value!,
               Text(
                 homeController.absentText.value,
-                style: TextStyle(
-                  fontSize: SDWsizes.lg * 0.8,
-                  fontWeight: FontWeight.bold,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: SDWcolors.textD,
+                  fontWeight: FontWeight.w900,
+                  fontSize: height * 0.012,
                 ),
                 textAlign: TextAlign.center,
               ),
               Text(
                 homeController.absenMessage.value,
-                style: TextStyle(
-                  fontSize: SDWsizes.md * 1,
-                  fontWeight: FontWeight.w300,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: SDWcolors.textD,
+                  fontWeight: FontWeight.normal,
+                  fontSize: height * 0.01,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -70,51 +71,55 @@ class PointAbsent extends StatelessWidget {
           },
           child: Container(
             margin: const EdgeInsets.only(top: 20, left: 10),
-            height: height * 0.14,
+            height: height * 0.15,
             width: width * 0.3,
             decoration: BoxDecoration(
               color: SDWcolors.bgL,
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
-                BoxShadow(
-                  color: SDWcolors.essentialDR.withAlpha(50),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
+                SDWboxShadow.shadow
               ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
                   "Poin Saya",
-                  style: TextStyle(
-                    fontSize: SDWsizes.lg * 0.9,
-                    fontWeight: FontWeight.bold,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: SDWcolors.textD,
+                    fontWeight: FontWeight.w900,
+                    fontSize: height * 0.018,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                homeController.pointText.value!,
+                Text(
+                  pointController.point.value.toString(),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: homeController.pointTextColor.value,
+                    fontWeight: FontWeight.w900,
+                    fontSize: height * 0.06,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 Text(
                   homeController.pointMessage.value,
-                  style: TextStyle(
-                    fontSize: SDWsizes.md * 1,
-                    fontWeight: FontWeight.w500,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: SDWcolors.textD,
+                    fontWeight: FontWeight.normal,
+                    fontSize: height * 0.012,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   "lihat benefit",
-                  style: TextStyle(
-                    fontSize: SDWsizes.md * 1.2,
-                    fontWeight: FontWeight.w300,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: SDWcolors.textD,
+                    fontWeight: FontWeight.normal,
+                    fontSize: height * 0.01,
                     decoration: TextDecoration.underline,
-                    decorationColor: SDWcolors.essentialD,
+                    
                   ),
                   textAlign: TextAlign.center,
                 ),
