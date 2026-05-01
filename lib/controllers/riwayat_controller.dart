@@ -81,6 +81,7 @@ class RiwayatController extends GetxController {
   }
 
   void applyFilter(String filter) {
+    isLoading.value = true;
     selectedFilter.value = filter;
     if (filter == 'Semua') {
       filteredhistories.assignAll(histories);
@@ -93,6 +94,7 @@ class RiwayatController extends GetxController {
       jumlahAbsen.value = filteredhistories
           .where((riwayat) => riwayat.statusMasuk == 'Absen')
           .length;
+      isLoading.value = false;
     } else {
       filteredhistories.assignAll(
         histories.where((riwayat) => riwayat.bulan == filter),
@@ -106,9 +108,11 @@ class RiwayatController extends GetxController {
       jumlahAbsen.value = filteredhistories
           .where((riwayat) => riwayat.statusMasuk == 'Absen')
           .length;
+      isLoading.value = false;
     }
   }
 
+  //For Development Only Please delete on production
   void dummyHistory() {
     histories.clear();
     Riwayat histori1 = Riwayat(

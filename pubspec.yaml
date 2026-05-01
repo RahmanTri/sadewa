@@ -37,11 +37,19 @@ dependencies:
   shared_preferences: ^2.5.5
   http: ^1.6.0
   intl: ^0.20.2
+  marquee: ^2.2.2
+  camera: ^0.11.0
+  google_mlkit_face_detection: ^0.13.2
+  tflite_flutter: ^0.11.0
+  image: ^4.1.7
+  google_fonts: ^8.0.2
+  font_awesome_flutter: ^10.7.0
   image_picker: ^1.0.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  iconify_flutter: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +76,21 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/form-auth-bg.png
+    - assets/images/blank-page-img.png
+    - assets/images/point-box.png
+    - assets/images/default-profile.png
+    - assets/images/image-loading.png
+
+
+    - assets/icons/riwayat_kehadiran.png
+    - assets/icons/peringkat_karyawan.png
+    - assets/icons/peringatan.png
+    - assets/icons/employee_id.png
+    - assets/icons/calendar.png
+    - assets/icons/divisi.png
+    - assets/icons/user.png
+
+    - assets/models/mobilefacenet.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

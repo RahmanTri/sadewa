@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/division_controller.dart';
+import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -12,6 +14,7 @@ class AuthController extends GetxController {
   final ApiService _apiService = ApiService();
   final formKey = GlobalKey<FormState>();
   final userController = Get.find<UserController>();
+  final DivisionController divisionController = Get.find<DivisionController>();
 
   final emailUsername = TextEditingController();
   final password = TextEditingController();
@@ -23,6 +26,8 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   var userRole = ''.obs;
   var token = ''.obs;
+
+  var embeddings = <List<double>>[].obs;
 
   @override
   void onInit() {
@@ -79,6 +84,11 @@ class AuthController extends GetxController {
       await _storageService.saveRole(role);
       userRole.value = role;
 
+      // //Save Embeddings
+      // final embeddingsData = result['user']['embeddings'] ?? <List<double>>[];
+      // await _storageService.saveEmbeddings(embeddingsData);
+      // embeddings.value = embeddingsData;
+
       //If remember me is checked
       if (rememberMe.value) {
         await _storageService.setRememberMe(true, emailUsername, password);
@@ -87,8 +97,17 @@ class AuthController extends GetxController {
       isLoading.value = false;
 
       //Assign user data to userController
-      userController.assignUserData(result['user_data']);
-      userController.setUserToken(token.value);
+      if (result['user_data']['role'] == 'admin') {
+        userController.isAdmin.value = true;
+        userController.assignUserData(result['user_data']);
+        userController.setUserToken(token.value);
+      } else {
+        userController.assignUserData(result['user_data']);
+        userController.setUserToken(token.value);
+      }
+
+      //Assign division data to divisionController
+      divisionController.fetchDivisions();
 
       Get.snackbar(
         'Login Berhasil',
@@ -99,13 +118,12 @@ class AuthController extends GetxController {
       if (userRole.value == 'employee') {
         Get.offAllNamed(Routes.profile);
         // Get.offNamed(Routes.riwayat);
-        // Get.offAllNamed(Routes.riwayat);
+        Get.offAllNamed(Routes.home);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
-        Get.offAllNamed(Routes.adminHome, arguments: result['userData']);
-
+        Get.offAllNamed(Routes.karyawan);
         //Test Only
-        Get.snackbar('Memasuki Halaman', 'Anda Dipindahkan ke halaman admin');
+        Get.snackbar('Anda Adalah Admin', 'Anda Dipindahkan ke halaman view');
       } else {
         Get.snackbar('Error', 'Anda belum memiliki role');
       }
@@ -117,6 +135,7 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Login gagal', e.toString());
+      // print(e);
       return false;
     }
   }
@@ -148,8 +167,11 @@ class AuthController extends GetxController {
 
   void devAutoLogin() async {
     isLoading.value = true;
+    final username = 'employee01';
+    final password = 'employee123';
+
     try {
-      final success = await login('ErehPakeH', 'ereh123456');
+      final success = await login(username, password);
       if (!success) {
         Get.snackbar('Login gagal', 'Ada yang Keliru');
         isLoading.value = false;

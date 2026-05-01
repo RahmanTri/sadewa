@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/models/riwayat_model.dart';
 import '../../../constants/sdw_colors.dart';
@@ -106,9 +104,10 @@ class HistoryCard extends StatelessWidget {
                 ),
                 Text(
                   riwayat.tanggal,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: SDWcolors.primary,
                     fontSize: 32,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
