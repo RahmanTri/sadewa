@@ -116,6 +116,7 @@ class AuthController extends GetxController {
 
       //employee page can be changed during development
       if (userRole.value == 'employee') {
+        Get.offAllNamed(Routes.profile);
         // Get.offNamed(Routes.riwayat);
         Get.offAllNamed(Routes.home);
       } else if (userRole.value == 'admin') {
