@@ -33,9 +33,7 @@ class AppPages {
     GetPage(name: Routes.faceScan, page: () => RegistWajah()),
     GetPage(name: Routes.absenConfirm, page: () => AbsenConfirm()),
     GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
-        GetPage(
-      name: Routes.editProfile,
-      page: () => EditProfile(),
-    ),
+    GetPage(name: Routes.profile, page: () => ProfilePage()),
+    GetPage(name: Routes.editProfile, page: () => EditProfile()),
   ];
 }

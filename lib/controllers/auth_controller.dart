@@ -73,7 +73,7 @@ class AuthController extends GetxController {
         data: loginData,
         parser: (body) => jsonDecode(body),
         onError: (resp) => 'Login gagal: ${resp.statusCode}',
-      );
+      ); 
 
       //Save token
       token.value = result['token'] ?? '';

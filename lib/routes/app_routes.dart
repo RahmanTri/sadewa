@@ -14,7 +14,8 @@ class Routes {
   static const faceScan = '/faceScan';
   static const absen = '/absen';
   static const absenConfirm = '/absenConfirm';
-    static const profile = '/profile';
+  static const profile = '/profile';
+  static const editProfile = '/editProfile';
 
   //Admin
   static const karyawan = '/karyawan';
