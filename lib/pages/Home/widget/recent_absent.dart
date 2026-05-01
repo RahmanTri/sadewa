@@ -42,10 +42,10 @@ class RecentAbsent extends StatelessWidget {
             Text(
               "Kehadiran Terkini",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: SDWcolors.textD,
-                        fontWeight: FontWeight.bold,
-                        fontSize: height * 0.024,
-                      ),
+                color: SDWcolors.textD,
+                fontWeight: FontWeight.bold,
+                fontSize: height * 0.024,
+              ),
             ),
             Stack(
               alignment: Alignment.topCenter,
@@ -71,47 +71,27 @@ class RecentAbsent extends StatelessWidget {
                       final status = item['status'];
                       final hari = item['hari'];
                       Color? bgColor;
-                      Icon? iconData;
+                      IconData? iconData;
 
                       switch (status) {
                         case 'unabsent':
                           bgColor = SDWcolors.grey;
-                          iconData = Icon(
-                            FontAwesomeIcons.circleQuestion,
-                            color: SDWcolors.white,
-                            size: 25,
-                          );  
+                          iconData = FontAwesomeIcons.circleQuestion;
                         case 'on_time':
                           bgColor = SDWcolors.success;
-                          iconData = Icon(
-                            Icons.check_circle_outline,
-                            color: SDWcolors.white,
-                            size: 30,
-                          );
+                          iconData = FontAwesomeIcons.circleCheck;
                           break;
                         case 'late':
                           bgColor = SDWcolors.warning;
-                          iconData = Icon(
-                            Icons.warning_amber_outlined,
-                            color: SDWcolors.white,
-                            size: 30,
-                          );
+                          iconData = FontAwesomeIcons.circleExclamation;
                           break;
                         case 'absent':
                           bgColor = SDWcolors.error;
-                          iconData = Icon(
-                            Icons.cancel_outlined,
-                            color: SDWcolors.white,
-                            size: 30,
-                          );
+                          iconData = FontAwesomeIcons.circleXmark;
                           break;
                         case 'day_off':
                           bgColor = SDWcolors.grey;
-                          iconData = Icon(
-                            FontAwesomeIcons.bed,
-                            color: SDWcolors.white,
-                            size: 17,
-                          );
+                          iconData = FontAwesomeIcons.calendarXmark;
                           break;
                       }
                       return Container(
@@ -120,23 +100,29 @@ class RecentAbsent extends StatelessWidget {
                           children: [
                             Container(
                               height: height * 0.04,
-                              width: width * 0.09,
+                              width: height * 0.04,
                               decoration: BoxDecoration(
                                 color: bgColor,
-                                borderRadius: BorderRadius.circular(50),
+                                shape: BoxShape.circle,
                                 border: Border.all(
                                   color: SDWcolors.bgL,
                                   width: 5,
                                 ),
                               ),
-                              child: iconData,
+                              child: Icon(
+                                iconData,
+                                color: SDWcolors.white,
+                                size: height * 0.022,
+                              ),
                             ),
                             Text(
                               hari,
-                              style: TextStyle(
-                                color: SDWcolors.textD,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: SDWcolors.textD,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: height * 0.015,
+                                  ),
                             ),
                           ],
                         ),
