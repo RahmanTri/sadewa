@@ -9,7 +9,7 @@ import 'package:sadewa_fe/routes/app_routes.dart';
 class HeaderPage extends StatelessWidget {
   final double width;
   final double height;
-  HeaderPage({required this.width, required this.height});
+  const HeaderPage({super.key, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -66,27 +66,38 @@ class HeaderPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Get.toNamed(Routes.profile),
-            child: 
-          Container(
-            width: width * 0.22,
-            height: width * 0.22,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: SDWcolors.grey,
-              boxShadow: [SDWboxShadow.shadow],
-              image: DecorationImage(
-                image:
-                    homeController.userData.user.value?.fotoProfil == null ||
-                        homeController.userData.user.value?.fotoProfil == ''
-                    ? const NetworkImage('${AppUrls.imgProfileUrl}default.png')
-                    : NetworkImage(
-                        '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil ?? ''}',
-                      ),
+            child: Container(
+              width: width * 0.22,
+              height: width * 0.22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [SDWboxShadow.shadow],
+                image: DecorationImage(
+                  image: const AssetImage(
+                    '${AppUrls.imgAssets}default-profile.png',
+                  ),
+                ),
               ),
-              border: Border.all(color: SDWcolors.bgL, width: 3),
+              child:
+                  homeController.userData.user.value?.fotoProfil != '' ||
+                      homeController.userData.user.value?.fotoProfil != null ||
+                      homeController.userData.user.value?.fotoProfil != 'null'
+                  ? Container(
+                    height: width * 0.22,
+                    width: width * 0.22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
+                        ),
+                      ),
+                      border: Border.all(color: SDWcolors.bgL, width: 3),
+                    ),
+                  )
+                  : null,
             ),
           ),
-          )
         ],
       ),
     );
