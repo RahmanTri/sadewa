@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
-import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class HeaderPage extends StatelessWidget {
   final double width;
@@ -64,6 +64,9 @@ class HeaderPage extends StatelessWidget {
               ],
             ),
           ),
+          GestureDetector(
+            onTap: () => Get.toNamed(Routes.profile),
+            child: 
           Container(
             width: width * 0.22,
             height: width * 0.22,
@@ -83,6 +86,7 @@ class HeaderPage extends StatelessWidget {
               border: Border.all(color: SDWcolors.bgL, width: 3),
             ),
           ),
+          )
         ],
       ),
     );

@@ -51,9 +51,9 @@ class RecentAbsent extends StatelessWidget {
               alignment: Alignment.topCenter,
               children: [
                 Container(
-                  height: height * 0.003,
+                  height: height * 0.0032,
                   width: width * 0.8,
-                  margin: EdgeInsets.only(top: 20),
+                  margin: EdgeInsets.only(top: height * 0.0184),
                   decoration: BoxDecoration(
                     color: SDWcolors.textD,
                     borderRadius: BorderRadius.circular(20),
@@ -95,7 +95,7 @@ class RecentAbsent extends StatelessWidget {
                           break;
                       }
                       return Container(
-                        margin: EdgeInsets.only(left: 10),
+                        margin: EdgeInsets.only(left: 5, right: 5),
                         child: Column(
                           children: [
                             Container(
