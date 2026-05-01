@@ -18,55 +18,59 @@ class PointAbsent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          height: height * 0.15,
-          width: width * 0.59,
-          decoration: BoxDecoration(
-            color: SDWcolors.bgL,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: SDWcolors.essentialDR.withAlpha(50),
-                spreadRadius: 0,
-                blurRadius: 4,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              homeController.absenIcons.value!,
-              Text(
-                homeController.absentText.value,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: SDWcolors.textD,
-                  fontWeight: FontWeight.w900,
-                  fontSize: height * 0.012,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.faceScan);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 20),
+            height: height * 0.15,
+            width: width * 0.59,
+            decoration: BoxDecoration(
+              color: SDWcolors.bgL,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: SDWcolors.essentialDR.withAlpha(50),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: const Offset(0, 4),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                homeController.absenMessage.value,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: SDWcolors.textD,
-                  fontWeight: FontWeight.normal,
-                  fontSize: height * 0.01,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                homeController.absenIcons.value!,
+                Text(
+                  homeController.absentText.value,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 1
+                      ..color = SDWcolors.textD,
+                    fontWeight: FontWeight.w700,
+                    fontSize: height * 0.012,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                Text(
+                  homeController.absenMessage.value,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: SDWcolors.textD,
+                    fontWeight: FontWeight.normal,
+                    fontSize: height * 0.01,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.zero,
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
-          onPressed: () {
+
+        GestureDetector(
+          onTap: () {
             Get.toNamed(Routes.myPoint);
           },
           child: Container(
@@ -76,9 +80,7 @@ class PointAbsent extends StatelessWidget {
             decoration: BoxDecoration(
               color: SDWcolors.bgL,
               borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                SDWboxShadow.shadow
-              ],
+              boxShadow: [SDWboxShadow.shadow],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,7 +121,6 @@ class PointAbsent extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                     fontSize: height * 0.01,
                     decoration: TextDecoration.underline,
-                    
                   ),
                   textAlign: TextAlign.center,
                 ),
