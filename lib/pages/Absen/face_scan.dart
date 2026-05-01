@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import '../Effect/box_shadow.dart';
-import 'package:sadewa_fe/controllers/absen_controller.dart';
+import 'package:sadewa_fe/controllers/face_scan_controller.dart';
 
 class RegistWajah extends StatelessWidget {
   RegistWajah({Key? key});
-  final absenController = Get.put(AbsenController());
+  final absenController = Get.put(FaceScanController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,13 @@ class RegistWajah extends StatelessWidget {
       final height = MediaQuery.of(context).size.height;
       final width = MediaQuery.of(context).size.width;
       final cam = absenController.cameraController.value;
+      Widget camBox;
+
+      if (cam != null && cam.value.isInitialized) {
+        camBox = CameraPreview(cam);
+      } else {
+        camBox = Center(child: CircularProgressIndicator());
+      }
 
       if (cam == null || !cam.value.isInitialized) {
         return Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -46,7 +53,9 @@ class RegistWajah extends StatelessWidget {
                     width: width,
                     alignment: Alignment.center,
                     child: Text(
-                      'Registrasi Data Wajah',
+                      absenController.isRegist
+                          ? 'Registrasi Wajah'
+                          : 'Scan Wajah Anda',
                       style: TextStyle(
                         fontSize: SDWsizes.xl,
                         fontWeight: FontWeight.bold,
@@ -66,7 +75,7 @@ class RegistWajah extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: CameraPreview(cam),
+              child: camBox,
             ),
 
             // Text Wrapper

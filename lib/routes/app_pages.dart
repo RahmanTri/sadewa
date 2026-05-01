@@ -9,11 +9,10 @@ import 'package:sadewa_fe/pages/splash_page.dart';
 import 'package:sadewa_fe/pages/Riwayat/riwayat_page.dart';
 import 'package:sadewa_fe/pages/Home/home_page.dart';
 import 'package:sadewa_fe/pages/Notice/notice_page.dart';
-import 'package:sadewa_fe/pages/Absen/regist_wajah.dart';
-import 'package:sadewa_fe/pages/Absen/absen_page.dart';
+import 'package:sadewa_fe/pages/Absen/face_scan.dart';
+import 'package:sadewa_fe/pages/Absen/scan_confirm.dart';
 
 class AppPages {
-  // static const initial = Routes.splash;
   static const initial = Routes.splash;
 
   static final routes = [
@@ -28,7 +27,7 @@ class AppPages {
     GetPage(name: Routes.notice, page: () => NoticePage()),
     GetPage(name: Routes.readNotice, page: () => ReadNoticePage()),
     GetPage(name: Routes.myPoint, page: () => MyPointPage()),
-    GetPage(name: Routes.registWajah, page: () => RegistWajah()),
-    GetPage(name: Routes.absen, page: () => AbsenPage()),
+    GetPage(name: Routes.faceScan, page: () => RegistWajah()),
+    GetPage(name: Routes.absenConfirm, page: () => AbsenConfirm()),
   ];
 }

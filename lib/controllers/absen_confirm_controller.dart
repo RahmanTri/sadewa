@@ -1,0 +1,71 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/face_scan_controller.dart';
+import 'package:sadewa_fe/services/api_service.dart';
+import 'package:sadewa_fe/services/storage_service.dart';
+import 'package:sadewa_fe/controllers/user_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+class AbsenConfirmController extends GetxController {
+  final ApiService _apiService = ApiService();
+  final StorageService _storageService = StorageService();
+
+  final userData = Get.find<UserController>();
+  final scanResult = Get.find<FaceScanController>();
+
+  final bool _isLoading = false;
+  final statusText = "".obs;
+  final dateNow = "".obs;
+  bool isRegist = false;
+  final token = ''.obs;
+
+  List<double>? _embeddingResult = [];
+  List<double>? _userEmbeddings = [];
+
+  @override
+  void onInit() async {
+    super.onInit();
+    _loadDateNow();
+    token.value = await _storageService.getToken() ?? '';
+    isRegist = scanResult.isRegist;
+    _embeddingResult = scanResult.embeddingResult;
+  }
+
+  Future<void> registFaceData() async {
+    final embeddingsData = {'face_data': _embeddingResult};
+    final authToken = token.value;
+
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: 'employee/regface',
+        data: embeddingsData,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
+
+      Get.snackbar(
+        "Registrasi Wajah Berhasil",
+        "Registrasi data wajah berhasil",
+      );
+      Get.offAllNamed("login");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> absenLogin() async {}
+
+  Future<void> _loadDateNow() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await initializeDateFormatting('id_ID', null);
+    DateTime now = DateTime.now();
+    final hari = DateFormat.EEEE('id_ID').format(now);
+    final tanggal = DateFormat('dd MMMM yyyy', 'id_ID').format(now);
+    final jam = DateFormat('HH:mm').format(now);
+    dateNow.value = '$hari, $tanggal | $jam';
+  }
+}

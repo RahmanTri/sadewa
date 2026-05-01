@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
               Get.offAllNamed(Routes.login);
             },
             onConfirm: () {
-              Get.offAllNamed(Routes.registWajah);
+              Get.offAllNamed(Routes.faceScan);
             },
           );
         });

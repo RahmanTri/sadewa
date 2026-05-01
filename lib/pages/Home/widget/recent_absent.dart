@@ -115,7 +115,7 @@ class RecentAbsent extends StatelessWidget {
                           break;
                       }
                       return Container(
-                        margin: EdgeInsets.only(left: 17),
+                        margin: EdgeInsets.only(left: 10),
                         child: Column(
                           children: [
                             Container(
