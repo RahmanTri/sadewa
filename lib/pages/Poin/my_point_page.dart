@@ -101,21 +101,32 @@ class MyPointPage extends StatelessWidget {
                             height: 80,
                             width: 80,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: SDWcolors.essentialD,
-                                width: 6,
-                              ),
                               shape: BoxShape.circle,
-                              color: SDWcolors.essentialL,
                               image: DecorationImage(
-                                // image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
-                                image: poinController.profilePic.value == ''
-                                    ? AssetImage(
-                                        '${AppUrls.imgAssets}default-profile.png',
-                                      )
-                                    : NetworkImage(
-                                        '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
-                                      ),
+                                image: AssetImage(
+                                  '${AppUrls.imgAssets}image-loading.png',
+                                ),
+                              )
+                            ),
+                            child: Container(
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: SDWcolors.essentialD,
+                                  width: 6,
+                                ),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  // image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
+                                  image: poinController.profilePic.value == ''
+                                      ? AssetImage(
+                                          '${AppUrls.imgAssets}default-profile.png',
+                                        )
+                                      : NetworkImage(
+                                          '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
+                                        ),
+                                ),
                               ),
                             ),
                           ),
@@ -132,13 +143,11 @@ class MyPointPage extends StatelessWidget {
                                 child: Text(
                                   poinController.point.value.toString(),
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
+                                  style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.primary,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: height * 0.072
+                                        fontSize: height * 0.072,
                                       ),
                                 ),
                               ),

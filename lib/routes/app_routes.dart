@@ -1,5 +1,7 @@
 class Routes {
   Routes._();
+
+  //User
   static const splash = '/';
   static const home = '/home';
   static const adminHome = '/adminHome';
@@ -12,4 +14,9 @@ class Routes {
   static const faceScan = '/faceScan';
   static const absen = '/absen';
   static const absenConfirm = '/absenConfirm';
+
+  //Admin
+  static const karyawan = '/karyawan';
+  static const divisi = '/divisi';
+  static const akunManajer = '/accounts';
 }

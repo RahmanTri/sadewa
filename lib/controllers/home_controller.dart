@@ -21,7 +21,7 @@ class HomeController extends GetxController {
   var absentText = ''.obs;
   var absenMessage = ''.obs;
   var absenIcons = Rxn<Widget>();
-  var pointText = Rxn<Widget>();
+  var pointTextColor = SDWcolors.error.obs;
   var pointMessage = ''.obs;
   var token = ''.obs;
   RxList<Map<String, dynamic>> latestLoginData = <Map<String, dynamic>>[].obs;
@@ -81,58 +81,20 @@ class HomeController extends GetxController {
     final point = userData.user.value?.poin;
 
     if (point! <= 50) {
-      pointText.value = Text(
-        point.toString(),
-        style: TextStyle(
-          fontSize: SDWsizes.lg * 2,
-          fontWeight: FontWeight.w800,
-          color: SDWcolors.error,
-        ),
-        textAlign: TextAlign.center,
-      );
+      pointTextColor.value = SDWcolors.error; 
       pointMessage.value = 'RESIGN O MAREN!!';
     } else if (point < 75) {
-      pointText.value = Text(
-        point.toString(),
-        style: TextStyle(
-          fontSize: SDWsizes.lg * 2,
-          fontWeight: FontWeight.w800,
-          color: SDWcolors.warning,
-        ),
-        textAlign: TextAlign.center,
-      );
+      pointTextColor.value = SDWcolors.warning;
+
       pointMessage.value = 'Tingkatkan Pointmu Terus!';
     } else if (point == 75) {
-      pointText.value = Text(
-        point.toString(),
-        style: TextStyle(
-          fontSize: SDWsizes.lg * 2,
-          fontWeight: FontWeight.w800,
-          color: SDWcolors.essentialL,
-        ),
-        textAlign: TextAlign.center,
-      );
+      pointTextColor.value = SDWcolors.essentialL;
+      pointMessage.value = 'Masih bisa ditingkatkan!';
     } else if (point < 90) {
-      pointText.value = Text(
-        point.toString(),
-        style: TextStyle(
-          fontSize: SDWsizes.lg * 2,
-          fontWeight: FontWeight.w800,
-          color: SDWcolors.primary,
-        ),
-        textAlign: TextAlign.center,
-      );
+      pointTextColor.value = SDWcolors.primary;
       pointMessage.value = 'Lebih semangat lagi!!!';
     } else {
-      pointText.value = Text(
-        point.toString(),
-        style: TextStyle(
-          fontSize: SDWsizes.lg * 2,
-          fontWeight: FontWeight.w800,
-          color: SDWcolors.success,
-        ),
-        textAlign: TextAlign.center,
-      );
+      pointTextColor.value = SDWcolors.success;
       pointMessage.value = 'Point anda sangat baik! PERTAHANKAN!';
     }
   }

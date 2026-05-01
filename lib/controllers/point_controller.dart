@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/services/api_service.dart';
-import '../models/riawayat_poin.dart';
+import '../models/riwayat_poin.dart';
 
 class PointController extends GetxController {
   final _userController = Get.find<UserController>();
@@ -119,7 +119,7 @@ class PointController extends GetxController {
       RiwayatPoin addedRiwayat = data[i];
       addedRiwayat.setStatusKehadiran();
       addedRiwayat.translateStatus();
-      Get.snackbar('Menambahkan', addedRiwayat.hari.toString());
+      // Get.snackbar('Menambahkan', addedRiwayat.hari.toString());
       historyPoint.add(addedRiwayat);
     }
     isLoading.value = false;

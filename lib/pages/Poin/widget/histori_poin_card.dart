@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
-import '../../../models/riawayat_poin.dart';
+import '../../../models/riwayat_poin.dart';
 
 class HistoriPoinCard extends StatelessWidget {
   final RiwayatPoin riwayatPoin;

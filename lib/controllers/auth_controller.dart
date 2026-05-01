@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/division_controller.dart';
+import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -12,6 +14,7 @@ class AuthController extends GetxController {
   final ApiService _apiService = ApiService();
   final formKey = GlobalKey<FormState>();
   final userController = Get.find<UserController>();
+  final DivisionController divisionController = Get.find<DivisionController>();
 
   final emailUsername = TextEditingController();
   final password = TextEditingController();
@@ -94,8 +97,17 @@ class AuthController extends GetxController {
       isLoading.value = false;
 
       //Assign user data to userController
-      userController.assignUserData(result['user_data']);
-      userController.setUserToken(token.value);
+      if (result['user_data']['role'] == 'admin') {
+        userController.isAdmin.value = true;
+        userController.assignUserData(result['user_data']);
+        userController.setUserToken(token.value);
+      } else {
+        userController.assignUserData(result['user_data']);
+        userController.setUserToken(token.value);
+      }
+
+      //Assign division data to divisionController
+      divisionController.fetchDivisions();
 
       Get.snackbar(
         'Login Berhasil',
@@ -108,10 +120,9 @@ class AuthController extends GetxController {
         Get.offAllNamed(Routes.home);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
-        Get.offAllNamed(Routes.adminHome);
-
+        Get.offAllNamed(Routes.karyawan);
         //Test Only
-        Get.snackbar('Memasuki Halaman', 'Anda Dipindahkan ke halaman admin');
+        Get.snackbar('Anda Adalah Admin', 'Anda Dipindahkan ke halaman view');
       } else {
         Get.snackbar('Error', 'Anda belum memiliki role');
       }
@@ -123,7 +134,7 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Login gagal', e.toString());
-      print(e);
+      // print(e);
       return false;
     }
   }

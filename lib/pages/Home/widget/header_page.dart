@@ -4,6 +4,7 @@ import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/constants/urls.dart';
+import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 
 class HeaderPage extends StatelessWidget {
   final double width;
@@ -26,10 +27,10 @@ class HeaderPage extends StatelessWidget {
               children: [
                 Text(
                   homeController.greetingText.value,
-                  style: TextStyle(
-                    fontSize: SDWsizes.lg,
-                    fontWeight: FontWeight.normal,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: SDWcolors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: height * 0.022,
                   ),
                 ),
 
@@ -52,11 +53,11 @@ class HeaderPage extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userData.user.value?.namaLengkap ?? '',
-                    style: TextStyle(
-                      fontSize: SDWsizes.xl,
-                      fontWeight: FontWeight.bold,
+                    homeController.userData.user.value?.namaLengkap ?? 'User',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: height * 0.04,
                     ),
                   ),
                 ),
@@ -65,21 +66,19 @@ class HeaderPage extends StatelessWidget {
           ),
           Container(
             width: width * 0.22,
-            height: height * 0.1,
+            height: width * 0.22,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                BoxShadow(
-                  color: SDWcolors.essentialDR.withAlpha(50),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              shape: BoxShape.circle,
+              color: SDWcolors.grey,
+              boxShadow: [SDWboxShadow.shadow],
               image: DecorationImage(
-                image: NetworkImage(
-                  '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil ?? ''}',
-                ),
+                image:
+                    homeController.userData.user.value?.fotoProfil == null ||
+                        homeController.userData.user.value?.fotoProfil == ''
+                    ? const NetworkImage('${AppUrls.imgProfileUrl}default.png')
+                    : NetworkImage(
+                        '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil ?? ''}',
+                      ),
               ),
               border: Border.all(color: SDWcolors.bgL, width: 3),
             ),

@@ -67,6 +67,7 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         backgroundColor: SDWcolors.bgD,
         body: Stack(
+          alignment: Alignment.topCenter,
           children: [
             Container(
               height: height * 0.4,
@@ -78,11 +79,13 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(left: 20, right: 20, top: 50),
+            SizedBox(
+              height: height,
+              width: width * 0.92,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: height * 0.04,),
                   HeaderPage(height: height, width: width),
                   PointAbsent(width: width, height: height),
                   QuickAction(width: width, height: height),

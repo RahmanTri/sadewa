@@ -11,6 +11,7 @@ import 'package:sadewa_fe/pages/Home/home_page.dart';
 import 'package:sadewa_fe/pages/Notice/notice_page.dart';
 import 'package:sadewa_fe/pages/Absen/face_scan.dart';
 import 'package:sadewa_fe/pages/Absen/scan_confirm.dart';
+import 'package:sadewa_fe/pages/Admin_ViewKaryawan/karyawan_page.dart';
 
 class AppPages {
   static const initial = Routes.splash;
@@ -29,5 +30,6 @@ class AppPages {
     GetPage(name: Routes.myPoint, page: () => MyPointPage()),
     GetPage(name: Routes.faceScan, page: () => RegistWajah()),
     GetPage(name: Routes.absenConfirm, page: () => AbsenConfirm()),
+    GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
   ];
 }

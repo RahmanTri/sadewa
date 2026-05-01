@@ -11,7 +11,7 @@ class RecentAbsent extends StatelessWidget {
   final double width;
   final double height;
 
-  RecentAbsent({required this.width, required this.height});
+  const RecentAbsent({super.key, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +41,11 @@ class RecentAbsent extends StatelessWidget {
           children: [
             Text(
               "Kehadiran Terkini",
-              style: TextStyle(
-                fontSize: SDWsizes.lg,
-                fontWeight: FontWeight.bold,
-                color: SDWcolors.textD,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.024,
+                      ),
             ),
             Stack(
               alignment: Alignment.topCenter,
@@ -80,7 +80,7 @@ class RecentAbsent extends StatelessWidget {
                             FontAwesomeIcons.circleQuestion,
                             color: SDWcolors.white,
                             size: 25,
-                          );
+                          );  
                         case 'on_time':
                           bgColor = SDWcolors.success;
                           iconData = Icon(
