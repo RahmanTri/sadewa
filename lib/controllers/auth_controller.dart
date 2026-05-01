@@ -97,8 +97,9 @@ class AuthController extends GetxController {
 
       //employee page can be changed during development
       if (userRole.value == 'employee') {
+        Get.offAllNamed(Routes.profile);
         // Get.offNamed(Routes.riwayat);
-        Get.offAllNamed(Routes.riwayat);
+        // Get.offAllNamed(Routes.riwayat);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
         Get.offAllNamed(Routes.adminHome, arguments: result['userData']);
@@ -148,7 +149,7 @@ class AuthController extends GetxController {
   void devAutoLogin() async {
     isLoading.value = true;
     try {
-      final success = await login('BambangSutejo', 'bamsutejo1234');
+      final success = await login('ErehPakeH', 'ereh123456');
       if (!success) {
         Get.snackbar('Login gagal', 'Ada yang Keliru');
         isLoading.value = false;
