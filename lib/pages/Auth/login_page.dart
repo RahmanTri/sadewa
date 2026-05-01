@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
     final authController = Get.find<AuthController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    Future.microtask(() => authController.devAutoLogin());
+    // Future.microtask(() => authController.devAutoLogin());
 
     return Scaffold(
       backgroundColor: SDWcolors.bgD,

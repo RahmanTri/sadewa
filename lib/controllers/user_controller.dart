@@ -21,8 +21,6 @@ class UserController extends GetxController {
   var isEditing = false.obs;
   var selectedImagePath = ''.obs;
 
-  var isAdmin = false.obs;
-
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
