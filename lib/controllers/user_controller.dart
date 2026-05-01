@@ -40,29 +40,6 @@ class UserController extends GetxController {
     isLoading.value = false;
   }
 
-  // void updateUserData(Map<String, dynamic> rawjson) {
-  //   Map<String, dynamic> userData = {
-  //     //User
-  //     'user_id' : rawjson['user']['new']['id'],
-  //     'username' : rawjson['user']['new']['username'],
-  //     'email' : rawjson['user']['new']['email'],
-  //     'role' : rawjson['user']['new']['role'],
-  //     //employee
-  //     'id_perusahaan' : rawjson['employee']['new']['company_id'],
-  //     'id_divisi' : rawjson['employee']['new']['division_id'],
-  //     'nama_divisi' : rawjson['employee']['new']['division_name'],
-  //     'nama_lengkap' : rawjson['employee']['new']['name'],
-  //     'no_telp' : rawjson['employee']['new']['phone_number'],
-  //     'data_wajah' : rawjson['employee']['new']['face_data'],
-  //     'foto_profil' :rawjson['employee']['new']['profile_pic'],
-  //     'poin' :rawjson['employee']['new']['points'],
-  //     'logged_in' :rawjson['employee']['new']['logged_in'],
-  //     'logged_out' :rawjson['employee']['new']['logged_out'],
-  //   }; 
-
-  //   user.value = User.fromJson(userData);
-  // }
-
   void setUserToken(String token) {
     userToken.value = token;
   }

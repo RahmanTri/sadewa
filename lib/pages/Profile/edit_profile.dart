@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/pages/Profile/widget/edit_profile.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class EditProfile extends StatelessWidget{
   const EditProfile({super.key});
@@ -48,57 +51,36 @@ class EditProfile extends StatelessWidget{
                           backgroundColor: SDWcolors.bgL,
                           child: CircleAvatar(
                             radius: 60,
-                          //   backgroundImage: userController.selectedImagePath.value != ''
-                          //     ? FileImage(File(userController.selectedImagePath.value)) as ImageProvider  
-                          //     : NetworkImage(userController.user.value!.fotoProfil),
+                            backgroundImage: userController.selectedImagePath.value != ''
+                              ? FileImage(File(userController.selectedImagePath.value)) as ImageProvider  
+                              : NetworkImage(userController.user.value!.fotoProfil),
                            ),
                         ),
-                    //     Positioned(
-                    //       bottom: 0,
-                    //       right: 0,
-                    //       child: GestureDetector(
-                    //         // onTap: () => _showPicker(context),
-                    //         //  child: Container(
-                    //         //   padding: const EdgeInsets.all(8),
-                    //         //   decoration: BoxDecoration(
-                    //         //     color: SDWcolors.bgL,
-                    //         //     shape: BoxShape.circle, 
-                    //           ),
-                    //           child: Icon(
-                    //             Icons.camera_alt,
-                    //             color: SDWcolors.primary,
-                    //             size: 21,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),     
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () => _showPicker(context, userController),
+                             child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: SDWcolors.bgL,
+                                shape: BoxShape.circle, 
+                              ),
+                            
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: SDWcolors.primary,
+                                size: 21,
+                              ),
+                            ),
+                          ),
+                        ),     
                        ],
                     )),
                 
             
-                //     void _showPicker(BuildContext context) {
-                //       Get.bottomSheet(
-                //         Container(
-                //           backgroundColor: SDWcolors.bgL,
-                //           padding: const EdgeInsets.all(20),
-                //           shape: const RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                //           ),
-                //           child: Wrap(
-                //             children: [
-                //               ListTile(
-                //                 leading: const Icon(Icons.camera_alt),
-                //                 title: const Text('Camera'),
-                //                 onTap: () {
-                //                   userController.getImage(ImageSource.camera);
-                //                   Get.back();
-                //                 },
-                //               )
-                //             ],
-                //           ),
-                //         )
-                //       );
-                //     }
+                    
                    ),
                  ),
             
@@ -184,4 +166,32 @@ class EditProfile extends StatelessWidget{
       ),
     );
   }
+
+  void _showPicker(BuildContext context, UserController userController) {
+                      Get.bottomSheet(
+                        Container(
+                          color: SDWcolors.bgL,
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          child: Wrap(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.camera_alt),
+                                title: const Text('Camera'),
+                                onTap: () =>
+                                  userController.pickImage(ImageSource.camera)
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.image),
+                                title: const Text('Gallery'),
+                                onTap: () =>
+                                  userController.pickImage(ImageSource.gallery)
+                              )
+                            ],
+                          ),
+                        )
+                      );
+                    }
 }
