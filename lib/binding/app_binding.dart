@@ -19,6 +19,6 @@ class AppBinding extends Bindings {
     Get.put<AuthController>(AuthController(), permanent: true);
     Get.put<ApiService>(ApiService(), permanent: true);
     Get.put<RiwayatController>(RiwayatController(), permanent: true);
-    // Get.put<NoticeController>(NoticeController(), permanent: true);
+    Get.put<NoticeController>(NoticeController(), permanent: true);
   }
 }

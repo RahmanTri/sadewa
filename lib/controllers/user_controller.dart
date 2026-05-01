@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/models/admin_model.dart';
 import '../models/user_model.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'dart:convert';
@@ -11,6 +12,10 @@ class UserController extends GetxController {
   final ApiService _apiService = ApiService();
   final ImagePicker _picker = ImagePicker();
   var user = Rxn<User>();
+  var admin = Rxn<Admin>();
+
+  var isAdmin = false.obs;
+
   var userToken = ''.obs;
   var isLoading = false.obs;
   var isEditing = false.obs;
@@ -26,8 +31,12 @@ class UserController extends GetxController {
 
   void assignUserData(Map<String, dynamic> userData) {
     isLoading.value = true;
-    user.value = User.fromJson(userData);
-
+     if (userData['role'] == 'admin') {
+      admin.value = Admin.fromJson(userData);
+      isAdmin.value = true;
+    } else {
+      user.value = User.fromJson(userData);
+    }
     // Get.snackbar('Berhasil Cok', user.value?.dataWajah.toString() ?? '');
 
     isLoading.value = false;
