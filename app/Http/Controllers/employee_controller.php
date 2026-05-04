@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Employee;
@@ -215,7 +216,7 @@ class employee_controller extends Controller
 
         $companyPrefix = 'KKS';
         $divisonId = $validatedData['division_id'];
-        $idNumber = Employee::max('id') + 1 ?? 0;
+        $idNumber = Employee::max('id') + 1 ?? 0; 
         $companyId = $companyPrefix . str_pad($divisonId, 2, '0', STR_PAD_LEFT) . str_pad($idNumber, 3, '0', STR_PAD_LEFT);
 
         $createdUser = User::where('email', $validatedData['email'])->first();
@@ -458,12 +459,57 @@ class employee_controller extends Controller
 
         $employee->face_data = $faceDataEncode ?? $employee->face_data;
 
-        $employee->save();  
+        $employee->save();
 
         return response()->json([
             "success" => true,
             "data" => $employee,
         ], 200);
+    }
+
+    public function fetchEmployeeData()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak punya otoritas disini!"
+            ], 403);
+        }
+
+        $employeeData = DB::table("employee as em")
+            ->join('division as dv', 'dv.id', '=', 'em.division_id')
+            ->join('users as user', 'user.id', '=', 'em.user_id')
+            ->select(
+                'em.id as id_karyawan',
+                'user.id as id_user',
+                'em.company_id as id_perusahaan',
+                'em.name as nama_lengkap',
+                'user.email as email',
+                'em.phone_number as no_tlp',
+                'dv.id as id_divisi',
+                'dv.division_name as nama_divisi',
+                'em.profile_pic as foto_profil'
+            )
+            ->orderBy('nama_lengkap', 'asc')
+            ->get()
+            ;
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Sukses mengambil data",
+                "data" => $employeeData
+            ]
+        );
     }
 }
 

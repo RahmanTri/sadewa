@@ -161,35 +161,33 @@ class em_log_in_controller extends Controller
             ], 403);
         }
 
-        $data = Em_log_in::create($login_data);
-
         if ($Point->positive_streak >= 5) {
             $Point->point_value += 2;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'point_value' => 2
+                'added_value' => 2
             ]);
         } elseif ($Point->negative_streak >= 3) {
             $Point->point_value -= 2;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'point_value' => -2
+                'added_value' => -2
             ]);
         } elseif ($Point->positive_streak && $status == "late") {
             $Point->point_value -= 1;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'point_value' => -1
+                'added_value' => -1
             ]);
         } else {
             $Point->point_value += 1;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'point_value' => 1
+                'added_value' => 1
             ]);
         }
 
@@ -207,6 +205,7 @@ class em_log_in_controller extends Controller
             $Point->positive_streak += 1;
         }
 
+        $data = Em_log_in::create($login_data);
         $Point->save();
 
         $employee->update(["logged_in" => 1]);

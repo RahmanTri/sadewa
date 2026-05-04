@@ -87,6 +87,16 @@ Route::middleware("auth:sanctum")->group(function () {
 
     // Fetch History
     Route::get('/fetch-history', [history_log_controller::class, 'fetch_histories']);
+    // Fetch Employee Data
+    Route::get('/employee/get-data', [employee_controller::class, 'fetchEmployeeData']);
+
+    //Account (Admin Only)
+    Route::post('/create-account', [auth_controller::class, 'createAccount']);
+    Route::post('/edit-account', [auth_controller::class, 'editAccount']);
+
+    //Division (Edit is Admin only)
+    Route::get('division/get-data', [division_controller::class, 'getDivision']);
+    Route::post('division/edit', [division_controller::class, 'editDivision']);
 
     //Fetch Pont History
     Route::get('/point/get-history', [point_log_controller::class, 'getData']);
