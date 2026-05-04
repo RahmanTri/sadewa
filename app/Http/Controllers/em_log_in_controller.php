@@ -212,10 +212,11 @@ class em_log_in_controller extends Controller
 
         return response()->json([
             "success" => true,
-            "message" => "berhasil checkin dalam kondisi $status",
+            "message" => "berhasil checkin",
             "data" => [
                 "employee" => $data,
                 "point" => $Point,
+                "status" => $status
             ]
         ], 200);
     }
