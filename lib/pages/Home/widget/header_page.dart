@@ -77,10 +77,11 @@ class HeaderPage extends StatelessWidget {
                     '${AppUrls.imgAssets}default-profile.png',
                   ),
                 ),
+                border: Border.all(color: SDWcolors.bgL, width: 3, strokeAlign: BorderSide.strokeAlignInside),
               ),
               child:
-                  homeController.userData.user.value?.fotoProfil != '' ||
-                      homeController.userData.user.value?.fotoProfil != null ||
+                  homeController.userData.user.value?.fotoProfil != '' &&
+                      homeController.userData.user.value?.fotoProfil != null &&
                       homeController.userData.user.value?.fotoProfil != 'null'
                   ? Container(
                     height: width * 0.22,
@@ -92,7 +93,6 @@ class HeaderPage extends StatelessWidget {
                           '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
                         ),
                       ),
-                      border: Border.all(color: SDWcolors.bgL, width: 3),
                     ),
                   )
                   : null,

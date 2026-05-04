@@ -35,32 +35,27 @@ class KaryawanCard extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(left: width * 0.04, right: width * 0.04),
-            height: height * 0.8,
+            height: height * 0.08,
             width: height * 0.08,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage('${AppUrls.imgAssets}image-loading.png'),
+                image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
               ),
+              border: Border.all(color: SDWcolors.primary, width: 4),
             ),
-            child: Container(
-              height: height * 0.08,
-              width: height * 0.08,
-              // margin: EdgeInsets.only(right: 30),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [SDWboxShadow.shadow],
-                border: Border.all(width: 4, color: SDWcolors.primary),
-                image: DecorationImage(
-                  image:
-                      karyawan.fotoProfil == '' || karyawan.fotoProfil == 'null'
-                      ? AssetImage('${AppUrls.imgAssets}default-profile.png')
-                      : NetworkImage(
-                          '${AppUrls.imgProfileUrl}${karyawan.fotoProfil}',
-                        ),
-                ),
-              ),
-            ),
+            child: karyawan.fotoProfil != 'null' && karyawan.fotoProfil != ''
+                ? Container(
+                  width: height * 0.8,
+                  height: height * 0.8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage('${AppUrls.imgProfileUrl}${karyawan.fotoProfil}'),
+                    ),
+                  ),
+                )
+                : null,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +85,7 @@ class KaryawanCard extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                   fontSize: height * 0.016,
                 ),
-              )
+              ),
             ],
           ),
         ],
