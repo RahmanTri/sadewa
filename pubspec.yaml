@@ -45,11 +45,14 @@ dependencies:
   google_fonts: ^8.0.2
   font_awesome_flutter: ^10.7.0
   image_picker: ^1.0.7
+  dropdown_button2: ^3.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   iconify_flutter: ^0.0.7
+  geolocator: ^14.0.2
+  animated_text_kit: ^4.3.0
 
 dev_dependencies:
   flutter_test:
@@ -81,7 +84,6 @@ flutter:
     - assets/images/default-profile.png
     - assets/images/image-loading.png
 
-
     - assets/icons/riwayat_kehadiran.png
     - assets/icons/peringkat_karyawan.png
     - assets/icons/peringatan.png
@@ -89,6 +91,8 @@ flutter:
     - assets/icons/calendar.png
     - assets/icons/divisi.png
     - assets/icons/user.png
+    - assets/icons/face_scan.png
+    - assets/icons/point_navbar.png
     - assets/icons/change_password.png
     - assets/icons/success.png
 

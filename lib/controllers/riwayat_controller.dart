@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:sadewa_fe/constants/urls.dart';
+import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/riwayat_model.dart';
 import 'package:sadewa_fe/services/api_service.dart';
-import 'package:sadewa_fe/services/storage_service.dart';
 
 class RiwayatController extends GetxController {
-  final StorageService _storageService = StorageService();
+  final UserController _userController = Get.find<UserController>();
   final ApiService _apiService = ApiService();
 
   final filteroptions = [
@@ -37,14 +37,13 @@ class RiwayatController extends GetxController {
   var token = ''.obs;
   var isLoading = false.obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    token.value = await _storageService.getToken() ?? '';
+  void getUserToken() {
+    token.value = _userController.userToken.value;
   }
 
   Future<void> fetchRiwayat() async {
     isLoading.value = true;
+    getUserToken();
     final String authtoken = token.value;
 
     histories.clear();

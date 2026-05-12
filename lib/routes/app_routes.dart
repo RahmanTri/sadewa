@@ -16,10 +16,13 @@ class Routes {
   static const absenConfirm = '/absenConfirm';
   static const profile = '/profile';
   static const editProfile = '/editProfile';
+  static const leaderboard = '/leaderboard';
   static const changePassword = '/changePassword';
 
   //Admin
   static const karyawan = '/karyawan';
+  static const karyawanDetail = '/karyawanDetail';
   static const divisi = '/divisi';
   static const akunManajer = '/accounts';
+  static const editKaryawan = '/editKaryawan';
 }

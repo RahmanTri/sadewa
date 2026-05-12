@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
-import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -73,7 +72,7 @@ class AuthController extends GetxController {
         data: loginData,
         parser: (body) => jsonDecode(body),
         onError: (resp) => 'Login gagal: ${resp.statusCode}',
-      ); 
+      );
 
       //Save token
       token.value = result['token'] ?? '';
@@ -135,7 +134,7 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Login gagal', e.toString());
-      // print(e);
+      // print("Error Login: $e");
       return false;
     }
   }
@@ -162,10 +161,15 @@ class AuthController extends GetxController {
   }
 
   void logOut() async {
-    await _storageService.logOut();
+    try {
+      await _storageService.logOut();
+      Get.offAllNamed(Routes.login);
+    } catch (e) {
+      print("Gagal logout: $e");
+    }
   }
 
-  void devAutoLogin() async {
+  Future<void> devAutoLogin() async {
     isLoading.value = true;
     final username = 'ErehPakeH';
     final password = 'ereh123456';

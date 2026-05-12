@@ -9,7 +9,7 @@ class AppUrls {
 
   //Platform URL
   static const String emulator = "http://10.0.2.2/";
-  static const String local = "http://localhost/";
+  static const String local = "http://192.168.0.165:8000/";
   static const String physical = "http://192.168.0.30/";
   static const String physical2 = "http://192.168.0.31/";
   static const String ngrok = "https://shaunda-unpolitic-maeve.ngrok-free.dev/";

@@ -1,10 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
-import '../Effect/box_shadow.dart';
+// import '../Effect/box_shadow.dart';
+import '../Effect/SDWOverlay.dart';
 import 'package:sadewa_fe/controllers/face_scan_controller.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class RegistWajah extends StatelessWidget {
   RegistWajah({Key? key});
@@ -16,18 +19,35 @@ class RegistWajah extends StatelessWidget {
       final height = MediaQuery.of(context).size.height;
       final width = MediaQuery.of(context).size.width;
       final cam = absenController.cameraController.value;
-      Widget camBox;
 
-      if (cam != null && cam.value.isInitialized) {
-        camBox = CameraPreview(cam);
-      } else {
-        camBox = Center(child: CircularProgressIndicator());
+      if (cam == null ||
+          !cam.value.isInitialized ||
+          !absenController.distanceUpdated.value ||
+          absenController.isLoading) {
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(
+              semanticsLabel: 'Menunggu respons Kamera dan Lokasi ...',
+            ),
+          ),
+        );
       }
 
-      if (cam == null || !cam.value.isInitialized) {
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
+      if (!absenController.isInRadius.value && !absenController.isRegist) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final ctx = Get.context;
+          if (ctx != null) {
+            Sdwoverlay.showOverlay(
+              context: (context),
+              title: "Anda Berada Diluar Jangkauan Area Divisi",
+              iconData: Icons.warning,
+              height: Get.height,
+              width: Get.width,
+              onConfirm: () => (Get.offAllNamed(Routes.home)),
+            );
+          }
+        });
       }
-
       return Scaffold(
         backgroundColor: SDWcolors.bgD,
         body: Stack(
@@ -41,7 +61,9 @@ class RegistWajah extends StatelessWidget {
                   Container(
                     height: height * 0.13,
                     child: IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        Get.offAllNamed(Routes.home);
+                      },
                       icon: Icon(Icons.arrow_back),
                       color: SDWcolors.textD,
                       iconSize: 40,
@@ -55,7 +77,9 @@ class RegistWajah extends StatelessWidget {
                     child: Text(
                       absenController.isRegist
                           ? 'Registrasi Wajah'
-                          : 'Scan Wajah Anda',
+                          : absenController.isAbsen
+                          ? 'Absen Keluar'
+                          : 'Absen Masuk',
                       style: TextStyle(
                         fontSize: SDWsizes.xl,
                         fontWeight: FontWeight.bold,
@@ -75,7 +99,7 @@ class RegistWajah extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: camBox,
+              child: CameraPreview(cam),
             ),
 
             // Text Wrapper

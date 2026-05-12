@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/controllers/point_controller.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/pages/Poin/widget/histori_poin_card.dart';
 import '../../constants/sdw_colors.dart';
 import '../../constants/urls.dart';
@@ -77,7 +78,7 @@ class MyPointPage extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          SizedBox(height: 40),
+                          SizedBox(height: height * 0.052),
                           Container(
                             height: height * 0.24,
                             width: width * 0.48,
@@ -98,19 +99,19 @@ class MyPointPage extends StatelessWidget {
                       Column(
                         children: [
                           Container(
-                            height: 80,
-                            width: 80,
+                            height: height * 0.104,
+                            width: height * 0.104,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 image: AssetImage(
                                   '${AppUrls.imgAssets}image-loading.png',
                                 ),
-                              )
+                              ),
                             ),
                             child: Container(
-                              height: 80,
-                              width: 80,
+                              height: height * 0.104,
+                              width: height * 0.104,
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: SDWcolors.essentialD,
@@ -118,16 +119,27 @@ class MyPointPage extends StatelessWidget {
                                 ),
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  // image: AssetImage('${AppUrls.imgAssets}default-profile.png'),
-                                  image: poinController.profilePic.value == ''
-                                      ? AssetImage(
-                                          '${AppUrls.imgAssets}default-profile.png',
-                                        )
-                                      : NetworkImage(
-                                          '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
-                                        ),
+                                  image: AssetImage(
+                                    '${AppUrls.imgAssets}default-profile.png',
+                                  ),
                                 ),
                               ),
+                              child:
+                                  poinController.profilePic.value != 'null' &&
+                                      poinController.profilePic.value != '' 
+                                  ? Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            '${AppUrls.imgProfileUrl}${poinController.profilePic.value}',
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : null,
                             ),
                           ),
                           SizedBox(height: height * 0.02),
