@@ -8,6 +8,7 @@ class Karyawan {
   int idDivisi;
   String namaDivisi;
   String fotoProfil;
+  String dataWajah;
 
   Karyawan({
     required this.idKaryawan,
@@ -18,6 +19,7 @@ class Karyawan {
     required this.noTlp,
     required this.idDivisi,
     required this.namaDivisi,
+    required this.dataWajah,
     this.fotoProfil = '',
   });
 
@@ -32,6 +34,7 @@ class Karyawan {
       idDivisi: json['id_divisi'],
       namaDivisi: json['nama_divisi'],
       fotoProfil: json['foto_profil'] == null || json['foto_profil'] == 'null' || json['foto_profil'] == '' ? '' : json['foto_profil'],
+      dataWajah: json['data_wajah'],
     );
   }
 }

@@ -3,18 +3,32 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/karyawan_controller.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 import '../effect/box_shadow.dart';
 import 'widgets/karyawan_card.dart';
 
-class KaryawanPage extends StatelessWidget {
+class KaryawanPage extends StatefulWidget {
   const KaryawanPage({super.key});
+
+  @override
+  State<KaryawanPage> createState() => _KaryawanPageState();
+}
+
+  class _KaryawanPageState extends State<KaryawanPage> {
+    late KaryawanController karyawanController;
+  @override
+  void initState() {
+    karyawanController = Get.find<KaryawanController>();
+    karyawanController.fetchKaryawan();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final karyawanController = Get.find<KaryawanController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    Future.microtask(() => karyawanController.fetchKaryawan());
+    // Future.microtask(() => karyawanController.fetchKaryawan());
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +42,7 @@ class KaryawanPage extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () => Get.toNamed(Routes.akunManajer),
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),
@@ -128,7 +142,28 @@ class KaryawanPage extends StatelessWidget {
               // ),
               Obx(
                 () => karyawanController.isLoading.value == true
-                    ? Center(child: CircularProgressIndicator())
+                    ? Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: SDWcolors.primary,
+                              ),
+                              SizedBox(height: height * 0.02),
+                              Text(
+                                'Memuat Data...',
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      color: SDWcolors.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: height * 0.022,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                     : karyawanController.filteredKaryawan.isNotEmpty
                     ? Expanded(
                         child: ListView.builder(
@@ -159,11 +194,12 @@ class KaryawanPage extends StatelessWidget {
                             ),
                             Text(
                               'Tidak ada data',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: SDWcolors.textD,
-                                fontWeight: FontWeight.bold,
-                                fontSize: height * 0.022,
-                              ),
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    color: SDWcolors.textD,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: height * 0.022,
+                                  ),
                             ),
                           ],
                         ),
