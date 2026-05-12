@@ -73,7 +73,7 @@ class AuthController extends GetxController {
         data: loginData,
         parser: (body) => jsonDecode(body),
         onError: (resp) => 'Login gagal: ${resp.statusCode}',
-      ); 
+      );
 
       //Save token
       token.value = result['token'] ?? '';
@@ -135,7 +135,7 @@ class AuthController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       Get.snackbar('Login gagal', e.toString());
-      // print(e);
+      // print("Error Login: $e");
       return false;
     }
   }
@@ -162,13 +162,18 @@ class AuthController extends GetxController {
   }
 
   void logOut() async {
-    await _storageService.logOut();
+    try {
+      await _storageService.logOut();
+      Get.offAllNamed(Routes.login);
+    } catch (e) {
+      print("Gagal logout: $e");
+    }
   }
 
   void devAutoLogin() async {
     isLoading.value = true;
-    final username = 'BambangSutejo';
-    final password = 'bamsutejo1234';
+    final username = 'employee01';
+    final password = 'employee123';
 
     try {
       final success = await login(username, password);

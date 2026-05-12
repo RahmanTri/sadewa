@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -9,21 +11,28 @@ import 'package:image/image.dart' as imeg;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/services/api_service.dart';
+import 'package:sadewa_fe/services/storage_service.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
 
 class FaceScanController extends GetxController {
+  final StorageService _storageService = StorageService();
+  final ApiService _apiService = ApiService();
   final userData = Get.find<UserController>();
   final statusText = ''.obs;
+  final token = ''.obs;
+
+  double divLat = 0.0;
+  double divLng = 0.0;
+  double divRadius = 0.0;
 
   late FaceDetector _faceDetector;
   Interpreter? _interpreter;
-
-  final bool _isLoading = false;
   bool isRegist = true;
 
   List<double>? embeddingResult = [];
-  List<double>? _userEmbeddings = [];
   Timer? _timer;
 
   final _faceRect = Rect.zero.obs;
@@ -31,6 +40,10 @@ class FaceScanController extends GetxController {
   bool _isCapturing = false;
   bool _isCounting = false;
   bool _isDispose = false;
+  final distanceUpdated = false.obs;
+  final isInRadius = false.obs;
+  bool isAbsen = false;
+  bool isLoading = false;
 
   late List<CameraDescription> cameras;
   final cameraController = Rxn<CameraController>();
@@ -38,22 +51,49 @@ class FaceScanController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    isAbsen = userData.user.value?.loggedIn ?? false;
+    token.value = await _storageService.getToken() ?? '';
     cameras = await availableCameras();
     _faceDetector = FaceDetector(
       options: FaceDetectorOptions(performanceMode: FaceDetectorMode.fast),
     );
     await _loadModel();
+    await _loadLocation();
     await _initCamera();
   }
 
   Future<void> _loadModel() async {
     try {
+      isLoading = true;
       _interpreter = await Interpreter.fromAsset(
         'assets/models/mobilefacenet.tflite',
       );
       print("Model TFlite berhasil dimuat");
+      isLoading = false;
     } catch (e) {
       print("Gagal memuat models $e");
+    }
+  }
+
+  Future<void> _loadLocation() async {
+    final authToken = token.value;
+
+    try {
+      isLoading = true;
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'user/get-division',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
+      final int radius = result['data']['r_tolerance'];
+      divLat = result['data']['latitude'];
+      divLng = result['data']['longitude'];
+      divRadius = radius.toDouble();
+      print("Berhasil mendapatkan data lokasi untuk divisi : $divLat, $divLng");
+      isLoading = false;
+    } catch (e) {
+      print("Gagal mendapatkan data lokasi untuk divisi: $e");
     }
   }
 
@@ -61,6 +101,7 @@ class FaceScanController extends GetxController {
     final userEmbeddings = userData.user.value?.dataWajah ?? [];
 
     try {
+      isLoading = true;
       final frontCamera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.front,
         orElse: () => cameras.first,
@@ -82,20 +123,77 @@ class FaceScanController extends GetxController {
         isRegist = true;
       } else {
         isRegist = false;
+        try {
+          isInRadius.value = await radiusProvider(divLat, divLng, divRadius);
+          Get.snackbar(
+            "Berhasil set isInRadius",
+            "isInRadius status : $isInRadius",
+          );
+        } catch (e) {
+          print("Gagal Kalkulasi lokasi : $e");
+        }
       }
 
       cameraController.value!.startImageStream((CameraImage image) {
         if (_isDispose) return;
-        if (!_isLoading) {
+        if (!isLoading) {
           if (_isDispose || _isCapturing) return;
-          _getEmbedding(image, userEmbeddings);
+
+          if (isRegist) {
+            _getEmbedding(image, userEmbeddings);
+          } else {
+            if (isInRadius.value) {
+              _getEmbedding(image, userEmbeddings);
+            } else {}
+          }
         }
       });
 
       print("kamera berhasil dimuat");
+      isLoading = false;
     } catch (e) {
       print('gagal memuat kamera: $e');
     }
+  }
+
+  Future<bool> radiusProvider(double lat, double lng, double radius) async {
+    bool isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    LocationPermission permission;
+
+    if (!isServiceEnabled) {
+      throw Exception('Lokasi tidak aktif');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw 'Izin lokasi ditolak';
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw 'Izin lokasi ditolak secara permanen';
+    }
+
+    Position userPos = await Geolocator.getCurrentPosition(
+      locationSettings: AndroidSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+        forceLocationManager: true,
+        intervalDuration: const Duration(seconds: 5),
+      ),
+    );
+    double distance = Geolocator.distanceBetween(
+      lat,
+      lng,
+      userPos.latitude,
+      userPos.longitude,
+    );
+    print("Jarak anda dengan divisi : $distance M");
+
+    distanceUpdated.value = true;
+    return distance <= radius;
   }
 
   double cosineSimilarity(List<double> a, List<double> b) {
@@ -113,22 +211,22 @@ class FaceScanController extends GetxController {
   }
 
   Uint8List _cvYUV2NV21(CameraImage image) {
-    final int width = image.width;
-    final int height = image.height;
-
     final yPlane = image.planes[0];
     final uPlane = image.planes[1];
     final vPlane = image.planes[2];
 
-    final nv21 = Uint8List(width * height * 3 ~/ 2);
+    final ySize = yPlane.bytes.length;
+    final uvSize = uPlane.bytes.length;
+
+    final nv21 = Uint8List(ySize + uvSize * 2);
 
     int index = 0;
 
-    for (int i = 0; i < yPlane.bytes.length; i++) {
+    for (int i = 0; i < ySize; i++) {
       nv21[index++] = yPlane.bytes[i];
     }
 
-    for (int i = 0; i < uPlane.bytes.length; i++) {
+    for (int i = 0; i < uvSize; i++) {
       nv21[index++] = vPlane.bytes[i];
       nv21[index++] = uPlane.bytes[i];
     }
@@ -177,7 +275,6 @@ class FaceScanController extends GetxController {
     final userEmbeddings = userData.user.value?.dataWajah;
     if (_isDispose) return;
     if (!Get.isRegistered<FaceScanController>()) return;
-
     if (_cameraController != null &&
         _cameraController.value.isInitialized &&
         !_isCapturing) {
@@ -214,26 +311,40 @@ class FaceScanController extends GetxController {
                     embeddingResult = await _processFace(faces.first, image);
                     await closeCamera();
                     print('Data wajah: $embeddingResult');
+                    isLoading = true;
                     Get.offAllNamed(Routes.absenConfirm);
-                    print('Dari sini udah ke page absen confirm');
+                    isLoading = false;
                   } catch (e) {
                     print('Gagal memproses wajah: $e');
                   } finally {
                     _isCapturing = false;
                     _isCounting = false;
+                    isLoading = false;
                   }
                 }
               });
             }
           } else {
+            embeddingResult = await _processFace(faces.first, image);
+            double maxSimilarity = 0.0;
+            const threshold = 0.7;
+
             try {
-              embeddingResult = await _processFace(faces.first, image);
-              print('Data wajah: $embeddingResult');
-              closeCamera();
-              Get.offAllNamed(Routes.absenConfirm);
+              double sim = cosineSimilarity(embeddingResult!, userEmbeddings);
+              if (sim > maxSimilarity && sim > threshold) {
+                isLoading = true;
+                closeCamera();
+                Get.offAllNamed(Routes.absenConfirm);
+                isLoading = false;
+              } else {
+                statusText.value = "Wajah Terdeteksi, tapi bukan anda!";
+              }
+            } catch (e) {
+              print('Gagal memproses wajah: $e');
             } finally {
               _isCapturing = false;
               _isCounting = false;
+              isLoading = false;
             }
           }
         } else {
@@ -326,6 +437,8 @@ class FaceScanController extends GetxController {
 
     _isCapturing = false;
     _isCounting = false;
+    distanceUpdated.value = false;
+    isLoading = false;
     super.onClose();
   }
 }

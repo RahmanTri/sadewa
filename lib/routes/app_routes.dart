@@ -16,6 +16,7 @@ class Routes {
   static const absenConfirm = '/absenConfirm';
   static const profile = '/profile';
   static const editProfile = '/editProfile';
+  static const leaderboard = '/leaderboard';
 
   //Admin
   static const karyawan = '/karyawan';

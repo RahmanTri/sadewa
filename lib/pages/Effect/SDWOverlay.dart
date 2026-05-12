@@ -11,7 +11,7 @@ class Sdwoverlay {
     required iconData,
     required double height,
     required double width,
-    VoidCallback? onConfirm,
+    required onConfirm,
     VoidCallback? onCancel,
   }) {
     _currentEntry?.remove();
@@ -67,37 +67,43 @@ class Sdwoverlay {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent,
-                                  ),
-                                  onPressed: () {
-                                    hide();
-                                    if (onCancel != null) {
-                                      onCancel();
-                                    }
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: 180,
-                                    decoration: BoxDecoration(
-                                      color: SDWcolors.bgL,
-                                      borderRadius: BorderRadius.circular(20),
+                                if (onCancel != null)
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        'Batal',
-                                        style: TextStyle(
-                                          color: SDWcolors.primary,
-                                          fontSize: SDWsizes.lg,
-                                          fontWeight: FontWeight.bold,
+                                    onPressed: () {
+                                      hide();
+                                      onCancel();
+                                    },
+                                    child: Container(
+                                      height: height * 0.045,
+                                      width: width * 0.35,
+                                      decoration: BoxDecoration(
+                                        color: SDWcolors.bgL,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Batal',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontSize: height * 0.02,
+                                                fontWeight: FontWeight.bold,
+                                                letterSpacing: 2,
+                                                foreground: Paint()
+                                                  ..style = PaintingStyle.stroke
+                                                  ..strokeWidth = 1
+                                                  ..color = SDWcolors.primary,
+                                              ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     padding: EdgeInsets.zero,
@@ -106,13 +112,11 @@ class Sdwoverlay {
                                   ),
                                   onPressed: () {
                                     hide();
-                                    if (onConfirm != null) {
-                                      onConfirm();
-                                    }
+                                    onConfirm();
                                   },
                                   child: Container(
-                                    height: 50,
-                                    width: 180,
+                                    height: height * 0.045,
+                                    width: width * 0.35,
                                     decoration: BoxDecoration(
                                       color: SDWcolors.primary,
                                       borderRadius: BorderRadius.circular(20),
@@ -120,11 +124,18 @@ class Sdwoverlay {
                                     child: Center(
                                       child: Text(
                                         'Lanjut',
-                                        style: TextStyle(
-                                          color: SDWcolors.bgL,
-                                          fontSize: SDWsizes.lg,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontSize: height * 0.02,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 2,
+                                              foreground: Paint()
+                                                ..style = PaintingStyle.stroke
+                                                ..strokeWidth = 1
+                                                ..color = SDWcolors.textL,
+                                            ),
                                       ),
                                     ),
                                   ),

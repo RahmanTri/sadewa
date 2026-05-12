@@ -38,10 +38,10 @@ class QuickAction extends StatelessWidget {
           Text(
             "Quick Action",
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: SDWcolors.textD,
-                        fontWeight: FontWeight.bold,
-                        fontSize: height * 0.024,
-                      ),
+              color: SDWcolors.textD,
+              fontWeight: FontWeight.bold,
+              fontSize: height * 0.024,
+            ),
           ),
           SizedBox(height: 15),
           Row(
@@ -100,7 +100,7 @@ class QuickAction extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      // Get.offAllNamed(Routes.riwayat);
+                      Get.toNamed(Routes.leaderboard);
                     },
                     child: Container(
                       width: width * 0.2,
@@ -163,7 +163,7 @@ class QuickAction extends StatelessWidget {
                     margin: EdgeInsets.only(top: 10),
                     child: Column(
                       children: [
-                        SizedBox(height: height * 0.008,),
+                        SizedBox(height: height * 0.008),
                         Text(
                           "Peringatan",
                           style: Theme.of(context).textTheme.titleLarge

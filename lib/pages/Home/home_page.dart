@@ -11,17 +11,11 @@ import 'widget/activity_log.dart';
 import 'widget/point_n_absent.dart';
 import 'widget/quick_action.dart';
 import 'widget/recent_absent.dart';
+import 'widget/buttom_navbar.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-
-  final List<Widget> pages = [];
-
-  final List<BottomNavigationBarItem> navbar = const [
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-    BottomNavigationBarItem(icon: Icon(Icons.point_of_sale), label: 'Point'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +24,7 @@ class HomePage extends StatelessWidget {
     final homeController = Get.put(HomeController());
 
     return Obx(() {
-      if (homeController.userData.user.value == null) {
+      if (homeController.isLoading.value) {
         return Scaffold(
           body: Container(
             decoration: BoxDecoration(
@@ -69,6 +63,7 @@ class HomePage extends StatelessWidget {
         body: Stack(
           alignment: Alignment.topCenter,
           children: [
+            // Background Oren
             Container(
               height: height * 0.4,
               decoration: BoxDecoration(
@@ -79,13 +74,15 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
+
+            // Content
             SizedBox(
               height: height,
               width: width * 0.92,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: height * 0.04,),
+                  SizedBox(height: height * 0.04),
                   HeaderPage(height: height, width: width),
                   PointAbsent(width: width, height: height),
                   QuickAction(width: width, height: height),
@@ -105,6 +102,12 @@ class HomePage extends StatelessWidget {
                   ActivityLog(width: width, height: height),
                 ],
               ),
+            ),
+
+            // Navbar
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ButtomNavbar(height: height, width: width),
             ),
           ],
         ),

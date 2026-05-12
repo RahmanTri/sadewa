@@ -8,6 +8,7 @@ import 'package:sadewa_fe/services/storage_service.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class AbsenConfirmController extends GetxController {
   final ApiService _apiService = ApiService();
@@ -20,6 +21,7 @@ class AbsenConfirmController extends GetxController {
   final statusText = "".obs;
   final dateNow = "".obs;
   bool isRegist = false;
+  bool isAbsen = false;
   final token = ''.obs;
 
   List<double>? _embeddingResult = [];
@@ -29,6 +31,7 @@ class AbsenConfirmController extends GetxController {
   void onInit() async {
     super.onInit();
     _loadDateNow();
+    isAbsen = userData.user.value?.loggedIn ?? false;
     token.value = await _storageService.getToken() ?? '';
     isRegist = scanResult.isRegist;
     _embeddingResult = scanResult.embeddingResult;
@@ -57,7 +60,45 @@ class AbsenConfirmController extends GetxController {
     }
   }
 
-  Future<void> absenLogin() async {}
+  Future<void> absenLogin() async {
+    final authToken = token.value;
+    final now = DateTime.now();
+    final formattedTime = DateFormat('HH:mm:ss').format(now);
+
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: 'em-log/chkin',
+        data: {'time': formattedTime},
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
+
+      Get.offAllNamed(Routes.home);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> absenLogout() async {
+    final authToken = token.value;
+    final now = DateTime.now();
+    final formattedTime = DateFormat('HH:mm:ss').format(now);
+
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: 'em-log/chkout',
+        data: {'time': formattedTime},
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
+
+      Get.offAllNamed(Routes.home);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> _loadDateNow() async {
     WidgetsFlutterBinding.ensureInitialized();

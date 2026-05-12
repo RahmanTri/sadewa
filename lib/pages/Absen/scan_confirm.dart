@@ -52,7 +52,9 @@ class AbsenConfirm extends StatelessWidget {
                     child: Text(
                       absenConfirm.isRegist
                           ? 'Konfirmasi Registrasi'
-                          : 'Konfirmasi Absensi',
+                          : !absenConfirm.isAbsen
+                          ? 'Konfirmasi Absen Masuk'
+                          : 'Konfirmasi Absen Keluar',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
                             color: SDWcolors.textD,
@@ -445,8 +447,22 @@ class AbsenConfirm extends StatelessWidget {
                     onPressed: () {
                       if (absenConfirm.isRegist) {
                         absenConfirm.registFaceData();
-                      } else {
+                        Get.snackbar(
+                          "Registrasi Berhasil",
+                          "Data wajah anda berhasil disimpan!",
+                        );
+                      } else if (!absenConfirm.isAbsen) {
                         absenConfirm.absenLogin();
+                        Get.snackbar(
+                          "Absen masuk Berhasil",
+                          "Anda berhasil absen untuk hari ini!",
+                        );
+                      } else {
+                        absenConfirm.absenLogout();
+                        Get.snackbar(
+                          "Absen keluar Berhasil",
+                          "Anda berhasil absen untuk hari ini!",
+                        );
                       }
                     },
                     child: Container(

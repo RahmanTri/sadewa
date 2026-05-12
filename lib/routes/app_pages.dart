@@ -14,6 +14,7 @@ import 'package:sadewa_fe/pages/Absen/scan_confirm.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/karyawan_page.dart';
 import 'package:sadewa_fe/pages/Profile/profile_page.dart';
 import 'package:sadewa_fe/pages/Profile/edit_profile.dart';
+import 'package:sadewa_fe/pages/leaderboard/leaderboard_page.dart';
 
 class AppPages {
   static const initial = Routes.splash;
@@ -35,5 +36,6 @@ class AppPages {
     GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
     GetPage(name: Routes.profile, page: () => ProfilePage()),
     GetPage(name: Routes.editProfile, page: () => EditProfile()),
+    GetPage(name: Routes.leaderboard, page: () => LeaderboardPage()),
   ];
 }

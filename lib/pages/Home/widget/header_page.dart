@@ -33,27 +33,10 @@ class HeaderPage extends StatelessWidget {
                     fontSize: height * 0.022,
                   ),
                 ),
-
-                // SizedBox(
-                //   height: 50,
-                //   child: Marquee(
-                //     text: "Suwito",
-                //     style: TextStyle(
-                //       fontSize: SDWsizes.xl,
-                //       fontWeight: FontWeight.bold,
-                //       color: SDWcolors.white,
-                //     ),
-                //     scrollAxis: Axis.horizontal,
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     blankSpace: 20.0,
-                //     velocity: 30.0,
-                //     pauseAfterRound: Duration(seconds: 2),
-                //   ),
-                // ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userData.user.value?.namaLengkap ?? 'User',
+                    homeController.dataRefresh.value?.namaLengkap ?? '',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
                       fontWeight: FontWeight.bold,
@@ -77,24 +60,27 @@ class HeaderPage extends StatelessWidget {
                     '${AppUrls.imgAssets}default-profile.png',
                   ),
                 ),
-                border: Border.all(color: SDWcolors.bgL, width: 3, strokeAlign: BorderSide.strokeAlignInside),
+                border: Border.all(
+                  color: SDWcolors.bgL,
+                  width: 3,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                ),
               ),
               child:
-                  homeController.userData.user.value?.fotoProfil != '' &&
-                      homeController.userData.user.value?.fotoProfil != null &&
-                      homeController.userData.user.value?.fotoProfil != 'null'
+                  homeController.dataRefresh.value?.fotoProfil != '' &&
+                      homeController.dataRefresh.value?.fotoProfil != 'null'
                   ? Container(
-                    height: width * 0.22,
-                    width: width * 0.22,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
+                      height: width * 0.22,
+                      width: width * 0.22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            '${AppUrls.imgProfileUrl}${homeController.dataRefresh.value?.fotoProfil}',
+                          ),
                         ),
                       ),
-                    ),
-                  )
+                    )
                   : null,
             ),
           ),

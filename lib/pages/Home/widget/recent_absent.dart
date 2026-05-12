@@ -83,7 +83,7 @@ class RecentAbsent extends StatelessWidget {
                           break;
                         case 'late':
                           bgColor = SDWcolors.warning;
-                          iconData = FontAwesomeIcons.circleExclamation;
+                          iconData = FontAwesomeIcons.clock;
                           break;
                         case 'absent':
                           bgColor = SDWcolors.error;
@@ -95,7 +95,10 @@ class RecentAbsent extends StatelessWidget {
                           break;
                       }
                       return Container(
-                        margin: EdgeInsets.only(left: 5, right: 5),
+                        margin: EdgeInsets.only(
+                          left: height * 0.0055,
+                          right: height * 0.0055,
+                        ),
                         child: Column(
                           children: [
                             Container(
