@@ -39,7 +39,10 @@ Widget editProfile( {
           controller: controller,
           decoration: InputDecoration(
             isDense: true, 
-            border: UnderlineInputBorder()
+
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
           ),
         )
         :Text(

@@ -73,7 +73,7 @@ class AuthController extends GetxController {
         data: loginData,
         parser: (body) => jsonDecode(body),
         onError: (resp) => 'Login gagal: ${resp.statusCode}',
-      );
+      ); 
 
       //Save token
       token.value = result['token'] ?? '';
@@ -167,8 +167,8 @@ class AuthController extends GetxController {
 
   void devAutoLogin() async {
     isLoading.value = true;
-    final username = 'BambangSutejo';
-    final password = 'bamsutejo1234';
+    final username = 'ErehPakeH';
+    final password = 'ereh123456';
 
     try {
       final success = await login(username, password);

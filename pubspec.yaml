@@ -89,6 +89,8 @@ flutter:
     - assets/icons/calendar.png
     - assets/icons/divisi.png
     - assets/icons/user.png
+    - assets/icons/change_password.png
+    - assets/icons/success.png
 
     - assets/models/mobilefacenet.tflite
 
