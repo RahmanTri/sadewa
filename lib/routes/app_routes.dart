@@ -19,6 +19,8 @@ class Routes {
 
   //Admin
   static const karyawan = '/karyawan';
+  static const karyawanDetail = '/karyawanDetail';
   static const divisi = '/divisi';
   static const akunManajer = '/accounts';
+  static const editKaryawan = '/editKaryawan';
 }

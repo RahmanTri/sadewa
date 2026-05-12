@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
-import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -165,7 +164,7 @@ class AuthController extends GetxController {
     await _storageService.logOut();
   }
 
-  void devAutoLogin() async {
+  Future<void> devAutoLogin() async {
     isLoading.value = true;
     final username = 'BambangSutejo';
     final password = 'bamsutejo1234';
