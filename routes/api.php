@@ -98,6 +98,19 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('division/get-data', [division_controller::class, 'getDivision']);
     Route::post('division/edit', [division_controller::class, 'editDivision']);
 
+    //Employee Data (Admin)
+    Route::post('/employee/reset-faces', [employee_controller::class, 'resetFaceData']);
+    Route::post('/employee/reset-pw', [employee_controller::class, 'resetUserPW']);
+    Route::post('/employee/edit', [employee_controller::class, 'editEmployee']);
+    Route::post('/employee/clear-profile', [employee_controller::class, 'clearProfilePics']);
+
+    //User Data (Admin)
+    Route::get('/user/get-data', [user_controller::class, 'getUsers']);
+    Route::post('/user/edit-data', [user_controller::class, 'editUserData']);
+
+    //User Change PW
+    Route::post('/user/change-pw', [user_controller::class, 'changeUserPassword']);
+
     //Fetch Pont History
     Route::get('/point/get-history', [point_log_controller::class, 'getData']);
 

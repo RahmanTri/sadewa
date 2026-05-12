@@ -497,10 +497,20 @@ class employee_controller extends Controller
                 'em.phone_number as no_tlp',
                 'dv.id as id_divisi',
                 'dv.division_name as nama_divisi',
-                'em.profile_pic as foto_profil'
+                'em.profile_pic as foto_profil',
+                'em.face_data as data_wajah'
             )
             ->orderBy('nama_lengkap', 'asc')
             ->get()
+            ->map(function ($item) {
+                if ($item->data_wajah != null) {
+                    $item->data_wajah = 'Terdaftar';
+                } else {
+                    $item->data_wajah = 'Belum Terdaftar';
+                }
+                return $item;
+                
+            })
             ;
 
         return response()->json(
@@ -510,6 +520,244 @@ class employee_controller extends Controller
                 "data" => $employeeData
             ]
         );
+    }
+
+    public function resetFaceData(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:employee,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 401);
+        }
+
+        $validatedData = $validator->validated();
+
+        $target = Employee::where('id', $validatedData["id"])->first();
+
+        if (!$target) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        $target->face_data = null;
+
+        $target->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Data berhasil dihapus!",
+            "data" => $target,
+        ], 200);
+
+    }
+
+    public function resetUserPW(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:users,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 401);
+        }
+
+        $validatedData = $validator->validated();
+
+        $target = User::where('id', $validatedData["id"])->first();
+
+        if (!$target) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        $target->password = Hash::make("{$target->username}123");
+
+        $target->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Berhasil!",
+            "data" => $target,
+        ], 200);
+
+    }
+
+    public function editEmployee(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otoritas!',
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'em_id' => 'required|exists:employee,id',
+            'name' => 'sometimes|string|max:150',
+            'email' => 'sometimes|email',
+            "phone_number" => "sometimes|string|max:13|min:12",
+            "division_id" => "sometimes|exists:division,id",
+        ], [
+            "em_id.required" => "ID harus diisi!",
+            "em_id.exists" => "ID tidak valid!",
+            "name.max" => "Nama maksimal 150 karakter",
+            "email.email" => "Email tidak valid",
+            "phone_number.max" => "Nomor telepon tidak valid",
+            "phone_number.min" => "Nomor telepon tidak valid",
+            "division_id.exists" => "ID divisi tidak valid!",
+        ]);
+
+        // dd($request->file('profile_pic'));
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $targetEmployee = Employee::where('id', $validatedData["em_id"])->first();
+        $targetUser = User::where('id', $targetEmployee->user_id)->first();
+
+        $oldUserData = $targetUser->toArray();
+        $oldEmployeeData = $targetEmployee->toArray();
+
+        // If email is not empty
+        if (isset($validatedData['email'])) {
+            $targetUser->email = $validatedData["email"];
+        }
+
+        // If phone number is not empty
+        if (isset($validatedData['phone_number'])) {
+            $targetEmployee->phone_number = $validatedData["phone_number"];
+        }
+
+        // If name is not empty
+        if (isset($validatedData['name'])) {
+            $targetEmployee->name = $validatedData["name"];
+        }
+
+        // If division id is not empty
+        if (isset($validatedData['division_id'])) {
+            $targetEmployee->division_id = $validatedData["division_id"];
+        }
+
+        $targetEmployee->save();
+        $targetUser->save();
+
+        return response()->json([
+            'success' => true,
+            "data" => [
+                "user" => [
+                    "old" => $oldUserData,
+                    "new" => $targetUser,
+                ],
+                "employee" => [
+                    "old" => $oldEmployeeData,
+                    "new" => $targetEmployee,
+                ]
+            ]
+        ], 200);
+    }
+
+    public function clearProfilePics()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        $targetEmployee = Employee::where('user_id', $user->id)->first();
+
+        if (!$targetEmployee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        if ($targetEmployee->profile_pic == null) {
+            return response()->json([
+                "success" => false,
+                "message" => "Foto profil tidak ada!",
+            ], 422);
+        }
+
+        Storage::disk('public')->delete("profile_pics/" . $targetEmployee->profile_pic);
+
+        $targetEmployee->profile_pic = null;
+
+        $targetEmployee->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Foto profil berhasil dihapus!",
+        ], 200);
     }
 }
 
