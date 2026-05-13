@@ -759,5 +759,145 @@ class employee_controller extends Controller
             "message" => "Foto profil berhasil dihapus!",
         ], 200);
     }
+
+    public function sendOtpForgotPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Email tidak ditemukan!",
+            ], 404);
+        }
+
+        $otp = rand(1000, 9999);
+
+        $user->otp = $otp;
+        $user->otp_expired_at = now()->addMinutes(2);
+        $user->save();
+
+        // Mail::to($user->email)->send(new SendOtpMail($otp));
+
+        return response()->json([
+            "success" => true,
+            "message" => "Berhasil mengirimkan OTP!",
+            "otp" => $otp,
+        ], 200);
+    
+    }
+
+    public function verifyOtpPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "otp" => "required|numeric|digits:4",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+            "otp.required" => "OTP harus diisi!",
+            "otp.numeric" => "OTP harus berupa angka!",
+            "otp.digits" => "OTP harus berupa 4 angka!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Email tidak ditemukan!",
+            ], 404);
+        }
+
+        if (now()->isAfter($user->otp_expired_at)) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP sudah kedaluwarsa!",
+            ], 422);
+        }
+
+        if ($user->otp != $validatedData["otp"]) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP tidak valid!",
+            ], 422);
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "OTP berhasil diverifikasi!",
+        ], 200);
+    }
+
+    public function verifyPassword(Request $request)
+{
+
+    $validator = Validator::make($request->all(), [
+        "email" => "required|email",
+        "password" => "required",
+    ], [
+        "email.required" => "Email harus diisi!",
+        "email.email" => "Email tidak valid!",
+        "password.required" => "Password harus diisi!",
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            "success" => false,
+            "message" => $validator->errors(),
+            "error" => $validator->errors(),
+        ], 422);
+    }
+
+    $validatedData = $validator->validated();
+
+    $user = User::where('email', $validatedData["email"])->first();
+
+    if (!$user) {
+        return response()->json([
+            "success" => false,
+            "message" => "Email tidak ditemukan!",
+        ], 404);
+    }
+
+    $user->password = Hash::make($validatedData["password"]);
+
+    $user->otp = null;
+    $user->otp_expired_at = null;
+    $user->save();
+
+    return response()->json([
+        "success" => true,
+        "message" => "Password berhasil diubah!",
+    ], 200);
+}
+
 }
 
