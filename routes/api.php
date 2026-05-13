@@ -107,6 +107,8 @@ Route::middleware("auth:sanctum")->group(function () {
     //User Data (Admin)
     Route::get('/user/get-data', [user_controller::class, 'getUsers']);
     Route::post('/user/edit-data', [user_controller::class, 'editUserData']);
+    Route::post('/user/create', [user_controller::class, 'createNewAccount']);
+    Route::post('/user/delete', [user_controller::class, 'deleteAccount']);
 
     //User Change PW
     Route::post('/user/change-pw', [user_controller::class, 'changeUserPassword']);

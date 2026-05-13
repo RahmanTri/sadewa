@@ -283,4 +283,56 @@ class user_controller extends Controller
             "data" => $newUser,
         ], 200);
     }
+
+    public function deleteAccount(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Unauthorized"
+            ], 401);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!",
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "user_id" => "required|exists:users,id",
+        ], [
+            "user_id.required" => "ID harus diisi!",
+            "user_id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $target = User::where('id', $validatedData['user_id'])->first();
+
+        if (!$target) {
+            return response()->json([
+                "success" => false,
+                "message" => "data dengan ID $validatedData[id] tidak ditemukan",
+            ], 404);
+        }
+
+        $target->delete();
+        return response()->json([
+            "success" => true,
+            "message" => "sukses menghapus data",
+            "data" => $target,
+        ], 200);
+    }
 }
