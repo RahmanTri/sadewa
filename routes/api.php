@@ -103,6 +103,9 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/reset-pw', [employee_controller::class, 'resetUserPW']);
     Route::post('/employee/edit', [employee_controller::class, 'editEmployee']);
     Route::post('/employee/clear-profile', [employee_controller::class, 'clearProfilePics']);
+    Route::post('/employee/send-otp', [employee_controller::class, 'sendOtpForgotPassword']);
+    Route::post('/employee/verify-otp', [employee_controller::class, 'verifyOtpPassword']);
+    Route::post('/employee/verify-pw', [employee_controller::class, 'verifyPassword']);
 
     //User Data (Admin)
     Route::get('/user/get-data', [user_controller::class, 'getUsers']);
