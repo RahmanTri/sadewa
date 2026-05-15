@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('password_otps', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->index();
+            $table->unsignedBigInteger('user_id');
             $table->string('otp', 4);
             $table->timestamp('otp_expired_at');
             $table->timestamps();
+            $table->boolean('validated')->default(false);
+
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

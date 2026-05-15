@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Auth;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\password_otp;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -790,9 +792,19 @@ class employee_controller extends Controller
 
         $otp = rand(1000, 9999);
 
-        $user->otp = $otp;
-        $user->otp_expired_at = now()->addMinutes(2);
-        $user->save();
+        $userOtp = password_otp::where('user_id', $user->id)->first();
+
+        if (!$userOtp) {
+            $userOtp = password_otp::create([
+                "user_id" => $user->id,
+                "otp" => $otp,
+                "otp_expired_at" => Carbon::now()->addMinutes(2)
+            ]);
+        } else {
+            $userOtp->otp = $otp;
+            $userOtp->otp_expired_at = Carbon::now()->addMinutes(2);
+            $userOtp->save();
+        }
 
         // Mail::to($user->email)->send(new SendOtpMail($otp));
 
@@ -836,18 +848,33 @@ class employee_controller extends Controller
             ], 404);
         }
 
-        if (now()->isAfter($user->otp_expired_at)) {
+        $otpData = password_otp::where("user_id", $user->id)->first();
+        //Find OTP based on email
+
+        if (!$otpData) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP tidak ditemukan!",
+            ], 404);
+        }
+
+        if (now()->isAfter($otpData->otp_expired_at)) {
             return response()->json([
                 "success" => false,
                 "message" => "OTP sudah kedaluwarsa!",
             ], 422);
-        }
+        } else if ($validatedData["otp"] == $otpData->otp) {
 
-        if ($user->otp != $validatedData["otp"]) {
+            $otpData->validated = true;
+
+            $otpData->save();
+
             return response()->json([
-                "success" => false,
-                "message" => "OTP tidak valid!",
+                "success" => true,
+                "message" => "Kode OTP tidak valid!",
             ], 422);
+        } else {
+            
         }
 
         return response()->json([
@@ -872,26 +899,47 @@ class employee_controller extends Controller
         return response()->json([
             "success" => false,
             "message" => $validator->errors(),
-            "error" => $validator->errors(),
         ], 422);
     }
 
     $validatedData = $validator->validated();
 
+
+    //Find User
     $user = User::where('email', $validatedData["email"])->first();
 
     if (!$user) {
         return response()->json([
             "success" => false,
-            "message" => "Email tidak ditemukan!",
+            "message" => "User tidak ditemukan!",
         ], 404);
     }
 
+    //check if OTP has verified
+    $userOtp = password_otp::where('user_id', $user->id)->first();
+
+    if (!$userOtp) {
+        return response()->json([
+            "success" => false,
+            "message" => "OTP tidak ditemukan!",
+        ], 404);
+    }
+
+    if (!$userOtp->validated) {
+        return response()->json([
+            "success" => false,
+            "message" => "OTP belum diverifikasi!",
+        ], 422);
+    } 
+
+    //update password
     $user->password = Hash::make($validatedData["password"]);
 
-    $user->otp = null;
-    $user->otp_expired_at = null;
+    //change OTP to false
+    $userOtp->validated = false;
+
     $user->save();
+    $userOtp->save();
 
     return response()->json([
         "success" => true,
