@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SendOtp;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -798,7 +799,7 @@ class employee_controller extends Controller
             $userOtp = password_otp::create([
                 "user_id" => $user->id,
                 "otp" => $otp,
-                "otp_expired_at" => Carbon::now()->addMinutes(2)
+                "otp_expired_at" => Carbon::now()->addMinutes(10)
             ]);
         } else {
             $userOtp->otp = $otp;
@@ -807,6 +808,7 @@ class employee_controller extends Controller
         }
 
         // Mail::to($user->email)->send(new SendOtpMail($otp));
+        $user->notify(new SendOtp($otp));
 
         return response()->json([
             "success" => true,
@@ -871,10 +873,13 @@ class employee_controller extends Controller
 
             return response()->json([
                 "success" => true,
-                "message" => "Kode OTP tidak valid!",
-            ], 422);
+                "message" => "OTP berhasil diverifikasi!",
+            ], 200);
         } else {
-            
+            return response()->json([
+                "success" => false,
+                "message" => "Kode OTP salah atau tidak valid!",
+            ]);
         }
 
         return response()->json([
