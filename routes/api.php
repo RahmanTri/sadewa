@@ -12,6 +12,7 @@ use App\Http\Controllers\history_log_controller;
 use App\Http\Controllers\export_controller;
 use App\Http\Controllers\point_log_controller;
 use App\Http\Controllers\devLogin_controller;
+use App\Http\Controllers\activityLog_controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::delete('/employee/delete', [employee_controller::class, 'deleteAccount']);
     Route::post('/employee/profile', [employee_controller::class, 'updateProfile']);
     Route::post('/employee/regface', [employee_controller::class, 'regFace']);
+    Route::get('/employee/leaderboard', [employee_controller::class, 'leaderboard']);
 
     //CRUD Point
     Route::get('/point', [point_controller::class, 'index']);
@@ -69,7 +71,9 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //USER
     Route::get('/user', [user_controller::class, 'index']);
-    Route::get('/get-latest', [user_controller::class, 'getLatestLogin']);
+    Route::get('/user/get-latest', [user_controller::class, 'getLatestLogin']);
+    Route::get('/user/get-division', [user_controller::class, 'getUserDivision']);
+    Route::get('/user/fetch', [user_controller::class, 'fetchUser']);
 
     //EM REGISTER (ADMIN ONLY)
     Route::post('/employee/register', [employee_controller::class, 'emregister']);
@@ -100,6 +104,8 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //Fetch Pont History
     Route::get('/point/get-history', [point_log_controller::class, 'getData']);
-
     Route::get('/profile', [user_controller::class, 'profile']);
+
+    //Activity Log
+    Route::get('/activity-log', [activityLog_controller::class, 'fetchActivityLog']);
 });

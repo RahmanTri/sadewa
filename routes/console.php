@@ -9,4 +9,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::command('update:daily-reset')->dailyAt('12:30')->timezone('Asia/Jakarta');
+Schedule::command('update:daily-reset')->dailyAt('15:00')->timezone('Asia/Jakarta');
+
+Schedule::command('create:autoAbsen')->everyMinute()->timezone('Asia/Jakarta');

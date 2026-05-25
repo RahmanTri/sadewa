@@ -242,12 +242,7 @@ class mainSeeder extends Seeder
 
         // Em_log_in::factory()->count(7)->create();
 
-        Point::create([
-            "employee_id" => 1,
-            "point_value" => 80,
-            "positive_streak" => 1,
-            "negative_streak" => 0
-        ]);
+        Point::factory()->count(50)->create();
 
     }
 }

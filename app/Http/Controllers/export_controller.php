@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Division;
+use App\Models\activity_log;
 use App\Models\Em_log_in;
 use App\Models\Em_log_out;
 use App\Models\Employee;
@@ -18,14 +19,21 @@ class export_controller extends Controller
 {
     public function allRecap()
     {
-        // $user = Auth::user();
+        $user = Auth::user();
 
-        // if ($user->role != 'admin') {
-        //     return response()->json([
-        //         "success" => false,
-        //         "message" => "fitur ini hanya untuk role admin"
-        //     ]);
-        // }
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ada!"
+            ]);
+        }
+
+        if ($user->role != 'admin') {
+            return response()->json([
+                "success" => false,
+                "message" => "fitur ini hanya untuk role admin"
+            ]);
+        }
 
         $rawData = Em_log_in::leftJoin('employee', 'employee_id', 'employee.id')
             ->join('division', 'employee.division_id', 'division.id')
@@ -66,6 +74,12 @@ class export_controller extends Controller
         ])->setPaper('A4', 'portrait');
 
         $fileName = 'rekap-semua-kehadiran.pdf';
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Export',
+            'description' => 'Cetak rekap kehadiran',
+        ]);
 
         return response()->streamDownload(
             function () use ($pdf) {

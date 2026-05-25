@@ -6,6 +6,7 @@ use App\Models\Division;
 use App\Models\Employee;
 use App\Models\point_log;
 use App\Models\User;
+use App\Models\activity_log;
 use App\Models\Point;
 use Illuminate\Http\Request;
 use App\Models\Em_log_in;
@@ -209,6 +210,22 @@ class em_log_in_controller extends Controller
         $Point->save();
 
         $employee->update(["logged_in" => 1]);
+
+        if ($status == "on_time") {
+            activity_log::create([
+                'user_id' => $user->id,
+                'activity_type' => 'Absen Masuk',
+                'description' => 'Absen Masuk Tepat Waktu',
+            ]);
+        } else {
+            activity_log::create([
+                'user_id' => $user->id,
+                'activity_type' => 'Absen Masuk',
+                'description' => 'Absen Masuk Terlambat',
+            ]);
+        }
+
+
 
         return response()->json([
             "success" => true,

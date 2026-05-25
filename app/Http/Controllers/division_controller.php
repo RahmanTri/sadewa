@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\division;
+use App\Models\activity_log;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
 
 class division_controller extends Controller
 {
@@ -25,6 +28,22 @@ class division_controller extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas"
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             "division_name" => "required|string|max:100",
             "checkin_time" => "required|date_format:H:i",
@@ -50,6 +69,12 @@ class division_controller extends Controller
 
         $data = division::create($validatedData);
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Registrasi Divisi',
+            'description' => 'Menambahkan divisi ' . $data->division_name,
+        ]);
+
         return response()->json([
             'success' => true,
             'data' => $data,
@@ -58,6 +83,22 @@ class division_controller extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas"
+            ], 403);
+        }
+
         $target = division::find($id);
 
         if (!$target) {
@@ -91,6 +132,12 @@ class division_controller extends Controller
 
         $target->update($validatedData);
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Update Divisi',
+            'description' => 'Mengubah data divisi ' . $target->division_name,
+        ]);
+
         return response()->json([
             'success' => true,
             'data' => $target,
@@ -100,6 +147,22 @@ class division_controller extends Controller
 
     public function destroy($id)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas"
+            ], 403);
+        }
+
         $target = division::find($id);
 
         if (!$target) {
@@ -110,6 +173,12 @@ class division_controller extends Controller
         }
 
         $target->delete();
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Hapus Divisi',
+            'description' => 'Menghapus divisi ' . $target->division_name,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -144,7 +213,7 @@ class division_controller extends Controller
                     "toleransi_radius" => $item->toleransi_radius,
                 ];
             })
-            ;
+        ;
 
         return response()->json([
             "Success" => true,
@@ -235,6 +304,12 @@ class division_controller extends Controller
         }
 
         $target->save();
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Update Divisi',
+            'description' => 'Mengubah data divisi ' . $target->division_name,
+        ]);
 
         return response()->json([
             'success' => true,

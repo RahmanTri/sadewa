@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Point;
+use App\Models\activity_log;
+use Carbon\Carbon;
 
 class employee_controller extends Controller
 {
@@ -90,6 +92,12 @@ class employee_controller extends Controller
             $point = $createdPoint;
         }
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Registrasi Karyawan',
+            'description' => 'Registrasi Karyawan ' . $validatedData['name'],
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'sukses menambahkan data',
@@ -152,6 +160,12 @@ class employee_controller extends Controller
             'face_data' => $validatedData['face_data'] ?? $target->face_data,
         ]);
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Update Karyawan',
+            'description' => 'Membarui data karyawan ' . $validatedData['name'],
+        ]);
+
         return response()->json([
             "success" => true,
             "message" => "sukses membarui data",
@@ -163,6 +177,22 @@ class employee_controller extends Controller
 
     public function destroy(Request $request, $id)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ada!",
+            ], 403);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas",
+            ], 403);
+        }
+
         $target = Employee::find($id);
 
         if (!$target) {
@@ -173,6 +203,14 @@ class employee_controller extends Controller
         }
 
         $target->delete();
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Hapus Karyawan',
+            'description' => 'Menghapus data karyawan ' . $target->name,
+        ]);
+
+
         return response()->json([
             "success" => true,
             "message" => "sukses menghapus data",
@@ -181,6 +219,23 @@ class employee_controller extends Controller
     }
     public function emregister(Request $request)
     {
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login!",
+            ], 403);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!",
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             "username" => "required|string|max:24",
             "password" => "required|string|min:8",
@@ -216,7 +271,7 @@ class employee_controller extends Controller
 
         $companyPrefix = 'KKS';
         $divisonId = $validatedData['division_id'];
-        $idNumber = Employee::max('id') + 1 ?? 0; 
+        $idNumber = Employee::max('id') + 1 ?? 0;
         $companyId = $companyPrefix . str_pad($divisonId, 2, '0', STR_PAD_LEFT) . str_pad($idNumber, 3, '0', STR_PAD_LEFT);
 
         $createdUser = User::where('email', $validatedData['email'])->first();
@@ -260,6 +315,11 @@ class employee_controller extends Controller
             $point = $createdPoint;
         }
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Membuat Akun Karyawan',
+            'description' => 'Membuat akun untuk karyawan ' . $employee->name,
+        ]);
 
         return response()->json(
             [
@@ -318,6 +378,12 @@ class employee_controller extends Controller
         $point->delete();
         $employee->delete();
         $user->delete();
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Hapus Akun Karyawan',
+            'description' => 'Menghapus akun karyawan ' . $employee->name,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -402,6 +468,12 @@ class employee_controller extends Controller
         $employee->save();
         $user->save();
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Update Profile',
+            'description' => 'Update profile Berhasil',
+        ]);
+
         return response()->json([
             'success' => true,
             "data" => [
@@ -461,6 +533,12 @@ class employee_controller extends Controller
 
         $employee->save();
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Registrasi Wajah',
+            'description' => 'Registrasi data wajah',
+        ]);
+
         return response()->json([
             "success" => true,
             "data" => $employee,
@@ -501,13 +579,59 @@ class employee_controller extends Controller
             )
             ->orderBy('nama_lengkap', 'asc')
             ->get()
-            ;
+        ;
 
         return response()->json(
             [
                 "success" => true,
                 "message" => "Sukses mengambil data",
                 "data" => $employeeData
+            ]
+        );
+    }
+
+    public function leaderboard()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        $employee = Employee::where('user_id', $user->id)->first();
+        $leaderboardData = Point::join('employee', 'employee.id', '=', 'point.employee_id')
+            ->join('employee_log_in', 'employee_log_in.employee_id', '=', 'employee.id')
+            ->select(
+                'employee.id as id_karyawan',
+                'employee.name as nama_lengkap',
+                'employee.profile_pic as foto_profil',
+                'point.point_value as total_poin',
+                DB::raw("COUNT(CASE WHEN employee_log_in.status = 'late' THEN 1 END) as total_telat"),
+                DB::raw("COUNT(*) as total_absen"),
+                DB::raw("SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END ) as total_ontime"),
+                DB::raw("ROUND((SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) as ontimePercent")
+            )
+            ->groupBy('employee.id', 'employee.name', 'employee.profile_pic', 'point.point_value')
+            ->orderByDesc('point.point_value')
+            ->get()
+        ;
+
+        $rankedData = $leaderboardData->map(function ($item, $index) {
+            $item->rank = $index + 1;
+            return $item;
+        });
+
+        $userRank = $rankedData->where('id_karyawan', $employee->id)->first();
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Sukses mengambil data",
+                "leaderboardData" => $rankedData,
+                "userRank" => $userRank
+
             ]
         );
     }

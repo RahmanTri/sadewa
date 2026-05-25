@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Division;
+use App\Models\activity_log;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -144,6 +145,20 @@ class em_log_out_controller extends Controller
 		$data = Em_log_out::create($logout_data);
 
 		$employee->update(["logged_out" => 1]);
+
+		if ($chkStatus == "early") {
+			activity_log::create([
+				'user_id' => $user->id,
+				'activity_type' => 'Absen Keluar',
+				'description' => 'Absen keluar terlalu dini',
+			]);
+		} else {
+			activity_log::create([
+				'user_id' => $user->id,
+				'activity_type' => 'Absen Keluar',
+				'description' => 'Absen keluar tepat waktu',
+			]);
+		}
 
 		return response()->json([
 			"success" => true,

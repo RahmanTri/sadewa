@@ -6,6 +6,7 @@ use App\Models\Em_log_in;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\activity_log;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,22 @@ class auth_controller extends Controller
     //
     public function register(Request $request)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login",
+            ]);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda bukan admin",
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             "username" => "required|string|max:24|unique:users,username",
             "password" => "required|string|min:8",
@@ -49,11 +66,18 @@ class auth_controller extends Controller
             // "role" => $validatedData["role"],
         ]);
 
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Registrasi Akun',
+            'description' => 'Registrasi akun ' . $validatedData["username"],
+        ]);
+
         return response()->json([
             "success" => true,
             "message" => "Sukses membuat akun",
             "data" => $data,
         ], 201);
+
     }
 
     public function loginByEmail(Request $request)
@@ -134,6 +158,13 @@ class auth_controller extends Controller
                 })
                 ->first()
             ;
+
+            activity_log::create([
+                'user_id' => $data->user_id,
+                'activity_type' => 'Login',
+                'description' => 'Login dengan Email',
+
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -228,6 +259,13 @@ class auth_controller extends Controller
                 ->first()
             ;
 
+            activity_log::create([
+                'user_id' => $data->user_id,
+                'activity_type' => 'Login',
+                'description' => 'Login dengan Username',
+
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil',
@@ -283,6 +321,12 @@ class auth_controller extends Controller
             "password" => Hash::make($validatedData["password"]),
             "email" => $validatedData["email"],
             "role" => $validatedData["role"],
+        ]);
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Registrasi Akun',
+            'description' => 'Regsitrasi akun ' . $validatedData["username"],
         ]);
 
         return response()->json([
@@ -359,6 +403,12 @@ class auth_controller extends Controller
         }
 
         $account->save();
+
+        activity_log::create([
+            'user_id' => $user->id,
+            'activity_type' => 'Update Akun',
+            'description' => 'Sunting akun untuk ' . $validatedData["username"],
+        ]);
 
         return response()->json([
             "success" => true,
