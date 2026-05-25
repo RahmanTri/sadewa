@@ -35,6 +35,7 @@ class _LoginFieldFormState extends State<LoginFieldForm> {
       children: [
         if (widget.showTitle) Text(widget.title ?? widget.inputlabel),
         TextFormField(
+          autofocus: true,
           controller: widget.controller,
           obscureText: isPasswordField ? !isPasswordVisible : false,
           keyboardType: widget.inputType,

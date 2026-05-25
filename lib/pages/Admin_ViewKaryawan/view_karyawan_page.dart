@@ -5,6 +5,7 @@ import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_attribute.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_attribute_wbutton.dart';
+import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_dialog.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 
 class ViewKaryawanDetails extends StatelessWidget {
@@ -115,13 +116,22 @@ class ViewKaryawanDetails extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       color: SDWcolors.white,
                     ),
-                    child: Text(
-                      karyawanController.karyawanView.value!.idPerusahaan,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: SDWcolors.primary,
-                        fontWeight: FontWeight.normal,
-                        fontSize: height * 0.018,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          karyawanController.karyawanView.value!.idPerusahaan,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: SDWcolors.primary,
+                                fontWeight: FontWeight.normal,
+                                fontSize: height * 0.018,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -192,8 +202,17 @@ class ViewKaryawanDetails extends StatelessWidget {
                             icon: Icons.tag_faces_rounded,
                             buttonText: 'Reset',
                             onPress: () => {
-                              karyawanController.resetEmployeeFD(),
-                              // karyawanController.refreshView(),
+                              KaryawanDialog.showDialog(
+                                context: context,
+                                symbol: '!',
+                                title: 'Peringatan!',
+                                message: 'Yakin reset data wajah karyawan ini?',
+                                onConfirm: () => {
+                                  karyawanController.resetEmployeeFD(),
+                                },
+                                height: height,
+                                width: width,
+                              ),
                             },
                             height: height,
                             width: width,
@@ -204,7 +223,17 @@ class ViewKaryawanDetails extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => {karyawanController.resetEmployeePW()},
+                  onTap: () => {
+                    KaryawanDialog.showDialog(
+                      context: context,
+                      symbol: '!',
+                      title: 'Peringatan!',
+                      message: 'Yakin reset password karyawan ini?',
+                      onConfirm: () => {karyawanController.resetEmployeePW()},
+                      height: height,
+                      width: width,
+                    ),
+                  },
                   child: Container(
                     height: height * 0.036,
                     width: width * 0.4,
@@ -216,8 +245,12 @@ class ViewKaryawanDetails extends StatelessWidget {
                     ),
                     child: karyawanController.processing.value
                         ? Center(
-                            child: CircularProgressIndicator(
-                              color: SDWcolors.white,
+                            child: SizedBox(
+                              height: height * 0.024,
+                              width: height * 0.024,
+                              child: CircularProgressIndicator(
+                                color: SDWcolors.white,
+                              ),
                             ),
                           )
                         : Center(

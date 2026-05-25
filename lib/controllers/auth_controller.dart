@@ -171,8 +171,8 @@ class AuthController extends GetxController {
 
   Future<void> devAutoLogin() async {
     isLoading.value = true;
-    final username = 'ErehPakeH';
-    final password = 'ereh123456';
+    final username = 'BambangSutejo';
+    final password = 'bamsutejo1234';
 
     try {
       final success = await login(username, password);

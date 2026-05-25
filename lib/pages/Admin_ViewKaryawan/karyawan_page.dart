@@ -14,14 +14,20 @@ class KaryawanPage extends StatefulWidget {
   State<KaryawanPage> createState() => _KaryawanPageState();
 }
 
-  class _KaryawanPageState extends State<KaryawanPage> {
-    late KaryawanController karyawanController;
+class _KaryawanPageState extends State<KaryawanPage> {
+  late KaryawanController karyawanController;
   @override
   void initState() {
     karyawanController = Get.find<KaryawanController>();
     karyawanController.fetchKaryawan();
     super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   karyawanController.fetchKaryawan();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +54,15 @@ class KaryawanPage extends StatefulWidget {
         ),
       ),
       backgroundColor: SDWcolors.bgD,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: SDWcolors.primary,
+        child: const Icon(Icons.add),
+        onPressed: () {
+          karyawanController.clearForm();
+          karyawanController.goToAddEmployee();
+          Get.toNamed(Routes.tambahKaryawan);
+        },
+      ),
       body: Stack(
         children: [
           Container(
@@ -131,6 +146,24 @@ class KaryawanPage extends StatefulWidget {
                   ),
                 ],
               ),
+
+              //Dev Only
+              ElevatedButton(
+                onPressed: () {
+                  Get.toNamed(Routes.divisi);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: SDWcolors.primary,
+                ),
+                child: Text(
+                  'Divisi',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: SDWcolors.white,
+                    fontSize: height * 0.02,
+                  ),
+                ),
+              ),
+
               SizedBox(height: 12),
               // Obx(
               //   () => Text(

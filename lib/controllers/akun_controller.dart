@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/akun_model.dart';
+import 'package:sadewa_fe/pages/Admin_ManajerAkun/widgets/akun_alert_dialog.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 
 class AkunController extends GetxController {
@@ -33,10 +34,13 @@ class AkunController extends GetxController {
 
   var editedAccount = Rxn<Akun>();
 
+  var dialogMessage = ''.obs;
+
   var isLoading = false.obs;
   var deleting = false.obs;
   var updating = false.obs;
   var adding = false.obs;
+  var successAdding = false.obs;
 
   Future<void> fetchAccounts() async {
     isLoading.value = true;
@@ -131,10 +135,11 @@ class AkunController extends GetxController {
         onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $userToken'},
       );
-      Get.snackbar('Sukses', 'Berhasil mengupdate akun');
+
+      showDialog(true, 'Berhasil mengubah akun');
     } catch (e) {
       updating.value = false;
-      Get.snackbar('Terjadi kesalahan', e.toString());
+      showDialog(false, 'Gagal mengubah akun');
     } finally {
       updating.value = false;
       refreshEditedAccount();
@@ -164,12 +169,40 @@ class AkunController extends GetxController {
         onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $userToken'},
       );
-      Get.snackbar('Sukses', 'Berhasil membuat akun');
+
+      showDialog(true, 'Berhasil membuat akun');
+      successAdding.value = true;
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
+      showDialog(false, 'Gagal membuat akun');
       adding.value = false;
+      successAdding.value = false;
     } finally {
       adding.value = false;
+      fetchAccounts();
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    deleting.value = true;
+    final endpoint = "user/delete";
+    final userToken = Get.find<UserController>().userToken.value;
+
+    try {
+      await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: endpoint,
+        data: {'user_id': editedAccount.value!.id},
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $userToken'},
+      );
+
+      editedAccount.value = null;
+      showDialog(true, 'Berhasil menghapus akun');
+  } catch (e) {
+      showDialog(false, 'Gagal menghapus akun');
+    } finally {
+      fetchAccounts();
+      deleting.value = false;
     }
   }
 
@@ -182,6 +215,8 @@ class AkunController extends GetxController {
       usernameError.value = 'Username minimal 8 karakter';
     } else if (usernameAdd.text.length > 24) {
       usernameError.value = 'Username maksimal 24 karakter';
+    } else if (usernameAdd.text.contains(' ')) {
+      usernameError.value = 'Username tidak boleh mengandung spasi';
     } else {
       data.addAll({'username': usernameAdd.text});
     }
@@ -211,6 +246,34 @@ class AkunController extends GetxController {
     }
 
     return data;
+  }
+
+  void checkUsernameField() {
+    if (usernameAdd.text.isEmpty) {
+      usernameError.value = 'Username tidak boleh kosong';
+    } else if (usernameAdd.text.length < 8) {
+      usernameError.value = 'Username minimal 8 karakter';
+    } else if (usernameAdd.text.length > 24) {
+      usernameError.value = 'Username maksimal 24 karakter';
+    } else if (usernameAdd.text.contains(' ')) {
+      usernameError.value = 'Username tidak boleh mengandung spasi';
+    }
+  }
+
+  void checkEmailField() {
+    if (emailAdd.text.isEmpty) {
+      emailError.value = 'Email tidak boleh kosong';
+    } else if (!GetUtils.isEmail(emailAdd.text)) {
+      emailError.value = 'Email tidak valid';
+    }
+  }
+
+  void checkPasswordField() {
+    if (passwordAdd.text.isEmpty) {
+      passwordError.value = 'Password tidak boleh kosong';
+    } else if (passwordAdd.text.length < 8) {
+      passwordError.value = 'Password minimal 8 karakter';
+    }
   }
 
   void refreshEditedAccount() {
@@ -258,5 +321,22 @@ class AkunController extends GetxController {
   void clearList() {
     accounts.clear();
     filteredAccounts.clear();
+  }
+
+  void showDialog(bool success, String message) {
+    dialogMessage.value = message;
+    Get.dialog(
+      AkunAlertDialog(
+        isSuccess: success,
+        message: message,
+        onConfirm: hideDialog,
+        height: Get.height,
+        width: Get.width,
+      ),
+    );
+  }
+
+  void hideDialog() {
+    dialogMessage.value = '';
   }
 }

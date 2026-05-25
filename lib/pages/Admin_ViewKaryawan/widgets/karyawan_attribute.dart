@@ -44,7 +44,10 @@ class KaryawanAttribute extends StatelessWidget {
                 SizedBox(width: width * 0.088),
                 SizedBox(
                   height: height * 0.04,
-                  child: Center(
+                  width: width * 0.832,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
                     child: Text(
                       value,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(

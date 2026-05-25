@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/akun_controller.dart';
+import 'package:sadewa_fe/pages/Admin_ManajerAkun/widgets/akun_dialog.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,7 @@ class PopUpAdd {
       barrierDismissible: true,
       barrierLabel: 'Tambah Akun',
       barrierColor: SDWcolors.essentialDR.withAlpha(80),
-      pageBuilder: (contex, animation, secondaryAnimation) {
+      pageBuilder: (context, animation, secondaryAnimation) {
         return Material(
           color: SDWcolors.transparent,
           child: Stack(
@@ -58,7 +59,7 @@ class PopUpAdd {
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
-                        
+
                           SizedBox(height: height * 0.02),
                           // Container(
                           //   height: height * 0.1,
@@ -98,6 +99,7 @@ class PopUpAdd {
                                 Container(
                                   height: height * 0.06,
                                   width: width * 0.8,
+                                  alignment: AlignmentGeometry.center,
                                   decoration: BoxDecoration(
                                     color: SDWcolors.bgL,
                                     borderRadius: BorderRadius.circular(40),
@@ -111,6 +113,9 @@ class PopUpAdd {
                                         ),
                                     onChanged: (val) => {
                                       akunController.usernameError.value = '',
+                                    },
+                                    onEditingComplete: () => {
+                                      akunController.checkUsernameField(),
                                     },
                                     decoration: InputDecoration(
                                       hintText: 'Masukkan Username',
@@ -165,6 +170,7 @@ class PopUpAdd {
                                 Container(
                                   height: height * 0.06,
                                   width: width * 0.8,
+                                  alignment: AlignmentGeometry.center,
                                   decoration: BoxDecoration(
                                     color: SDWcolors.bgL,
                                     borderRadius: BorderRadius.circular(40),
@@ -178,6 +184,9 @@ class PopUpAdd {
                                         ),
                                     onChanged: (val) => {
                                       akunController.emailError.value = '',
+                                    },
+                                    onEditingComplete: () => {
+                                      akunController.checkEmailField(),
                                     },
                                     decoration: InputDecoration(
                                       hintText: 'Masukkan Email',
@@ -232,6 +241,7 @@ class PopUpAdd {
                                 Container(
                                   height: height * 0.06,
                                   width: width * 0.8,
+                                  alignment: AlignmentGeometry.center,
                                   decoration: BoxDecoration(
                                     color: SDWcolors.bgL,
                                     borderRadius: BorderRadius.circular(40),
@@ -245,6 +255,9 @@ class PopUpAdd {
                                         ),
                                     onChanged: (val) => {
                                       akunController.passwordError.value = '',
+                                    },
+                                    onEditingComplete: () => {
+                                      akunController.checkPasswordField(),
                                     },
                                     decoration: InputDecoration(
                                       hintText: 'Buat Password',
@@ -306,9 +319,17 @@ class PopUpAdd {
                                     ),
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton(
-                                        elevation: 8,
                                         isExpanded: true,
                                         isDense: true,
+                                        dropdownColor: SDWcolors.bgL,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              color: SDWcolors.textD,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: height * 0.020,
+                                            ),
                                         icon: Transform.rotate(
                                           angle: 3.14 / -2,
                                           child: Icon(
@@ -355,8 +376,19 @@ class PopUpAdd {
                                 children: [
                                   GestureDetector(
                                     onTap: () => {
-                                      akunController.clearError(),
-                                      akunController.makeNewAccount(),
+                                      AkunDialog.showDialog(
+                                        context: context,
+                                        symbol: '?',
+                                        title: 'Peringatan',
+                                        message: 'Yakin membuat akun baru?',
+                                        onConfirm: () => {
+                                          akunController.clearError(),
+                                          akunController.makeNewAccount(),
+                                          Navigator.pop(context),
+                                        },
+                                        height: height,
+                                        width: width,
+                                      ),
                                     },
                                     child: Container(
                                       height: height * 0.04,
