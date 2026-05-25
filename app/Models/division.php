@@ -9,6 +9,7 @@ class Division extends Model
     protected $table = "division";
     protected $fillable = [
         "division_name",
+        "address",
         "checkin_time",
         "checkout_time",
         "tolerance",

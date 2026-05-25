@@ -219,7 +219,7 @@ class employee_controller extends Controller
 
         $companyPrefix = 'KKS';
         $divisonId = $validatedData['division_id'];
-        $idNumber = Employee::max('id') + 1 ?? 0; 
+        $idNumber = Employee::max('id') + 1 ?? 0;
         $companyId = $companyPrefix . str_pad($divisonId, 2, '0', STR_PAD_LEFT) . str_pad($idNumber, 3, '0', STR_PAD_LEFT);
 
         $createdUser = User::where('email', $validatedData['email'])->first();
@@ -512,9 +512,9 @@ class employee_controller extends Controller
                     $item->data_wajah = 'Belum Terdaftar';
                 }
                 return $item;
-                
+
             })
-            ;
+        ;
 
         return response()->json(
             [
@@ -799,7 +799,7 @@ class employee_controller extends Controller
             $userOtp = password_otp::create([
                 "user_id" => $user->id,
                 "otp" => $otp,
-                "otp_expired_at" => Carbon::now()->addMinutes(10)
+                "otp_expired_at" => Carbon::now()->addMinutes(2)
             ]);
         } else {
             $userOtp->otp = $otp;
@@ -815,7 +815,7 @@ class employee_controller extends Controller
             "message" => "Berhasil mengirimkan OTP!",
             "otp" => $otp,
         ], 200);
-    
+
     }
 
     public function verifyOtpPassword(Request $request)
@@ -879,7 +879,7 @@ class employee_controller extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "Kode OTP salah atau tidak valid!",
-            ]);
+            ], status: 422);
         }
 
         return response()->json([
@@ -889,68 +889,128 @@ class employee_controller extends Controller
     }
 
     public function verifyPassword(Request $request)
-{
+    {
 
-    $validator = Validator::make($request->all(), [
-        "email" => "required|email",
-        "password" => "required",
-    ], [
-        "email.required" => "Email harus diisi!",
-        "email.email" => "Email tidak valid!",
-        "password.required" => "Password harus diisi!",
-    ]);
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "password" => "required",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+            "password.required" => "Password harus diisi!",
+        ]);
 
-    if ($validator->fails()) {
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+
+        //Find User
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!",
+            ], 404);
+        }
+
+        //check if OTP has verified
+        $userOtp = password_otp::where('user_id', $user->id)->first();
+
+        if (!$userOtp) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP tidak ditemukan!",
+            ], 404);
+        }
+
+        if (!$userOtp->validated) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP belum diverifikasi!",
+            ], 422);
+        }
+
+        //update password
+        $user->password = Hash::make($validatedData["password"]);
+
+        //change OTP to false
+        $userOtp->validated = false;
+
+        $user->save();
+        $userOtp->save();
+
         return response()->json([
-            "success" => false,
-            "message" => $validator->errors(),
-        ], 422);
+            "success" => true,
+            "message" => "Password berhasil diubah!",
+        ], 200);
     }
 
-    $validatedData = $validator->validated();
+    public function deleteEmployee(Request $request)
+    {
+        $user = Auth::user();
 
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+        if ($user->role != "admin") {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otoritas!',
+            ], 403);
+        }
 
-    //Find User
-    $user = User::where('email', $validatedData["email"])->first();
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:employee,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
 
-    if (!$user) {
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $targetEmployee = Employee::where('id', $validatedData["id"])->first();
+        $targetUser = User::where('id', $targetEmployee->user_id)->first();
+
+        if (!$targetEmployee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        if (!$targetUser) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!",
+            ], 404);
+        }
+
+        $targetEmployee->delete();
+        $targetUser->delete();
+
         return response()->json([
-            "success" => false,
-            "message" => "User tidak ditemukan!",
-        ], 404);
+            "success" => true,
+            "message" => "Data berhasil dihapus!",
+            "data" => $targetEmployee
+        ], 200);
     }
-
-    //check if OTP has verified
-    $userOtp = password_otp::where('user_id', $user->id)->first();
-
-    if (!$userOtp) {
-        return response()->json([
-            "success" => false,
-            "message" => "OTP tidak ditemukan!",
-        ], 404);
-    }
-
-    if (!$userOtp->validated) {
-        return response()->json([
-            "success" => false,
-            "message" => "OTP belum diverifikasi!",
-        ], 422);
-    } 
-
-    //update password
-    $user->password = Hash::make($validatedData["password"]);
-
-    //change OTP to false
-    $userOtp->validated = false;
-
-    $user->save();
-    $userOtp->save();
-
-    return response()->json([
-        "success" => true,
-        "message" => "Password berhasil diubah!",
-    ], 200);
-}
-
 }
 
