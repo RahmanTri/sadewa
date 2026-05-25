@@ -6,6 +6,8 @@ import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_attribute_edit_dropdown.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_attribute_edit_form.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_attribute.dart';
+import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_dialog.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class EditKaryawan extends StatelessWidget {
   const EditKaryawan({super.key});
@@ -39,11 +41,31 @@ class EditKaryawan extends StatelessWidget {
                   SizedBox(height: height * 0.028),
                   Row(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
                         onPressed: () => {Get.back()},
                         icon: Icon(Icons.arrow_back, color: SDWcolors.white),
+                      ),
+
+                      IconButton(
+                        onPressed: () {
+                          KaryawanDialog.showDialog(
+                            context: context,
+                            symbol: '!',
+                            title: 'Peringatan!',
+                            message: 'Anda yakin ingin menghapus karyawan ini?',
+                            onConfirm: () {
+                              karyawanController.deleteKaryawan();
+                            },
+                            height: height,
+                            width: width,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.delete_forever_rounded,
+                          color: SDWcolors.white,
+                        ),
                       ),
                     ],
                   ),
@@ -104,13 +126,22 @@ class EditKaryawan extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       color: SDWcolors.white,
                     ),
-                    child: Text(
-                      karyawanController.karyawanView.value!.idPerusahaan,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: SDWcolors.primary,
-                        fontWeight: FontWeight.normal,
-                        fontSize: height * 0.018,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          karyawanController.karyawanView.value!.idPerusahaan,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: SDWcolors.primary,
+                                fontWeight: FontWeight.normal,
+                                fontSize: height * 0.018,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -178,8 +209,23 @@ class EditKaryawan extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => {
-                  Get.back(),
-                  karyawanController.editEmployee(),},
+                  KaryawanDialog.showDialog(
+                    context: context,
+                    symbol: '!',
+                    title: 'Peringatan',
+                    message: 'Yakin ingin menyimpan perubahan?',
+                    onConfirm: () {
+                      karyawanController.editEmployee();
+                      Get.back();
+                    },
+                    height: height,
+                    width: width,
+
+                    // symbol: '?',
+                    // title: 'ID',
+                    // message: 'Id Divisi: ${karyawanController.selectedDivisionId.value}',
+                  ),
+                },
                 child: Container(
                   height: height * 0.036,
                   width: width * 0.4,
@@ -207,6 +253,9 @@ class EditKaryawan extends StatelessWidget {
                         ),
                 ),
               ),
+              // Obx(() =>
+              //   karyawanController.showSuccessDialog.value ?
+              // )
             ],
           ),
         ],

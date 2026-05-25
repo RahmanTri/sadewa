@@ -123,12 +123,6 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 17),
                   profileMenu(
-                    icon: Icons.language, 
-                    title: 'Bahasa', 
-                    onTap: () => Get.toNamed('/language'),
-                  ),
-                  const SizedBox(height: 17),
-                  profileMenu(
                     icon: Icons.logout,
                     title: 'Logout',
                     onTap: () => userController.user.value?.loggedOut,

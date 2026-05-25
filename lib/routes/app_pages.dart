@@ -1,9 +1,17 @@
 // import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:sadewa_fe/pages/Admin_Divisi/detail_divisi_page.dart';
+import 'package:sadewa_fe/pages/Admin_Divisi/divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin_ManajerAkun/manajer_akun_page.dart';
+import 'package:sadewa_fe/pages/Admin_ViewKaryawan/tambah_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/view_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Notice/read_notice_page.dart';
 import 'package:sadewa_fe/pages/Poin/my_point_page.dart';
+import 'package:sadewa_fe/pages/Profile/forgot_password.dart';
+import 'package:sadewa_fe/pages/Profile/reset_password.dart';
+import 'package:sadewa_fe/pages/Profile/verify_otp.dart';
+import 'package:sadewa_fe/pages/Profile/change_password_page.dart';
+
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/pages/Auth/login_page.dart';
 import 'package:sadewa_fe/binding/app_binding.dart';
@@ -18,10 +26,6 @@ import 'package:sadewa_fe/pages/Profile/profile_page.dart';
 import 'package:sadewa_fe/pages/Profile/edit_profile.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/edit_karyawan_page.dart';
 import 'package:sadewa_fe/pages/leaderboard/leaderboard_page.dart';
-import 'package:sadewa_fe/pages/Profile/change_password_page.dart';
-import 'package:sadewa_fe/pages/Profile/forgot_password.dart';
-import 'package:sadewa_fe/pages/Profile/reset_password.dart';
-import 'package:sadewa_fe/pages/Profile/verify_otp.dart';
 
 class AppPages {
   static const initial = Routes.splash;
@@ -51,5 +55,8 @@ class AppPages {
     GetPage(name: Routes.forgotPassword, page: () => ForgotPassword()),
     GetPage(name: Routes.resetPassword, page: () => ResetPassword()),
     GetPage(name: Routes.verifyOtp, page: () => VerifyOtp()),
+    GetPage(name: Routes.tambahKaryawan, page: () => AddKaryawanPage()),
+    GetPage(name: Routes.divisi, page: () => DivisiPage()),
+    GetPage(name: Routes.detailDivisi, page : () => DetailDivisiPage()),
   ];
 }
