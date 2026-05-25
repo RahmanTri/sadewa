@@ -602,6 +602,52 @@ class employee_controller extends Controller
         );
     }
 
+    public function leaderboard()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        $employee = Employee::where('user_id', $user->id)->first();
+        $leaderboardData = Point::join('employee', 'employee.id', '=', 'point.employee_id')
+            ->Leftjoin('employee_log_in', 'employee_log_in.employee_id', '=', 'employee.id')
+            ->select(
+                'employee.id as id_karyawan',
+                'employee.name as nama_lengkap',
+                'employee.profile_pic as foto_profil',
+                'point.point_value as total_poin',
+                DB::raw("COUNT(CASE WHEN employee_log_in.status = 'late' THEN 1 END) as total_telat"),
+                DB::raw("COUNT(*) as total_absen"),
+                DB::raw("SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END ) as total_ontime"),
+                DB::raw("ROUND((SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) as ontimePercent")
+            )
+            ->groupBy('employee.id', 'employee.name', 'employee.profile_pic', 'point.point_value')
+            ->orderByDesc('point.point_value')
+            ->get()
+        ;
+
+        $rankedData = $leaderboardData->map(function ($item, $index) {
+            $item->rank = $index + 1;
+            return $item;
+        });
+
+        $userRank = $rankedData->where('id_karyawan', $employee->id)->first();
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Sukses mengambil data",
+                "leaderboardData" => $rankedData,
+                "userRank" => $userRank
+
+            ]
+        );
+    }
+
     public function resetFaceData(Request $request)
     {
         $user = Auth::user();
