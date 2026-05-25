@@ -16,7 +16,7 @@ Widget changePassword({
         labelText: label,
         suffixIcon: IconButton(
           icon: Icon(isObscure.value ? Icons.visibility_off : Icons.visibility),
-          color: SDWcolors.primary,
+          color: SDWcolors.grey,
           onPressed: () =>  isObscure.toggle(),
         ),
       ),

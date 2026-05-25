@@ -95,6 +95,9 @@ flutter:
     - assets/icons/point_navbar.png
     - assets/icons/change_password.png
     - assets/icons/success.png
+    - assets/icons/forgot_password.png
+    - assets/icons/verify_otp.png
+    - assets/icons/reset_password.png
 
     - assets/models/mobilefacenet.tflite
 

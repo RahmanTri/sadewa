@@ -8,6 +8,7 @@ class ChangePassword extends StatelessWidget {
   const ChangePassword({super.key});
 
   @override
+
   Widget build(BuildContext context) {
     final userController = Get.find<UserController>();
 
@@ -35,7 +36,7 @@ class ChangePassword extends StatelessWidget {
                       color: SDWcolors.primary,
                     ),
                   ),
-                  const SizedBox(height: 43),
+                  const SizedBox(height: 33),
 
                   changePassword(
                     controller: userController.oldPassController,
@@ -52,20 +53,20 @@ class ChangePassword extends StatelessWidget {
                     label: 'Confirm Password',
                     isObscure: userController.obscureConfirm,
                   ),
-                  // Align(
-                  //   alignment: Alignment.centerRight,
-                  //   child: TextButton(
-                  //     onPressed: () => Get.toNamed('/forgotPassword'), 
-                  //     child: const Text(
-                  //       'Forgot Password?',
-                  //       style: TextStyle(
-                  //         color: SDWcolors.primary,
-                  //         fontSize: 13,
-                  //         fontWeight: FontWeight.w600
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Get.toNamed('/forgotPassword'), 
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: SDWcolors.primary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20),
 
                   Obx(

@@ -18,6 +18,9 @@ class Routes {
   static const editProfile = '/editProfile';
   static const leaderboard = '/leaderboard';
   static const changePassword = '/changePassword';
+  static const forgotPassword = '/forgotPassword';
+  static const resetPassword = '/resetPassword';
+  static const verifyOtp = '/verifyOtp';
 
   //Admin
   static const karyawan = '/karyawan';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import 'package:sadewa_fe/models/admin_model.dart';
 import 'package:sadewa_fe/pages/Profile/changepw_succes.dart';
 import '../models/user_model.dart';
@@ -16,6 +17,31 @@ class UserController extends GetxController {
   final String baseApiUrl = AppUrls.baseApiUrl;
   final String imgProfileUrl = AppUrls.imgProfileUrl;
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController divisionController = TextEditingController();
+
+  final oldPassController = TextEditingController();
+  final newPassController = TextEditingController();
+  final confirmPassController = TextEditingController();
+
+  final forgotEmailController = TextEditingController();
+  var visibleEmail = ''.obs;
+  final otpController = TextEditingController();
+  final resetNewPassController = TextEditingController();
+  final resetConfirmPassController = TextEditingController();
+
+  final otp1Controller = TextEditingController();
+  final otp2Controller = TextEditingController();
+  final otp3Controller = TextEditingController();
+  final otp4Controller = TextEditingController();
+
+  final fn1 = FocusNode();
+  final fn2 = FocusNode();
+  final fn3 = FocusNode();
+  final fn4 = FocusNode();
+
   var user = Rxn<User>();
   var admin = Rxn<Admin>();
 
@@ -30,14 +56,13 @@ class UserController extends GetxController {
   var obscureNew = true.obs;
   var obscureConfirm = true.obs;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController divisionController = TextEditingController();
+  Timer? _timer;
+  var remainingTime = 120.obs;
+  var isButtonDisabled = true.obs;
 
-  final oldPassController = TextEditingController();
-  final newPassController = TextEditingController();
-  final confirmPassController = TextEditingController();
+  // To fusion 4 number into 1 string OTP
+  String get combinedOtp =>
+    otp1Controller.text + otp2Controller.text + otp3Controller.text + otp4Controller.text;
 
   void assignUserData(Map<String, dynamic> userData) {
     isLoading.value = true;
@@ -300,6 +325,180 @@ class UserController extends GetxController {
           
       } catch (e) {
         Get.snackbar('Error', 'Gagal mengubah password: $e');
+      } finally {
+        isLoading.value = false;
+      }
+    }
+
+    void emailVisible() {
+      if (GetUtils.isEmail(forgotEmailController.text)) {
+        final email = forgotEmailController.text;
+
+        final trimEmail = email.substring(0, (email.length - 10));
+        final visible = trimEmail.substring(0, 4);
+        final replacement = ('*' * (trimEmail.length - 4));
+
+        final combined = '$visible$replacement@gmail.com';
+
+        visibleEmail.value = combined;
+      }
+    }
+
+    Future<void> sendOtp(String email) async {
+      if (forgotEmailController.text.trim().isEmpty) {
+        Get.snackbar('Peringatan!', 'Email harus diisi!');
+        return;
+      }
+      if(!GetUtils.isEmail(forgotEmailController.text)) {
+        Get.snackbar('Peringatan!', 'Email tidak valid!');
+        return;
+      }
+      try {
+        isLoading.value = true;
+
+        await _apiService.postRequest<Map<String, dynamic>>(
+          endpoint: 'employee/send-otp',
+          data: {
+            'email': forgotEmailController.text,
+          },
+          parser: (body) => json.decode(body), 
+          onError: (resp) => 'Gagal: ${resp.statusCode}',
+        );  
+
+        Get.snackbar('Berhasil', 'Kode OTP berhasil dikirim');
+
+        startTimer();
+
+        Get.offAllNamed('/verifyOtp');
+      } catch (e) {
+        Get.snackbar('Error', e.toString());
+      } finally {
+        isLoading.value = false;
+      }
+    }
+
+
+    Future<void> verifyOtp() async {
+      String otp = combinedOtp.trim();
+
+      otpController.text = otp;
+
+      if (otpController.text.isEmpty) {
+        Get.snackbar('Error', 'Kode OTP harus diisi');
+        return;
+      } 
+      if (otpController.text.length != 4) {
+        Get.snackbar('Peringatan!', 'Kode OTP harus terdiri dari 4 angka');
+        return;
+      }
+      try {
+        isLoading.value = true;
+
+        await _apiService.postRequest<Map<String, dynamic>>(
+          endpoint: 'employee/verify-otp',
+          data: {
+            'email': forgotEmailController.text,
+            'otp': otpController.text,
+          },
+          parser: (body) => json.decode(body), 
+          onError: (resp) => 'Gagal: ${resp.statusCode}',
+        );
+
+        Get.snackbar('Berhasil', 'Kode OTP berhasil diverifikasi');
+
+        otp1Controller.clear();
+        otp2Controller.clear();
+        otp3Controller.clear();
+        otp4Controller.clear();
+
+        otpController.clear();
+
+        Get.offAllNamed('/resetPassword');
+      } catch (e) {
+        Get.snackbar('Error', 'Kode OTP salah atau kadaluarsa');
+      } finally {
+        isLoading.value = false;
+      }
+    }
+
+    Future<void> resetPassword() async {
+      if (resetNewPassController.text.isEmpty || resetConfirmPassController.text.isEmpty) {
+        Get.snackbar('Peringatan!', 'Semua kolom wajib diisi');
+        return;
+      }
+      if (resetNewPassController.text != resetConfirmPassController.text) {
+        Get.snackbar('Error', 'Konfirmasi password tidak cocok');
+        return;
+      }
+      try {
+        isLoading.value = true;
+
+        await _apiService.postRequest<Map<String, dynamic>>(
+          endpoint: 'employee/verify-pw',
+          data: {
+            'email': forgotEmailController.text,
+            'password': resetNewPassController.text,
+          },
+          parser: (body) => json.decode(body), 
+          onError: (resp) => 'Gagal: ${resp.statusCode}',
+        );
+
+        Get.snackbar('Berhasil', 'Password Anda telah diperbarui, silahkan login kembali');
+
+        forgotEmailController.clear();
+        otpController.clear();
+        resetNewPassController.clear();
+        resetConfirmPassController.clear();
+
+        Get.offAllNamed('/login');
+      } catch (e) {
+        Get.snackbar('Error', 'Gagal mengubah password: $e');
+      } finally {
+        isLoading.value = false;
+      }
+    }
+
+    void startTimer() {
+      remainingTime.value = 120;
+      isButtonDisabled.value = true;
+
+      _timer?.cancel();
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (remainingTime.value > 0) {
+          remainingTime.value--;
+        } else {
+          isButtonDisabled.value = false;
+          _timer?.cancel();
+        }
+      });
+    }
+
+    /// Convert into minuttes:seconds format
+    String get formattedTime {
+      int minutes = remainingTime.value ~/ 60;
+      int seconds = remainingTime.value % 60;
+      return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+    }
+
+    Future<void> resendOtp() async {
+      try {
+        isLoading.value = true;
+
+        await _apiService.postRequest<Map<String, dynamic>>(
+          endpoint: 'employee/send-otp',
+          data: {
+            'email': forgotEmailController.text,
+          },
+          parser: (body) => json.decode(body), 
+          onError: (resp) => 'Gagal: ${resp.statusCode}',
+        );
+
+        Get.snackbar('Berhasil', 'Kode OTP berhasil dikirim ulang');
+
+        startTimer();
+
+      } catch (e) {
+        Get.snackbar('Error', 'Gagal mengirim ulang kode OTP: $e');
       } finally {
         isLoading.value = false;
       }

@@ -19,6 +19,9 @@ import 'package:sadewa_fe/pages/Profile/edit_profile.dart';
 import 'package:sadewa_fe/pages/Admin_ViewKaryawan/edit_karyawan_page.dart';
 import 'package:sadewa_fe/pages/leaderboard/leaderboard_page.dart';
 import 'package:sadewa_fe/pages/Profile/change_password_page.dart';
+import 'package:sadewa_fe/pages/Profile/forgot_password.dart';
+import 'package:sadewa_fe/pages/Profile/reset_password.dart';
+import 'package:sadewa_fe/pages/Profile/verify_otp.dart';
 
 class AppPages {
   static const initial = Routes.splash;
@@ -38,10 +41,15 @@ class AppPages {
     GetPage(name: Routes.faceScan, page: () => RegistWajah()),
     GetPage(name: Routes.absenConfirm, page: () => AbsenConfirm()),
     GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
+    GetPage(name: Routes.profile, page: () => ProfilePage()),
     GetPage(name: Routes.editProfile, page: () => EditProfile()),
     GetPage(name: Routes.karyawanDetail, page: () => ViewKaryawanDetails(),),
     GetPage(name: Routes.editKaryawan, page: () => EditKaryawan(),),
     GetPage(name: Routes.akunManajer, page: () => ManajerAkun()),
     GetPage(name: Routes.leaderboard, page: () => LeaderboardPage()),
+    GetPage(name: Routes.changePassword, page: () => ChangePassword()),
+    GetPage(name: Routes.forgotPassword, page: () => ForgotPassword()),
+    GetPage(name: Routes.resetPassword, page: () => ResetPassword()),
+    GetPage(name: Routes.verifyOtp, page: () => VerifyOtp()),
   ];
 }
