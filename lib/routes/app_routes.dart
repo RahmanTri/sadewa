@@ -25,4 +25,6 @@ class Routes {
   static const divisi = '/divisi';
   static const akunManajer = '/accounts';
   static const editKaryawan = '/editKaryawan';
+  static const tambahKaryawan = '/tambahKaryawan';
+  static const detailDivisi = '/detailDivisi';
 }

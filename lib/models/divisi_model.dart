@@ -1,6 +1,7 @@
 class Divisi {
   final int id;
   String namaDivisi;
+  String alamatKantor;
   String waktuMasuk;
   String waktuKeluar;
   int toleransiWaktu;
@@ -14,6 +15,7 @@ class Divisi {
   Divisi({
     required this.id,
     required this.namaDivisi,
+    this.alamatKantor = '',
     this.waktuMasuk = '09:00',
     this.waktuKeluar = '17:00',
     this.toleransiWaktu = 15,
@@ -27,6 +29,7 @@ class Divisi {
   factory Divisi.fromJson(Map<String, dynamic> json) => Divisi(
     id: json['id_divisi'],
     namaDivisi: json['nama_divisi'],
+    alamatKantor: json['alamat_kantor'] ?? '',
     waktuMasuk: json['waktu_checkin'],
     waktuKeluar: json['waktu_checkout'],
     toleransiWaktu: json['toleransi_waktu'],
