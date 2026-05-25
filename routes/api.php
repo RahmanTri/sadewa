@@ -25,11 +25,16 @@ Route::post('/register', [auth_controller::class, 'register']);
 Route::post('/email-login', [auth_controller::class, 'loginByEmail']);
 Route::post('/username-login', [auth_controller::class, 'loginByUsername']);
 
+//Forgot Password
+Route::post('/employee/send-otp', [employee_controller::class, 'sendOtpForgotPassword']);
+Route::post('/employee/verify-otp', [employee_controller::class, 'verifyOtpPassword']);
+Route::post('/employee/verify-pw', [employee_controller::class, 'verifyPassword']);
+
 //LOGIN REQUIRED
 Route::middleware("auth:sanctum")->group(function () {
 
     //CRUD Division
-    Route::get('/division', [division_controller::class, 'index']);
+    Route::get('/division', [division_controller::class, 'index']); 
     Route::post('/division/store', [division_controller::class, 'store']);
     Route::put('/division/update/{id}', [division_controller::class, 'update']);
     Route::delete('/division/delete/{id}', [division_controller::class, 'destroy']);
@@ -101,6 +106,23 @@ Route::middleware("auth:sanctum")->group(function () {
     //Division (Edit is Admin only)
     Route::get('division/get-data', [division_controller::class, 'getDivision']);
     Route::post('division/edit', [division_controller::class, 'editDivision']);
+    Route::post('division/get-id', [division_controller::class, 'getDivisionById']);
+
+    //Employee Data (Admin)
+    Route::post('/employee/reset-faces', [employee_controller::class, 'resetFaceData']);
+    Route::post('/employee/reset-pw', [employee_controller::class, 'resetUserPW']);
+    Route::post('/employee/edit', [employee_controller::class, 'editEmployee']);
+    Route::post('/employee/clear-profile', [employee_controller::class, 'clearProfilePics']);
+    Route::post('/employee/delete', [employee_controller::class, 'deleteEmployee']);
+
+    //User Data (Admin)
+    Route::get('/user/get-data', [user_controller::class, 'getUsers']);
+    Route::post('/user/edit-data', [user_controller::class, 'editUserData']);
+    Route::post('/user/create', [user_controller::class, 'createNewAccount']);
+    Route::post('/user/delete', [user_controller::class, 'deleteAccount']);
+
+    //User Change PW
+    Route::post('/user/change-pw', [user_controller::class, 'changeUserPassword']);
 
     //Fetch Pont History
     Route::get('/point/get-history', [point_log_controller::class, 'getData']);

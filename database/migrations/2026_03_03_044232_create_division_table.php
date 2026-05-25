@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('division', function (Blueprint $table) {
             $table->id();
             $table->string('division_name');
+            $table->string('address')->nullable();
             $table->time('checkin_time');
             $table->time('checkout_time');
             $table->integer('tolerance');

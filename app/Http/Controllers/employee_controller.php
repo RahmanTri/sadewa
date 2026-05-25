@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SendOtp;
 use Auth;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\password_otp;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Point;
 use App\Models\activity_log;
-use Carbon\Carbon;
 
 class employee_controller extends Controller
 {
@@ -575,10 +577,20 @@ class employee_controller extends Controller
                 'em.phone_number as no_tlp',
                 'dv.id as id_divisi',
                 'dv.division_name as nama_divisi',
-                'em.profile_pic as foto_profil'
+                'em.profile_pic as foto_profil',
+                'em.face_data as data_wajah'
             )
             ->orderBy('nama_lengkap', 'asc')
             ->get()
+            ->map(function ($item) {
+                if ($item->data_wajah != null) {
+                    $item->data_wajah = 'Terdaftar';
+                } else {
+                    $item->data_wajah = 'Belum Terdaftar';
+                }
+                return $item;
+
+            })
         ;
 
         return response()->json(
@@ -590,7 +602,7 @@ class employee_controller extends Controller
         );
     }
 
-    public function leaderboard()
+    public function resetFaceData(Request $request)
     {
         $user = Auth::user();
 
@@ -601,39 +613,481 @@ class employee_controller extends Controller
             ], 404);
         }
 
-        $employee = Employee::where('user_id', $user->id)->first();
-        $leaderboardData = Point::join('employee', 'employee.id', '=', 'point.employee_id')
-            ->join('employee_log_in', 'employee_log_in.employee_id', '=', 'employee.id')
-            ->select(
-                'employee.id as id_karyawan',
-                'employee.name as nama_lengkap',
-                'employee.profile_pic as foto_profil',
-                'point.point_value as total_poin',
-                DB::raw("COUNT(CASE WHEN employee_log_in.status = 'late' THEN 1 END) as total_telat"),
-                DB::raw("COUNT(*) as total_absen"),
-                DB::raw("SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END ) as total_ontime"),
-                DB::raw("ROUND((SUM(CASE WHEN employee_log_in.status = 'on_time' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) as ontimePercent")
-            )
-            ->groupBy('employee.id', 'employee.name', 'employee.profile_pic', 'point.point_value')
-            ->orderByDesc('point.point_value')
-            ->get()
-        ;
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!"
+            ], 403);
+        }
 
-        $rankedData = $leaderboardData->map(function ($item, $index) {
-            $item->rank = $index + 1;
-            return $item;
-        });
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:employee,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
 
-        $userRank = $rankedData->where('id_karyawan', $employee->id)->first();
-        return response()->json(
-            [
-                "success" => true,
-                "message" => "Sukses mengambil data",
-                "leaderboardData" => $rankedData,
-                "userRank" => $userRank
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 401);
+        }
 
+        $validatedData = $validator->validated();
+
+        $target = Employee::where('id', $validatedData["id"])->first();
+
+        if (!$target) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        $target->face_data = null;
+
+        $target->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Data berhasil dihapus!",
+            "data" => $target,
+        ], 200);
+
+    }
+
+    public function resetUserPW(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:users,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 401);
+        }
+
+        $validatedData = $validator->validated();
+
+        $target = User::where('id', $validatedData["id"])->first();
+
+        if (!$target) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        $target->password = Hash::make("{$target->username}123");
+
+        $target->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Berhasil!",
+            "data" => $target,
+        ], 200);
+
+    }
+
+    public function editEmployee(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otoritas!',
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'em_id' => 'required|exists:employee,id',
+            'name' => 'sometimes|string|max:150',
+            'email' => 'sometimes|email',
+            "phone_number" => "sometimes|string|max:13|min:12",
+            "division_id" => "sometimes|exists:division,id",
+        ], [
+            "em_id.required" => "ID harus diisi!",
+            "em_id.exists" => "ID tidak valid!",
+            "name.max" => "Nama maksimal 150 karakter",
+            "email.email" => "Email tidak valid",
+            "phone_number.max" => "Nomor telepon tidak valid",
+            "phone_number.min" => "Nomor telepon tidak valid",
+            "division_id.exists" => "ID divisi tidak valid!",
+        ]);
+
+        // dd($request->file('profile_pic'));
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $targetEmployee = Employee::where('id', $validatedData["em_id"])->first();
+        $targetUser = User::where('id', $targetEmployee->user_id)->first();
+
+        $oldUserData = $targetUser->toArray();
+        $oldEmployeeData = $targetEmployee->toArray();
+
+        // If email is not empty
+        if (isset($validatedData['email'])) {
+            $targetUser->email = $validatedData["email"];
+        }
+
+        // If phone number is not empty
+        if (isset($validatedData['phone_number'])) {
+            $targetEmployee->phone_number = $validatedData["phone_number"];
+        }
+
+        // If name is not empty
+        if (isset($validatedData['name'])) {
+            $targetEmployee->name = $validatedData["name"];
+        }
+
+        // If division id is not empty
+        if (isset($validatedData['division_id'])) {
+            $targetEmployee->division_id = $validatedData["division_id"];
+        }
+
+        $targetEmployee->save();
+        $targetUser->save();
+
+        return response()->json([
+            'success' => true,
+            "data" => [
+                "user" => [
+                    "old" => $oldUserData,
+                    "new" => $targetUser,
+                ],
+                "employee" => [
+                    "old" => $oldEmployeeData,
+                    "new" => $targetEmployee,
+                ]
             ]
-        );
+        ], 200);
+    }
+
+    public function clearProfilePics()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        $targetEmployee = Employee::where('user_id', $user->id)->first();
+
+        if (!$targetEmployee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        if ($targetEmployee->profile_pic == null) {
+            return response()->json([
+                "success" => false,
+                "message" => "Foto profil tidak ada!",
+            ], 422);
+        }
+
+        Storage::disk('public')->delete("profile_pics/" . $targetEmployee->profile_pic);
+
+        $targetEmployee->profile_pic = null;
+
+        $targetEmployee->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Foto profil berhasil dihapus!",
+        ], 200);
+    }
+
+    public function sendOtpForgotPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Email tidak ditemukan!",
+            ], 404);
+        }
+
+        $otp = rand(1000, 9999);
+
+        $userOtp = password_otp::where('user_id', $user->id)->first();
+
+        if (!$userOtp) {
+            $userOtp = password_otp::create([
+                "user_id" => $user->id,
+                "otp" => $otp,
+                "otp_expired_at" => Carbon::now()->addMinutes(2)
+            ]);
+        } else {
+            $userOtp->otp = $otp;
+            $userOtp->otp_expired_at = Carbon::now()->addMinutes(2);
+            $userOtp->save();
+        }
+
+        // Mail::to($user->email)->send(new SendOtpMail($otp));
+        $user->notify(new SendOtp($otp));
+
+        return response()->json([
+            "success" => true,
+            "message" => "Berhasil mengirimkan OTP!",
+            "otp" => $otp,
+        ], 200);
+
+    }
+
+    public function verifyOtpPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "otp" => "required|numeric|digits:4",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+            "otp.required" => "OTP harus diisi!",
+            "otp.numeric" => "OTP harus berupa angka!",
+            "otp.digits" => "OTP harus berupa 4 angka!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Email tidak ditemukan!",
+            ], 404);
+        }
+
+        $otpData = password_otp::where("user_id", $user->id)->first();
+        //Find OTP based on email
+
+        if (!$otpData) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP tidak ditemukan!",
+            ], 404);
+        }
+
+        if (now()->isAfter($otpData->otp_expired_at)) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP sudah kedaluwarsa!",
+            ], 422);
+        } else if ($validatedData["otp"] == $otpData->otp) {
+
+            $otpData->validated = true;
+
+            $otpData->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "OTP berhasil diverifikasi!",
+            ], 200);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "Kode OTP salah atau tidak valid!",
+            ], status: 422);
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "OTP berhasil diverifikasi!",
+        ], 200);
+    }
+
+    public function verifyPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "password" => "required",
+        ], [
+            "email.required" => "Email harus diisi!",
+            "email.email" => "Email tidak valid!",
+            "password.required" => "Password harus diisi!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+
+        //Find User
+        $user = User::where('email', $validatedData["email"])->first();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!",
+            ], 404);
+        }
+
+        //check if OTP has verified
+        $userOtp = password_otp::where('user_id', $user->id)->first();
+
+        if (!$userOtp) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP tidak ditemukan!",
+            ], 404);
+        }
+
+        if (!$userOtp->validated) {
+            return response()->json([
+                "success" => false,
+                "message" => "OTP belum diverifikasi!",
+            ], 422);
+        }
+
+        //update password
+        $user->password = Hash::make($validatedData["password"]);
+
+        //change OTP to false
+        $userOtp->validated = false;
+
+        $user->save();
+        $userOtp->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Password berhasil diubah!",
+        ], 200);
+    }
+
+    public function deleteEmployee(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+        if ($user->role != "admin") {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otoritas!',
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:employee,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $targetEmployee = Employee::where('id', $validatedData["id"])->first();
+        $targetUser = User::where('id', $targetEmployee->user_id)->first();
+
+        if (!$targetEmployee) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data tidak ditemukan!",
+            ], 404);
+        }
+
+        if (!$targetUser) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!",
+            ], 404);
+        }
+
+        $targetEmployee->delete();
+        $targetUser->delete();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Data berhasil dihapus!",
+            "data" => $targetEmployee
+        ], 200);
     }
 }
 

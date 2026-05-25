@@ -193,6 +193,7 @@ class division_controller extends Controller
             ->select(
                 'id as id_divisi',
                 'division_name as nama_divisi',
+                'address as alamat',
                 'checkin_time as waktu_checkin',
                 'checkout_time as waktu_checkout',
                 'tolerance as toleransi_waktu',
@@ -205,6 +206,7 @@ class division_controller extends Controller
                 return [
                     "id_divisi" => $item->id_divisi,
                     "nama_divisi" => $item->nama_divisi,
+                    "alamat" => $item->alamat,
                     "waktu_checkin" => Carbon::parse($item->waktu_checkin)->format('H:i'),
                     "waktu_checkout" => Carbon::parse($item->waktu_checkout)->format('H:i'),
                     "toleransi_waktu" => $item->toleransi_waktu,
@@ -220,6 +222,79 @@ class division_controller extends Controller
             "message" => "Sukses mengambil data",
             "data" => $divisions,
         ], 200);
+    }
+
+    public function getDivisionById(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User tidak ditemukan!"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas!"
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            "id" => "required|exists:division,id",
+        ], [
+            "id.required" => "ID harus diisi!",
+            "id.exists" => "ID tidak valid!",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal menghapus data!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $division = DB::table("division")
+            ->where("id", $validatedData["id"])
+            ->select(
+                'id as id_divisi',
+                'division_name as nama_divisi',
+                'address as alamat',
+                'checkin_time as waktu_checkin',
+                'checkout_time as waktu_checkout',
+                'tolerance as toleransi_waktu',
+                'latitude',
+                'longitude',
+                'r_tolerance as toleransi_radius'
+            )
+            ->get()
+            ->map(function ($item) {
+                return [
+                    "id_divisi" => $item->id_divisi,
+                    "nama_divisi" => $item->nama_divisi,
+                    "alamat" => $item->alamat,
+                    "waktu_checkin" => Carbon::parse($item->waktu_checkin)->format('H:i'),
+                    "waktu_checkout" => Carbon::parse($item->waktu_checkout)->format('H:i'),
+                    "toleransi_waktu" => $item->toleransi_waktu,
+                    "latitude" => $item->latitude,
+                    "longitude" => $item->longitude,
+                    "toleransi_radius" => $item->toleransi_radius,
+                ];
+            })
+            ->first()
+        ;
+
+        return response()->json([
+            "success" => true,
+            "message" => "Sukses mengambil data",
+            "data" => $division,
+        ], 200);
+
     }
 
     public function editDivision(Request $request)
@@ -242,7 +317,8 @@ class division_controller extends Controller
 
         $validator = Validator::make($request->all(), [
             "id" => "required|exists:division,id",
-            "division_name" => "sometimes|string|max:100",
+            "division_name" => "sometimes|string|max:255",
+            "address" => "sometimes|string|max:1000",
             "checkin_time" => "sometimes|date_format:H:i",
             "checkout_time" => "sometimes|date_format:H:i",
             "tolerance" => "sometimes|int|max:120",
@@ -254,6 +330,7 @@ class division_controller extends Controller
             "id.exists" => "ID tidak valid!",
             "division_name.required" => "Nama divisi tidak boleh kosong",
             "division_name.max" => "Maksimal 100 karakter",
+            "address.max" => "Maksimal 1000 karakter",
             "checkin_time.required" => "Waktu checkin tidak boleh kosong",
             "checkout_time.required" => "Waktu checkout tidak boleh kosong",
             "tolerance" => "Toleransi Waktu maksimal 2 jam",
@@ -271,12 +348,23 @@ class division_controller extends Controller
 
         $validatedData = $validator->validate();
 
-        $target = division::find($validatedData['id']);
+        $target = division::where('id', $validatedData['id'])->first();
+
+        if (!$target) {
+            return response()->json([
+                'success' => false,
+                'message' => "ID $validatedData[id] tidak ditemukan",
+            ], 404);
+        }
 
         $oldData = $target->toArray();
 
         if (isset($validatedData['division_name'])) {
             $target->division_name = $validatedData['division_name'];
+        }
+
+        if (isset($validatedData['address'])) {
+            $target->address = $validatedData['address'];
         }
 
         if (isset($validatedData['checkin_time'])) {
