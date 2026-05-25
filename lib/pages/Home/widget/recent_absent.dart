@@ -5,17 +5,16 @@ import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-final homeController = Get.put(HomeController());
-
 class RecentAbsent extends StatelessWidget {
   final double width;
   final double height;
-
-  const RecentAbsent({super.key, required this.width, required this.height});
+  final homeController = Get.put(HomeController());
+  RecentAbsent({super.key, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      print("Data Render Recent Absent ${homeController.latestLoginData}");
       final List<Map<String, dynamic>> latestLoginData =
           homeController.latestLoginData;
       return Container(

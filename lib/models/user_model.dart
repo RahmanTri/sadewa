@@ -14,7 +14,7 @@ class User {
   final int poin;
   final bool loggedIn;
   final bool loggedOut;
-  
+
   User({
     required this.userId,
     required this.username,
@@ -30,7 +30,7 @@ class User {
     required this.fotoProfil,
     required this.poin,
     required this.loggedIn,
-    required this.loggedOut
+    required this.loggedOut,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -45,8 +45,17 @@ class User {
       namaDivisi: json['nama_divisi'],
       namaLengkap: json['nama_lengkap'],
       noTelp: json['no_telp'],
-      dataWajah: json['data_wajah'] == null ? [] : (json['data_wajah'] as List).map((e) => (e as num).toDouble()).toList(),
-      fotoProfil: json['foto_profil'] ?? "",
+      dataWajah: json['data_wajah'] == null
+          ? []
+          : (json['data_wajah'] as List)
+                .map((e) => (e as num).toDouble())
+                .toList(),
+      fotoProfil:
+          json['foto_profil'] == null ||
+              json['foto_profil'] == 'null' ||
+              json['foto_profil'] == ''
+          ? ''
+          : json['foto_profil'],
       poin: json['poin'].toInt(),
       loggedIn: (json['logged_in'] as int) == 1,
       loggedOut: (json['logged_out'] as int) == 1,

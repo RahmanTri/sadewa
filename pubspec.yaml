@@ -53,6 +53,8 @@ dependencies:
   iconify_flutter: ^0.0.7
   geolocator: ^14.0.2
   animated_text_kit: ^4.3.0
+  arc_text: ^0.0.4
+  flutter_arc_text: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +85,8 @@ flutter:
     - assets/images/point-box.png
     - assets/images/default-profile.png
     - assets/images/image-loading.png
+    - assets/images/leaderboard-border.png
+    - assets/images/leaderboard-profile.png
 
     - assets/icons/riwayat_kehadiran.png
     - assets/icons/peringkat_karyawan.png

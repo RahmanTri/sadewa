@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/user_refresh.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:sadewa_fe/constants/sdw_sizes.dart';
+// import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 // import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -25,7 +27,7 @@ class HomeController extends GetxController {
   var pointMessage = ''.obs;
   var token = ''.obs;
   RxList<Map<String, dynamic>> latestLoginData = <Map<String, dynamic>>[].obs;
-  // List<Map<String, dynamic>> latestLoginData = [].obs;
+  RxList<Map<String, dynamic>> activityLog = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() async {
@@ -36,6 +38,7 @@ class HomeController extends GetxController {
     _loadGreeting();
     _loadAbsenText();
     _loadPointText();
+    _loadActivityLog();
   }
 
   Future<void> _loadGreeting() async {
@@ -137,6 +140,8 @@ class HomeController extends GetxController {
         headers: {'Authorization': 'Bearer $authToken'},
       );
       final List<dynamic> jsonData = result['latest_login'];
+      print("berhasil mendapat json latest login");
+      print(jsonData);
 
       for (var apiItem in jsonData) {
         final dt = DateTime.parse(apiItem['hari']);
@@ -148,12 +153,48 @@ class HomeController extends GetxController {
           loginDay[index]['status'] = status;
         }
       }
-      print("Berhasil mendapatkan Data Latest Login");
       latestLoginData.value = loginDay;
+      print("Berhasil mendapatkan Data Latest Login");
+      print(latestLoginData);
       isLoading.value = false;
     } catch (e) {
       print('Gagal Mendapatkan Latest Logi : $e');
       isLoading.value = false;
+    }
+  }
+
+  Future<void> _loadActivityLog() async {
+    isLoading.value = true;
+    await initializeDateFormatting('id_ID', null);
+    String authToken = token.value;
+    try {
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'activity-log',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) =>
+            'Gagal memuat riwayat: ${resp.statusCode} ${resp.body}',
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
+
+      final List<dynamic> jsonData = result['data'];
+
+      for (var apiItem in jsonData) {
+        String rawDate = apiItem['created_at'];
+        DateTime dateTime = DateTime.parse(rawDate).toLocal();
+
+        String formattedDate = DateFormat(
+          "EEE, dd MMM | HH:mm",
+          "id_ID",
+        ).format(dateTime);
+        apiItem['created_at'] = formattedDate;
+        activityLog.add(apiItem);
+      }
+
+      isLoading.value = false;
+      print("Berhasil Mendapatkan Activity Log");
+    } catch (e) {
+      isLoading.value = false;
+      print('Gagal Mendapatkan Activity Log: $e');
     }
   }
 

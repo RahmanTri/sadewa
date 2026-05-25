@@ -1,9 +1,14 @@
+import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconify_flutter/icons/heroicons.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
+import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/leaderboard_controller.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../Effect/box_shadow.dart';
+import 'widget/lb_header.dart';
+import 'widget/lb_top3.dart';
+import 'widget/lb_top20.dart';
+import 'widget/lb_footer.dart';
 
 class LeaderboardPage extends StatelessWidget {
   LeaderboardPage({super.key});
@@ -15,10 +20,13 @@ class LeaderboardPage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
 
     return Obx(() {
+      if (lbController.isLoading.value || lbController.leaderboard.isEmpty) {
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+
       return Scaffold(
         body: Stack(
           children: [
-            Text(lbController.initial.value),
             Container(
               height: height,
               width: width,
@@ -33,39 +41,18 @@ class LeaderboardPage extends StatelessWidget {
             Column(
               children: [
                 SizedBox(height: height * 0.04, width: width),
-                Container(
-                  width: width,
-                  height: height * 0.05,
-                  padding: EdgeInsets.only(
-                    left: width * 0.05,
-                    right: width * 0.05,
-                  ),
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Icon(
-                          FontAwesomeIcons.arrowLeft,
-                          size: height * 0.03,
-                          color: SDWcolors.textL,
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          "Peringkat Teratas",
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(
-                                color: SDWcolors.textL,
-                                fontSize: width * 0.05,
-                                letterSpacing: 5,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
+                HeaderPage(width: width, height: height),
+                Top3Page(width: width, height: height),
+                SizedBox(height: height * 0.04, width: width),
+                Expanded(
+                  child: Top20Page(width: width, height: height),
                 ),
-                
               ],
+            ),
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: FooterPage(width: width, height: height),
             ),
           ],
         ),

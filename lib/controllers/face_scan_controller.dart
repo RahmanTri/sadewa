@@ -309,11 +309,9 @@ class FaceScanController extends GetxController {
 
                   try {
                     embeddingResult = await _processFace(faces.first, image);
-                    await closeCamera();
+                    closeCamera();
                     print('Data wajah: $embeddingResult');
-                    isLoading = true;
                     Get.offAllNamed(Routes.absenConfirm);
-                    isLoading = false;
                   } catch (e) {
                     print('Gagal memproses wajah: $e');
                   } finally {
@@ -327,15 +325,13 @@ class FaceScanController extends GetxController {
           } else {
             embeddingResult = await _processFace(faces.first, image);
             double maxSimilarity = 0.0;
-            const threshold = 0.7;
+            const threshold = 0.85;
 
             try {
               double sim = cosineSimilarity(embeddingResult!, userEmbeddings);
               if (sim > maxSimilarity && sim > threshold) {
-                isLoading = true;
-                closeCamera();
                 Get.offAllNamed(Routes.absenConfirm);
-                isLoading = false;
+                closeCamera();
               } else {
                 statusText.value = "Wajah Terdeteksi, tapi bukan anda!";
               }
