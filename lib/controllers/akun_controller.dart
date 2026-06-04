@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/akun_model.dart';
-import 'package:sadewa_fe/pages/Admin_ManajerAkun/widgets/akun_alert_dialog.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ManajerAkun/widgets/akun_alert_dialog.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 
 class AkunController extends GetxController {

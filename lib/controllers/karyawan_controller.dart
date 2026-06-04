@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/karyawan_model.dart';
-import 'package:sadewa_fe/pages/Admin_ViewKaryawan/widgets/karyawan_alert_dialog.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/widgets/karyawan_alert_dialog.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
-import 'package:sadewa_fe/pages/Admin_Divisi/widgets/divisi_alert_dialog.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_Divisi/widgets/divisi_alert_dialog.dart';
 import '../models/divisi_model.dart';
 import '../services/api_service.dart';
 import '../controllers/karyawan_controller.dart';

@@ -120,7 +120,7 @@ class AuthController extends GetxController {
         Get.offAllNamed(Routes.home);
       } else if (userRole.value == 'admin') {
         // Get.offNamed(Routes.adminHome);
-        Get.offAllNamed(Routes.karyawan);
+        Get.offAllNamed(Routes.adminHome);
         //Test Only
         Get.snackbar('Anda Adalah Admin', 'Anda Dipindahkan ke halaman view');
       } else {

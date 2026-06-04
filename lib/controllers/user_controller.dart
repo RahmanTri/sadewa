@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'package:sadewa_fe/models/admin_model.dart';
-import 'package:sadewa_fe/pages/Profile/changepw_succes.dart';
+import 'package:sadewa_fe/pages/User/Profile/changepw_succes.dart';
 import '../models/user_model.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'dart:convert';
@@ -56,6 +56,8 @@ class UserController extends GetxController {
   var obscureNew = true.obs;
   var obscureConfirm = true.obs;
 
+  var isEditMode = false.obs;
+
   Timer? _timer;
   var remainingTime = 120.obs;
   var isButtonDisabled = true.obs;
@@ -95,6 +97,12 @@ class UserController extends GetxController {
     divisionController.text = user.value!.namaDivisi;
   }
 
+  @override
+  void dispose() {
+    isEditMode.value = false;
+    super.dispose();
+  }
+
   Future<void> updateUser() async {
     isLoading.value = true;
 
@@ -115,6 +123,11 @@ class UserController extends GetxController {
 
     if (divisionController.text != user.value?.namaDivisi) {
       userData.assign('namaDivisi(X)', divisionController.text);
+    }
+
+    if (userData.isEmpty) {
+      isLoading.value = false;
+      return;
     }
 
     try {
@@ -149,6 +162,7 @@ class UserController extends GetxController {
       }
 
       Get.snackbar('Berhasil', 'Data profil telah diperbarui');
+      isEditing.value = false;
     } catch (e) {
       Get.snackbar('error', 'Terjadi kesalahan: $e');
       isLoading.value = false;
@@ -243,7 +257,7 @@ class UserController extends GetxController {
     isLoading.value = true;
 
     var url = Uri.parse('$baseApiUrl/employee/clear-profile');
-    var response = await http.delete(
+    var response = await http.post(
       url,
       headers: {
         'Authorization': 'Bearer ${userToken.value}',
