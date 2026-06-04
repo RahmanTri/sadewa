@@ -22,7 +22,8 @@ class DivisionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DivisionController divisionController = Get.find<DivisionController>();
+    final DivisionController divisionController =
+        Get.find<DivisionController>();
 
     return Container(
       margin: EdgeInsets.only(
@@ -63,11 +64,18 @@ class DivisionsCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        'Kantor Utama | Jl. Jendral Sudirman No. 1, Jakarta Pusat, Indonesia',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: SDWcolors.textD,
-                          fontSize: height * 0.016,
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          physics: const BouncingScrollPhysics(),
+                          child: Text(
+                            '${division.kantor} | ${division.alamatKantor == '' ? '-' : division.alamatKantor}',
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: SDWcolors.textD,
+                                  fontSize: height * 0.016,
+                                ),
+                          ),
                         ),
                       ),
                     ],
@@ -89,7 +97,7 @@ class DivisionsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -101,6 +109,7 @@ class DivisionsCard extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     divisionController.goToDetails(division);
+                    divisionController.resetEditing();
                     Get.toNamed(Routes.detailDivisi);
                   },
                   icon: Icon(
