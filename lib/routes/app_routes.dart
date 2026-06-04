@@ -21,6 +21,7 @@ class Routes {
   static const forgotPassword = '/forgotPassword';
   static const resetPassword = '/resetPassword';
   static const verifyOtp = '/verifyOtp';
+  static const helpCenter = '/helpCenter';
 
   //Admin
   static const karyawan = '/karyawan';

@@ -8,6 +8,7 @@ import 'package:sadewa_fe/pages/Admin_ViewKaryawan/view_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Notice/read_notice_page.dart';
 import 'package:sadewa_fe/pages/Poin/my_point_page.dart';
 import 'package:sadewa_fe/pages/Profile/forgot_password.dart';
+import 'package:sadewa_fe/pages/Profile/help_center.dart';
 import 'package:sadewa_fe/pages/Profile/reset_password.dart';
 import 'package:sadewa_fe/pages/Profile/verify_otp.dart';
 import 'package:sadewa_fe/pages/Profile/change_password_page.dart';
@@ -58,5 +59,6 @@ class AppPages {
     GetPage(name: Routes.tambahKaryawan, page: () => AddKaryawanPage()),
     GetPage(name: Routes.divisi, page: () => DivisiPage()),
     GetPage(name: Routes.detailDivisi, page : () => DetailDivisiPage()),
+    GetPage(name: Routes.helpCenter, page: () => HelpCenter())
   ];
 }

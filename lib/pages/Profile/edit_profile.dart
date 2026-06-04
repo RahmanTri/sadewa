@@ -14,7 +14,19 @@ class EditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final userController = Get.find<UserController>();
 
-    return Scaffold(
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result){
+        if(didPop){
+          userController.isEditing.value = false;
+
+          userController.nameController.text = userController.user.value?.namaLengkap ?? '';
+          userController.emailController.text = userController.user.value?.email ?? '';
+          userController.phoneController.text = userController.user.value?.noTelp ?? '';
+        }
+      },
+    
+    child: Scaffold(
       appBar: AppBar(
         backgroundColor: SDWcolors.primary,
         toolbarHeight: 60,
@@ -26,7 +38,11 @@ class EditProfile extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: Get.back,
+          onPressed: () {
+            userController.isEditing.value = false;
+          
+            Get.back();
+          },
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),
@@ -180,8 +196,10 @@ class EditProfile extends StatelessWidget {
           ),
         ],
       ),
+    )
     );
   }
+  
 
   void _showPicker(BuildContext context, UserController userController) {
     Get.bottomSheet(
@@ -211,7 +229,6 @@ class EditProfile extends StatelessWidget {
                 if (userController.user.value?.fotoProfil != null &&
                     userController.user.value?.fotoProfil != '' &&
                     userController.user.value?.fotoProfil != 'null')
-
                   IconButton(
                     onPressed: () {
                       Get.back();
@@ -222,7 +239,7 @@ class EditProfile extends StatelessWidget {
                       color: SDWcolors.primary,
                     ),
                   )
-                  else
+                else
                   const SizedBox(width: 100),
               ],
             ),
@@ -276,3 +293,4 @@ class EditProfile extends StatelessWidget {
     );
   }
 }
+

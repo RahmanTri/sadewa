@@ -1,6 +1,7 @@
 import 'package:get/instance_manager.dart';
 import 'package:sadewa_fe/controllers/akun_controller.dart';
 import 'package:sadewa_fe/controllers/auth_controller.dart';
+import 'package:sadewa_fe/controllers/help_center_controller.dart';
 import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/controllers/notice_controller.dart';
 import 'package:sadewa_fe/services/api_service.dart';
@@ -22,5 +23,6 @@ class AppBinding extends Bindings {
     Get.put<RiwayatController>(RiwayatController(), permanent: true);
     Get.put<NoticeController>(NoticeController(), permanent: true);
     Get.put<AkunController>(AkunController(), permanent: true);
+    Get.put<HelpCenterController>(HelpCenterController(), permanent: true);
   }
 }
