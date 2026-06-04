@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/karyawan_controller.dart';
@@ -233,6 +234,52 @@ class _KaryawanPageState extends State<KaryawanPage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: height * 0.022,
                                   ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: height * 0.02),
+                              height: height * 0.05,
+                              width: width * 0.5,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: karyawanController.karyawan.isEmpty
+                                    ? SDWcolors.primary
+                                    : SDWcolors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: karyawanController.karyawan.isEmpty
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        if (karyawanController
+                                            .karyawan
+                                            .isEmpty) {
+                                          karyawanController.fetchKaryawan();
+                                        }
+                                      },
+                                      child: Container(
+                                        height: height * 0.05,
+                                        width: width * 0.5,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: SDWcolors.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Refresh',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
+                                                color: SDWcolors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: height * 0.022,
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox.shrink(),
                             ),
                           ],
                         ),

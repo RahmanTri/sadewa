@@ -4,6 +4,7 @@ import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_Divisi/widgets/divisions_card.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 import '../../effect/box_shadow.dart';
 
 class DivisiPage extends StatefulWidget {
@@ -57,7 +58,10 @@ class _DivisiPageState extends State<DivisiPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: SDWcolors.primary,
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          divisionController.goToAddNewDivision();
+          Get.toNamed(Routes.addDivisi);
+        },
       ),
       body: Stack(
         children: [
@@ -94,47 +98,47 @@ class _DivisiPageState extends State<DivisiPage> {
                         () => Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // DropdownButtonHideUnderline(
-                            //   child: DropdownButton(
-                            //     isExpanded: true,
-                            //     isDense: true,
-                            //     dropdownColor: SDWcolors.bgL,
-                            //     menuWidth: width * 0.42,
-                            //     value: karyawanController.selectedFilter.value,
-                            //     style: Theme.of(context).textTheme.bodyLarge
-                            //         ?.copyWith(
-                            //           color: SDWcolors.primary,
-                            //           fontWeight: FontWeight.bold,
-                            //         ),
-                            //     icon: Transform.rotate(
-                            //       angle: 3.14 / -2,
-                            //       child: Icon(
-                            //         Icons.chevron_left_outlined,
-                            //         color: SDWcolors.primary,
-                            //         size: 24,
-                            //       ),
-                            //     ),
-                            //     items: karyawanController.filterOptions.map((
-                            //       filter,
-                            //     ) {
-                            //       return DropdownMenuItem<String>(
-                            //         value: filter,
-                            //         child: SingleChildScrollView(
-                            //           physics: BouncingScrollPhysics(),
-                            //           scrollDirection: Axis.horizontal,
-                            //           child: Text(filter),
-                            //         ),
-                            //       );
-                            //     }).toList(),
-                            //     onChanged: (newValue) {
-                            //       if (newValue != null) {
-                            //         karyawanController.selectedFilter.value =
-                            //             newValue;
-                            //         karyawanController.applyFilter(newValue);
-                            //       }
-                            //     },
-                            //   ),
-                            // ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                isDense: true,
+                                dropdownColor: SDWcolors.bgL,
+                                menuWidth: width * 0.42,
+                                value: divisionController.selectedFilter.value,
+                                style: Theme.of(context).textTheme.bodyLarge
+                                    ?.copyWith(
+                                      color: SDWcolors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                icon: Transform.rotate(
+                                  angle: 3.14 / -2,
+                                  child: Icon(
+                                    Icons.chevron_left_outlined,
+                                    color: SDWcolors.primary,
+                                    size: 24,
+                                  ),
+                                ),
+                                items: divisionController.filterOptions.map((
+                                  filter,
+                                ) {
+                                  return DropdownMenuItem<String>(
+                                    value: filter,
+                                    child: SingleChildScrollView(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(filter),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  if (newValue != null) {
+                                    divisionController.selectedFilter.value =
+                                        newValue;
+                                    divisionController.applyFilter(newValue);
+                                  }
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),

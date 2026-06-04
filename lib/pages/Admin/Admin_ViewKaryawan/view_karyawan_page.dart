@@ -92,12 +92,18 @@ class ViewKaryawanDetails extends StatelessWidget {
                           )
                         : null,
                   ),
-                  Text(
-                    karyawanController.karyawanView.value!.namaLengkap,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: SDWcolors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: height * 0.032,
+                  SizedBox(
+                    width: width * 0.92,
+                    child: Text(
+                      karyawanController.karyawanView.value!.namaLengkap,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: SDWcolors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.032,
+                      ),
                     ),
                   ),
                   Text(

@@ -5,7 +5,7 @@ import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/pages/User/Profile/widget/profile_menu.dart';
 import 'package:sadewa_fe/constants/urls.dart';
-
+import 'package:sadewa_fe/pages/User/Profile/widget/logout.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -119,13 +119,13 @@ class ProfilePage extends StatelessWidget {
                   profileMenu(
                     icon: Icons.help_outlined,
                     title: 'Pusat Bantuan',
-                    onTap: () => Get.toNamed('/help-center'),
+                    onTap: () => Get.toNamed('/helpCenter'),
                   ),
                   const SizedBox(height: 17),
                   profileMenu(
                     icon: Icons.logout,
                     title: 'Logout',
-                    onTap: () => userController.user.value?.loggedOut,
+                    onTap: () => logoutDialog(context),
                   ),
                 ],
               ),

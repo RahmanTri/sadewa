@@ -20,6 +20,7 @@ class Routes {
   static const forgotPassword = '/forgotPassword';
   static const resetPassword = '/resetPassword';
   static const verifyOtp = '/verifyOtp';
+  static const helpCenter = '/helpCenter';
 
   //Admin
   static const adminHome = '/adminHome';
@@ -30,5 +31,6 @@ class Routes {
   static const editKaryawan = '/editKaryawan';
   static const tambahKaryawan = '/tambahKaryawan';
   static const detailDivisi = '/detailDivisi';
+  static const addDivisi = '/addDivisi';
   static const exportPage = '/export';
 }
