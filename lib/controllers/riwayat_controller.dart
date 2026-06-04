@@ -91,7 +91,7 @@ class RiwayatController extends GetxController {
           .where((riwayat) => riwayat.statusMasuk == 'Terlambat')
           .length;
       jumlahAbsen.value = filteredhistories
-          .where((riwayat) => riwayat.statusMasuk == 'Absen')
+          .where((riwayat) => riwayat.statusMasuk == 'Tidak Hadir')
           .length;
       isLoading.value = false;
     } else {
@@ -105,7 +105,7 @@ class RiwayatController extends GetxController {
           .where((riwayat) => riwayat.statusMasuk == 'Terlambat')
           .length;
       jumlahAbsen.value = filteredhistories
-          .where((riwayat) => riwayat.statusMasuk == 'Absen')
+          .where((riwayat) => riwayat.statusMasuk == 'Tidak Hadir')
           .length;
       isLoading.value = false;
     }
