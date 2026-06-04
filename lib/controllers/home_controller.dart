@@ -57,7 +57,7 @@ class HomeController extends GetxController {
       _loadAbsenText();
       _loadPointText();
     }
-    _loadAdminDashboard();
+    await _loadAdminDashboard();
     _loadMasuk();
     _loadKeluar();
   }

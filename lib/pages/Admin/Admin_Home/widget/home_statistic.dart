@@ -80,7 +80,7 @@ class HomeStatistic extends StatelessWidget {
 
           GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.myPoint);
+              Get.toNamed(Routes.divisi);
             },
             child: Container(
               height: width * 0.29,
@@ -138,9 +138,7 @@ class HomeStatistic extends StatelessWidget {
           ),
 
           GestureDetector(
-            onTap: () {
-              Get.toNamed(Routes.myPoint);
-            },
+            onTap: () {},
             child: Container(
               height: width * 0.29,
               width: width * 0.29,

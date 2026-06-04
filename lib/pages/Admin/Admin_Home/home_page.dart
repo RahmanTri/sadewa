@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
-import '../../Effect/box_shadow.dart';
-import '../../Effect/SDWOverlay.dart';
 import 'widget/header_page.dart';
 import 'widget/activity_log.dart';
 import 'widget/home_statistic.dart';
 import 'widget/quick_action.dart';
 import 'widget/recent_absent.dart';
-import 'package:sadewa_fe/routes/app_routes.dart';
 
 class AdminHomePage extends StatelessWidget {
   AdminHomePage({super.key});

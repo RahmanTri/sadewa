@@ -49,7 +49,7 @@ class _KaryawanPageState extends State<KaryawanPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Get.toNamed(Routes.akunManajer),
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),
