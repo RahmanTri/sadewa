@@ -9,10 +9,14 @@ class Division extends Model
     protected $table = "division";
     protected $fillable = [
         "division_name",
+        "office",
         "address",
         "checkin_time",
         "checkout_time",
         "tolerance",
+        "r_tolerance",
+        "latitude",
+        "longitude",
 
     ];
     public $timestamps = true;

@@ -109,6 +109,8 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get('division/get-data', [division_controller::class, 'getDivision']);
     Route::post('division/edit', [division_controller::class, 'editDivision']);
     Route::post('division/get-id', [division_controller::class, 'getDivisionById']);
+    Route::post('division/create', [division_controller::class, 'addNewDivision']);
+    Route::post('division/delete', [division_controller::class, 'deleteDivision']);
 
     //Employee Data (Admin)
     Route::post('/employee/reset-faces', [employee_controller::class, 'resetFaceData']);
@@ -116,6 +118,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/employee/edit', [employee_controller::class, 'editEmployee']);
     Route::post('/employee/clear-profile', [employee_controller::class, 'clearProfilePics']);
     Route::post('/employee/delete', [employee_controller::class, 'deleteEmployee']);
+    Route::post('/employee/get-div', [employee_controller::class, 'getEmByDiv']);
 
     //User Data (Admin)
     Route::get('/user/get-data', [user_controller::class, 'getUsers']);

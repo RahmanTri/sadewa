@@ -37,12 +37,13 @@ class SendOtp extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Makane Tala Password ojok lali-lali COK')
-            ->line('Kontol ngerepoti wong tok ae isomu')
-            ->line('Kilo kodemu COK')
+            ->line('Hello ' . $notifiable->name)
+            ->line('You have requested to reset your password')
+            ->line('Here is your OTP code')
             ->line('OTP: ' . $this->otp)
-            ->line('Iki mek valid 10 menit tok COk gek ndang')
-            ->line('Nk guguk koen seng jalok iki Gausah direken COK');
+            ->line('This code only valid within 5 minutes')
+            ->line('If you did not request this, no further action is required')
+            ->line('Thank you for using our application!');
     }
 
     /**
