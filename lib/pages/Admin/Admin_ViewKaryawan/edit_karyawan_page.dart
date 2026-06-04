@@ -7,7 +7,6 @@ import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/widgets/karyawan_attrib
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/widgets/karyawan_attribute_edit_form.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/widgets/karyawan_attribute.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/widgets/karyawan_dialog.dart';
-import 'package:sadewa_fe/routes/app_routes.dart';
 
 class EditKaryawan extends StatelessWidget {
   const EditKaryawan({super.key});

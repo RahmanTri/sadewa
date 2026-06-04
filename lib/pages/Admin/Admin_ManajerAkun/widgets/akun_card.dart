@@ -5,7 +5,6 @@ import 'package:sadewa_fe/models/akun_model.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ManajerAkun/widgets/popup_edit.dart';
-import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 
 class AkunCard extends StatelessWidget {
