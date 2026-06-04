@@ -1,5 +1,6 @@
 // import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:sadewa_fe/pages/Admin_Divisi/add_divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin_Divisi/detail_divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin_Divisi/divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin_ManajerAkun/manajer_akun_page.dart';
@@ -58,5 +59,6 @@ class AppPages {
     GetPage(name: Routes.tambahKaryawan, page: () => AddKaryawanPage()),
     GetPage(name: Routes.divisi, page: () => DivisiPage()),
     GetPage(name: Routes.detailDivisi, page : () => DetailDivisiPage()),
+    GetPage(name: Routes.addDivisi, page : () => AddDivisiPage()),
   ];
 }

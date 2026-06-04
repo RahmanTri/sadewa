@@ -466,4 +466,47 @@ class KaryawanController extends GetxController {
       fetchKaryawan();
     }
   }
+
+  Future<void> reNewKaryawan(int divisionID) async {
+    processing.value = true;
+    final endpoint = 'employee/get-div';
+    final apiToken = Get.find<UserController>().userToken.value;
+    final data = {'division_id': divisionID};
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: endpoint,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $apiToken'},
+        data: data,
+      );
+
+      final jsonData = result['data'];
+      final reNewKaryawanFromBE = jsonData
+          .map((item) => Karyawan.fromJson(item))
+          .toList();
+      
+      karyawan.removeWhere((item) => item.idDivisi == divisionID);
+
+      for (int i = 0; i < reNewKaryawanFromBE.length; i++) {
+        karyawan.add(reNewKaryawanFromBE[i]);
+      }
+
+      applyFilter(selectedFilter.value);
+
+      processing.value = false;
+    } catch (e) {
+      processing.value = false;
+    }
+  }
+
+  int countKaryawan(int divId) {
+    int count = 0;
+    for (int i = 0; i < karyawan.length; i++) {
+      if (karyawan[i].idDivisi == divId) {
+        count += 1;
+      }
+    }
+    return count;
+  }
 }

@@ -30,4 +30,5 @@ class Routes {
   static const editKaryawan = '/editKaryawan';
   static const tambahKaryawan = '/tambahKaryawan';
   static const detailDivisi = '/detailDivisi';
+  static const addDivisi = '/addDivisi';
 }

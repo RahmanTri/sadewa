@@ -16,6 +16,8 @@ class ApiService {
       return resultProvider();
     } else if (resp.statusCode == 401) {
       throw Exception('Unauthorized');
+    } else if (resp.statusCode == 423) {
+      return resultProvider();
     } else {
       String errorMessage;
       try {

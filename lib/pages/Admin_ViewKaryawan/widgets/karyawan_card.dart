@@ -23,13 +23,14 @@ class KaryawanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final KaryawanController karyawanController = Get.find<KaryawanController>();
+    final KaryawanController karyawanController =
+        Get.find<KaryawanController>();
 
     return GestureDetector(
       onTap: () => {
         karyawanController.assignView(karyawan),
         Get.toNamed(Routes.karyawanDetail),
-        },
+      },
       child: Container(
         margin: EdgeInsets.only(bottom: gap),
         height: height * 0.1,
@@ -75,12 +76,18 @@ class KaryawanCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  karyawan.namaLengkap,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: SDWcolors.textD,
-                    fontWeight: FontWeight.bold,
-                    fontSize: height * 0.022,
+                SizedBox(
+                  width: width * 0.6,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      karyawan.namaLengkap,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.022,
+                      ),
+                    ),
                   ),
                 ),
                 Text(
