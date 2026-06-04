@@ -104,6 +104,8 @@ flutter:
     - assets/icons/forgot_password.png
     - assets/icons/verify_otp.png
     - assets/icons/reset_password.png
+    - assets/icons/employee_icon.png
+    - assets/icons/export.png
 
     - assets/models/mobilefacenet.tflite
 

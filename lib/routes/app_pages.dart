@@ -1,31 +1,35 @@
 // import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
-import 'package:sadewa_fe/pages/Admin_Divisi/detail_divisi_page.dart';
-import 'package:sadewa_fe/pages/Admin_Divisi/divisi_page.dart';
-import 'package:sadewa_fe/pages/Admin_ManajerAkun/manajer_akun_page.dart';
-import 'package:sadewa_fe/pages/Admin_ViewKaryawan/tambah_karyawan_page.dart';
-import 'package:sadewa_fe/pages/Admin_ViewKaryawan/view_karyawan_page.dart';
-import 'package:sadewa_fe/pages/Notice/read_notice_page.dart';
-import 'package:sadewa_fe/pages/Poin/my_point_page.dart';
-import 'package:sadewa_fe/pages/Profile/forgot_password.dart';
-import 'package:sadewa_fe/pages/Profile/reset_password.dart';
-import 'package:sadewa_fe/pages/Profile/verify_otp.dart';
-import 'package:sadewa_fe/pages/Profile/change_password_page.dart';
-
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:sadewa_fe/pages/Auth/login_page.dart';
 import 'package:sadewa_fe/binding/app_binding.dart';
-import 'package:sadewa_fe/pages/splash_page.dart';
-import 'package:sadewa_fe/pages/Riwayat/riwayat_page.dart';
-import 'package:sadewa_fe/pages/Home/home_page.dart';
-import 'package:sadewa_fe/pages/Notice/notice_page.dart';
-import 'package:sadewa_fe/pages/Absen/face_scan.dart';
-import 'package:sadewa_fe/pages/Absen/scan_confirm.dart';
-import 'package:sadewa_fe/pages/Admin_ViewKaryawan/karyawan_page.dart';
-import 'package:sadewa_fe/pages/Profile/profile_page.dart';
-import 'package:sadewa_fe/pages/Profile/edit_profile.dart';
-import 'package:sadewa_fe/pages/Admin_ViewKaryawan/edit_karyawan_page.dart';
-import 'package:sadewa_fe/pages/leaderboard/leaderboard_page.dart';
+
+import 'package:sadewa_fe/pages/Splash/splash_page.dart';
+
+import 'package:sadewa_fe/pages/User/Notice/read_notice_page.dart';
+import 'package:sadewa_fe/pages/User/Poin/my_point_page.dart';
+import 'package:sadewa_fe/pages/User/Profile/forgot_password.dart';
+import 'package:sadewa_fe/pages/User/Profile/reset_password.dart';
+import 'package:sadewa_fe/pages/User/Profile/verify_otp.dart';
+import 'package:sadewa_fe/pages/User/Profile/change_password_page.dart';
+import 'package:sadewa_fe/pages/User/Riwayat/riwayat_page.dart';
+import 'package:sadewa_fe/pages/User/Home/home_page.dart';
+import 'package:sadewa_fe/pages/User/Notice/notice_page.dart';
+import 'package:sadewa_fe/pages/User/Absen/face_scan.dart';
+import 'package:sadewa_fe/pages/User/Absen/scan_confirm.dart';
+import 'package:sadewa_fe/pages/User/Profile/profile_page.dart';
+import 'package:sadewa_fe/pages/User/Profile/edit_profile.dart';
+import 'package:sadewa_fe/pages/User/leaderboard/leaderboard_page.dart';
+
+import 'package:sadewa_fe/pages/Admin/Admin_Home/home_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/edit_karyawan_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/karyawan_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_Divisi/detail_divisi_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_Divisi/divisi_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ManajerAkun/manajer_akun_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/tambah_karyawan_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/view_karyawan_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_Export/export_page.dart';
 
 class AppPages {
   static const initial = Routes.splash;
@@ -47,8 +51,8 @@ class AppPages {
     GetPage(name: Routes.karyawan, page: () => KaryawanPage()),
     GetPage(name: Routes.profile, page: () => ProfilePage()),
     GetPage(name: Routes.editProfile, page: () => EditProfile()),
-    GetPage(name: Routes.karyawanDetail, page: () => ViewKaryawanDetails(),),
-    GetPage(name: Routes.editKaryawan, page: () => EditKaryawan(),),
+    GetPage(name: Routes.karyawanDetail, page: () => ViewKaryawanDetails()),
+    GetPage(name: Routes.editKaryawan, page: () => EditKaryawan()),
     GetPage(name: Routes.akunManajer, page: () => ManajerAkun()),
     GetPage(name: Routes.leaderboard, page: () => LeaderboardPage()),
     GetPage(name: Routes.changePassword, page: () => ChangePassword()),
@@ -57,6 +61,9 @@ class AppPages {
     GetPage(name: Routes.verifyOtp, page: () => VerifyOtp()),
     GetPage(name: Routes.tambahKaryawan, page: () => AddKaryawanPage()),
     GetPage(name: Routes.divisi, page: () => DivisiPage()),
-    GetPage(name: Routes.detailDivisi, page : () => DetailDivisiPage()),
+    GetPage(name: Routes.detailDivisi, page: () => DetailDivisiPage()),
+
+    GetPage(name: Routes.adminHome, page: () => AdminHomePage()),
+    GetPage(name: Routes.exportPage, page: () => AdminExportPage()),
   ];
 }

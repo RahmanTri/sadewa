@@ -4,7 +4,6 @@ class Routes {
   //User
   static const splash = '/';
   static const home = '/home';
-  static const adminHome = '/adminHome';
   static const login = '/login';
   static const point = '/register';
   static const riwayat = '/riwayat';
@@ -23,6 +22,7 @@ class Routes {
   static const verifyOtp = '/verifyOtp';
 
   //Admin
+  static const adminHome = '/adminHome';
   static const karyawan = '/karyawan';
   static const karyawanDetail = '/karyawanDetail';
   static const divisi = '/divisi';
@@ -30,4 +30,5 @@ class Routes {
   static const editKaryawan = '/editKaryawan';
   static const tambahKaryawan = '/tambahKaryawan';
   static const detailDivisi = '/detailDivisi';
+  static const exportPage = '/export';
 }

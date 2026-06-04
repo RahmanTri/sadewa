@@ -44,7 +44,8 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png', width: 300, height: 300),
+            Image.asset('assets/images/logo.png', width: 400, height: 400),
+
             SizedBox(height: 20),
 
             Text(

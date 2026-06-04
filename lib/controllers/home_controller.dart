@@ -2,21 +2,31 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:sadewa_fe/controllers/karyawan_controller.dart';
+import 'package:sadewa_fe/controllers/division_controller.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/user_refresh.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
-// import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 // import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 // import 'package:sadewa_fe/services/storage_service.dart';
 
+import 'package:sadewa_fe/models/absenMasuk_model.dart';
+import 'package:sadewa_fe/models/absenKeluar_model.dart';
+
 class HomeController extends GetxController {
   final userData = Get.find<UserController>();
+  final dataKaryawan = Get.find<KaryawanController>();
+  final dataDivisi = Get.find<DivisionController>();
   final ApiService _apiService = ApiService();
   final dataRefresh = Rxn<UserRefresh>();
+
   // final StorageService _storageService = StorageService();
+
+  var absenMasuk = <AbsenMasuk>[].obs;
+  var absenKeluar = <AbsenKeluar>[].obs;
 
   var greetingText = ''.obs;
   var isLoading = false.obs;
@@ -26,6 +36,11 @@ class HomeController extends GetxController {
   var pointTextColor = SDWcolors.error.obs;
   var pointMessage = ''.obs;
   var token = ''.obs;
+
+  var jumlahKaryawan = ''.obs;
+  var jumlahDivisi = ''.obs;
+  var underPoint = ''.obs;
+
   RxList<Map<String, dynamic>> latestLoginData = <Map<String, dynamic>>[].obs;
   RxList<Map<String, dynamic>> activityLog = <Map<String, dynamic>>[].obs;
 
@@ -33,12 +48,18 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
     token.value = userData.userToken.value;
-    await _refreshUserData();
-    await _loadLatestLogin();
     _loadGreeting();
-    _loadAbsenText();
-    _loadPointText();
     _loadActivityLog();
+
+    if (userData.user.value?.role == 'employee') {
+      await _refreshUserData();
+      _loadLatestLogin();
+      _loadAbsenText();
+      _loadPointText();
+    }
+    _loadAdminDashboard();
+    _loadMasuk();
+    _loadKeluar();
   }
 
   Future<void> _loadGreeting() async {
@@ -158,7 +179,7 @@ class HomeController extends GetxController {
       print(latestLoginData);
       isLoading.value = false;
     } catch (e) {
-      print('Gagal Mendapatkan Latest Logi : $e');
+      print('Gagal Mendapatkan Latest Login : $e');
       isLoading.value = false;
     }
   }
@@ -172,7 +193,7 @@ class HomeController extends GetxController {
         endpoint: 'activity-log',
         parser: (body) => jsonDecode(body),
         onError: (resp) =>
-            'Gagal memuat riwayat: ${resp.statusCode} ${resp.body}',
+            'Gagal memuat riwayat activity log: ${resp.statusCode} ${resp.body}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
 
@@ -195,6 +216,112 @@ class HomeController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       print('Gagal Mendapatkan Activity Log: $e');
+    }
+  }
+
+  Future<void> _loadAdminDashboard() async {
+    try {
+      isLoading.value = true;
+      final karyawanResult = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'employee',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => "${resp.statusCode}",
+        headers: {'Authorization': 'Bearer ${token.value}'},
+      );
+      final List<dynamic> karyawanJson = karyawanResult['data'];
+
+      final underPointResult = await _apiService
+          .getRequest<Map<String, dynamic>>(
+            endpoint: 'point/under-point',
+            parser: (body) => jsonDecode(body),
+            onError: (resp) => "${resp.statusCode}",
+            headers: {'Authorization': 'Bearer ${token.value}'},
+          );
+      final List<dynamic> underPointJson = underPointResult['data'];
+
+      final divisionResult = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'division',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => '${resp.statusCode}',
+        headers: {'Authorization': 'Bearer ${token.value}'},
+      );
+      final List<dynamic> divisionJson = divisionResult['data'];
+
+      underPoint.value = underPointJson.length.toString();
+      jumlahKaryawan.value = karyawanJson.length.toString();
+      jumlahDivisi.value = divisionJson.length.toString();
+      isLoading.value = false;
+      print('Berhasil mendapatkan data statistik untuk menu admin');
+    } catch (e) {
+      isLoading.value = false;
+      print("Gagal mendapatkan data statistik : $e");
+    }
+  }
+
+  Future<void> _loadMasuk() async {
+    try {
+      isLoading.value = true;
+      await initializeDateFormatting("id_ID", null);
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'em-log-in',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat masuk: ${resp.body}',
+        headers: {'Authorization': 'Bearer ${token.value}'},
+      );
+      final jsonData = result['data'];
+      final data = jsonData.map((item) => AbsenMasuk.fromJson(item)).toList();
+      for (int i = 0; i < data.length; i++) {
+        AbsenMasuk addedAbsenMasuk = data[i];
+
+        DateTime rawDate = DateTime.parse(addedAbsenMasuk.waktuMasuk).toLocal();
+        String formattedDate = DateFormat(
+          "d MMM | HH:mm",
+          "id_ID",
+        ).format(rawDate);
+        addedAbsenMasuk.waktuMasuk = formattedDate;
+
+        absenMasuk.add(addedAbsenMasuk);
+        isLoading.value = false;
+      }
+
+      print("Berhasil mendapatkan data absen masuk");
+    } catch (e) {
+      isLoading.value = false;
+      print('Gagal Mendapatkan data absen masuk: $e');
+    }
+  }
+
+  Future<void> _loadKeluar() async {
+    try {
+      isLoading.value = true;
+      await initializeDateFormatting("id_ID", null);
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'em-log-out',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat keluar: ${resp.body}',
+        headers: {'Authorization': 'Bearer ${token.value}'},
+      );
+      final jsonData = result['data'];
+      final data = jsonData.map((item) => AbsenKeluar.fromJson(item)).toList();
+      for (int i = 0; i < data.length; i++) {
+        AbsenKeluar addedAbsenKeluar = data[i];
+
+        DateTime rawDate = DateTime.parse(
+          addedAbsenKeluar.waktuKeluar,
+        ).toLocal();
+        String formattedDate = DateFormat(
+          "d MMM | HH:mm",
+          "id_ID",
+        ).format(rawDate);
+        addedAbsenKeluar.waktuKeluar = formattedDate;
+        absenKeluar.add(addedAbsenKeluar);
+        isLoading.value = false;
+      }
+
+      print("Berhasil mendapatkan data absen keluar");
+    } catch (e) {
+      isLoading.value = false;
+      print('Gagal Mendapatkan data absen keluar: $e');
     }
   }
 

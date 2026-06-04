@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'package:sadewa_fe/models/admin_model.dart';
-import 'package:sadewa_fe/pages/Profile/changepw_succes.dart';
+import 'package:sadewa_fe/pages/User/Profile/changepw_succes.dart';
 import '../models/user_model.dart';
 import 'package:sadewa_fe/services/api_service.dart';
 import 'dart:convert';

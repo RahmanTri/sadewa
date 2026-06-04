@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Leaderboard {
   final int rank;
   final String namaLengkap;
