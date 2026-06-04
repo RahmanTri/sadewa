@@ -21,7 +21,35 @@ class em_log_in_controller extends Controller
     //
     public function index()
     {
-        $retrieve = Em_log_in::all();
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda belum login"
+            ], 404);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                "success" => false,
+                "message" => "Anda tidak memiliki otoritas"
+            ]);
+        }
+
+
+        $retrieve = Em_log_in::join('employee', 'employee.id', '=', 'employee_log_in.employee_id')
+            ->join('division', 'division.id', '=', 'employee.division_id')
+            ->select(
+                'employee_log_in.id as id',
+                'employee.company_id as kode_karyawan',
+                'employee.name as nama_karyawan',
+                'division.division_name as divisi',
+                'employee_log_in.created_at as waktu_masuk',
+                'employee_log_in.status as status',
+            )
+            ->orderBy('waktu_masuk', 'desc')
+            ->get();
 
         return response()->json([
             "success" => true,

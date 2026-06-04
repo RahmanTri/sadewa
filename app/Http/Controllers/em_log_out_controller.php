@@ -16,7 +16,19 @@ class em_log_out_controller extends Controller
 
 	public function index()
 	{
-		$retrieve = Em_log_out::all();
+		$retrieve = Em_log_out::join('employee', 'employee.id', '=', 'employee_log_out.employee_id')
+			->join('division', 'division.id', '=', 'employee.division_id')
+			->select(
+				'employee_log_out.id as id',
+
+				'employee.company_id as kode_karyawan',
+				'employee.name as nama_karyawan',
+				'division.division_name as divisi',
+				'employee_log_out.created_at as waktu_keluar',
+				'employee_log_out.status as status',
+			)
+			->orderBy('waktu_keluar', 'desc')
+			->get();
 
 		return response()->json([
 			"Success" => true,

@@ -121,6 +121,13 @@ class auth_controller extends Controller
             if ($user->role == "admin") {
                 $token = $user->createToken('token')->plainTextToken;
 
+                activity_log::create([
+                    'user_id' => $user->id,
+                    'activity_type' => 'Login',
+                    'description' => 'Login dengan Username',
+
+                ]);
+
                 return response()->json([
                     "success" => true,
                     "message" => "Sukses login",
@@ -220,6 +227,13 @@ class auth_controller extends Controller
 
             if ($user->role == "admin") {
                 $token = $user->createToken('token')->plainTextToken;
+
+                activity_log::create([
+                    'user_id' => $user->id,
+                    'activity_type' => 'Login',
+                    'description' => 'Login dengan Username',
+
+                ]);
 
                 return response()->json([
                     "success" => true,

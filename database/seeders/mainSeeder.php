@@ -236,13 +236,13 @@ class mainSeeder extends Seeder
 
         // Employee::factory()->count(50)->create();
 
-        // Em_log_in::factory()->count(50)->create();
+        Em_log_in::factory()->count(50)->create();
 
         // Em_log_out::factory()->count(50)->create();
 
         // Em_log_in::factory()->count(7)->create();
 
-        Point::factory()->count(50)->create();
+        // Point::factory()->count(50)->create();
 
     }
 }

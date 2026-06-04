@@ -34,7 +34,7 @@ Route::post('/employee/verify-pw', [employee_controller::class, 'verifyPassword'
 Route::middleware("auth:sanctum")->group(function () {
 
     //CRUD Division
-    Route::get('/division', [division_controller::class, 'index']); 
+    Route::get('/division', [division_controller::class, 'index']);
     Route::post('/division/store', [division_controller::class, 'store']);
     Route::put('/division/update/{id}', [division_controller::class, 'update']);
     Route::delete('/division/delete/{id}', [division_controller::class, 'destroy']);
@@ -66,6 +66,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/point/store', [point_controller::class, 'store']);
     Route::put('/point/update/{id}', [point_controller::class, 'update']);
     Route::delete('/point/delete/{id}', [point_controller::class, 'delete']);
+    Route::get('/point/under-point', [point_controller::class, 'getUnderPoint']);
 
 
     //CHECK IN
@@ -91,8 +92,9 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::post('/monitor/get', [dashboard_controller::class, 'monitorAll']);
     Route::post('/monitor/div', [dashboard_controller::class, 'monitorDivision']);
 
-    // DEV TEST
+    //EXPORT
     Route::get('/export/all', [export_controller::class, 'allRecap']);
+    Route::post('/export/custom', [export_controller::class, 'customRecap']);
 
     // Fetch History
     Route::get('/fetch-history', [history_log_controller::class, 'fetch_histories']);

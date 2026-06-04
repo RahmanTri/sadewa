@@ -25,7 +25,7 @@ class point_controller extends Controller
 		$validator = Validator::make($request->all(), [
 			"employee_id" => "required",
 			"checkin_point" => "required",
-			"early_checkout_point" => "required", 
+			"early_checkout_point" => "required",
 			"late_point" => "required",
 		], [
 			"employee_id.required" => "ID karyawan tidak boleh kosong",
@@ -100,6 +100,28 @@ class point_controller extends Controller
 		return response()->json([
 			"success" => true,
 			"message" => "data berhasil dihapus"
+		], 200);
+	}
+
+	public function getUnderPoint()
+	{
+		$points = point::join('employee', 'employee.id', '=', 'point.employee_id')
+			->join('division', 'division.id', '=', 'employee.division_id')
+			->where('point_value', '<=', '40')
+			->select(
+				'employee.id as id',
+				'employee.company_id as kode_karyawan',
+				'employee.profile_pic as foto_profil',
+				'division.division_name as divisi',
+				'employee.name as nama_lengkap',
+				'point.point_value as total_poin'
+			)
+			->get();
+
+		return response()->json([
+			"success" => true,
+			"message" => "Sukses menerima data",
+			"data" => $points,
 		], 200);
 	}
 }
