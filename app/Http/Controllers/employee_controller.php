@@ -1135,5 +1135,75 @@ class employee_controller extends Controller
             "data" => $targetEmployee
         ], 200);
     }
+
+    public function getEmbyDiv() {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ada!',
+            ], 403);
+        }
+
+        if ($user->role != "admin") {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki otoritas!',
+            ], 403);
+        }
+
+        $validator = Validator::make(request()->all(), [
+            "division_id" => "required|exists:division,id",
+        ],[
+            "division_id.required" => "ID Divisi harus diisi!",
+            "division_id.exists" => "ID Divisi tidak valid!",
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => "Gagal mengambil data!",
+                "error" => $validator->errors(),
+            ], 422);
+        }
+
+        $validatedData = $validator->validated();
+
+        $employees = DB::table("employee as em")
+            ->join('division as dv', 'dv.id', '=', 'em.division_id')
+            ->join('users as user', 'user.id', '=', 'em.user_id')
+            ->where('em.division_id', $validatedData["division_id"])
+            ->select(
+                'em.id as id_karyawan',
+                'user.id as id_user',
+                'em.company_id as id_perusahaan',
+                'em.name as nama_lengkap',
+                'user.email as email',
+                'em.phone_number as no_tlp',
+                'dv.id as id_divisi',
+                'dv.division_name as nama_divisi',
+                'em.profile_pic as foto_profil',
+                'em.face_data as data_wajah'
+            )
+            ->orderBy('nama_lengkap', 'asc')
+            ->get()
+            ->map(function ($item) {
+                if ($item->data_wajah != null) {
+                    $item->data_wajah = 'Terdaftar';
+                } else {
+                    $item->data_wajah = 'Belum Terdaftar';
+                }
+                return $item;
+
+            })
+        ;
+
+        return response()->json([
+            "success" => true,
+            "message" => "Data berhasil diambil!",
+            "data" => $employees
+        ], 200);
+    }
 }
 
