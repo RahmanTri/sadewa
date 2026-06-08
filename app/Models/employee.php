@@ -54,6 +54,11 @@ class Employee extends Model
     return $this->hasMany(point_log::class, 'employee_id', 'id');
   }
 
+  public function notices()
+  {
+    return $this->hasMany(notices::class, 'employee_id', 'id');
+  }
+
   protected function casts(): array
   {
     return [

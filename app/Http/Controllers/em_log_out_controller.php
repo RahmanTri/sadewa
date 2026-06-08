@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Division;
 use App\Models\activity_log;
 use App\Models\Employee;
+use App\Models\Point;
+use App\Models\point_log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Em_log_out;
@@ -124,6 +126,8 @@ class em_log_out_controller extends Controller
 		}
 
 		$employee = Employee::where("user_id", $user->id)->first();
+		$emPoint = Point::where("employee_id", $employee->id)->first();
+		$emPointValue = $emPoint->point_value;
 		$division = Division::where('id', $employee->division_id)->first();
 		$chkoutTime = Carbon::createFromFormat('H:i:s', $division->checkout_time);
 		$timeTolerance = (int) $division->tolerance;
@@ -157,6 +161,32 @@ class em_log_out_controller extends Controller
 		$data = Em_log_out::create($logout_data);
 
 		$employee->update(["logged_out" => 1]);
+
+		if ($chkStatus == "on_time") {
+			$emPoint->point_value += 1;
+
+			$log = point_log::create([
+				"employee_id" => $employee->id,
+				"added_value" => 1,
+				"previous_value" => $emPointValue
+			]);
+		} else if ($chkStatus == "early") {
+			$emPoint->point_value -= 1;
+
+			$log = point_log::create([
+				"employee_id" => $employee->id,
+				"added_value" => -1,
+				"previous_value" => $emPointValue
+			]);
+		} else {
+			$emPoint->point_value -= 1;
+
+			$log = point_log::create([
+				"employee_id" => $employee->id,
+				"added_value" => -1,
+				"previous_value" => $emPointValue
+			]);
+		}
 
 		if ($chkStatus == "early") {
 			activity_log::create([
