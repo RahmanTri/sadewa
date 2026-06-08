@@ -191,6 +191,8 @@ class em_log_out_controller extends Controller
 			]);
 		}
 
+		$emPoint->save();
+
 		if ($chkStatus == "early") {
 			activity_log::create([
 				'user_id' => $user->id,

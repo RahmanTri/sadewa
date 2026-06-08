@@ -57,6 +57,7 @@ class AutoAbsen extends Command
                     'employee_id' => $employee->id,
                     'previous_value' => $point->point_value,
                     'added_value' => -2,
+                    'source' => 'log_in',
                 ]);
                 $point->save();
 
@@ -84,6 +85,7 @@ class AutoAbsen extends Command
                     'employee_id' => $employee->id,
                     'previous_value' => $point->point_value,
                     'added_value' => -1,
+                    'source' => 'log_out',
                 ]);
                 $point->save();
 
