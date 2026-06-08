@@ -15,6 +15,8 @@ class QuickAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NoticeController _noticeController = Get.find<NoticeController>();
+
     return Container(
       height: height * 0.22,
       margin: EdgeInsets.only(top: 20),
@@ -144,16 +146,57 @@ class QuickAction extends StatelessWidget {
                     onPressed: () {
                       Get.toNamed(Routes.notice);
                     },
-                    child: Container(
-                      width: width * 0.2,
-                      height: height * 0.09,
-                      decoration: BoxDecoration(
-                        color: SDWcolors.bgD,
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: AssetImage('assets/icons/peringatan.png'),
-                          fit: BoxFit.fill,
-                        ),
+                    child: Obx(
+                      () => Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Container(
+                            width: width * 0.2,
+                            height: height * 0.09,
+                            decoration: BoxDecoration(
+                              color: SDWcolors.bgD,
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/peringatan.png',
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: width * 0.2,
+                            height: height * 0.02,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                _noticeController.theresUnreadNotice.value
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        height: height * 0.02,
+                                        width: height * 0.02,
+                                        decoration: BoxDecoration(
+                                          color: SDWcolors.primary,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Text(
+                                          _noticeController.noticesNotRead.value
+                                              .toString(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                fontSize: height * 0.012,
+                                                color: SDWcolors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

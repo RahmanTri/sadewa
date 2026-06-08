@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/notice_controller.dart';
 import '../../effect/box_shadow.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
-import '../../../routes/app_routes.dart';
 
 class ReadNoticePage extends StatelessWidget {
   const ReadNoticePage({super.key});
@@ -96,7 +95,7 @@ class ReadNoticePage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: SDWcolors.primary,
                 ),
-                onPressed: () => {noticeController.hasBeenRead(), Get.back()},
+                onPressed: () => {noticeController.noticesHasBeenRead(),noticeController.hasBeenRead(), Get.back()},
                 child: SizedBox(
                   height: height * 0.04,
                   width: width * 0.5,

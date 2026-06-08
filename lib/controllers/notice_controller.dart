@@ -1,13 +1,14 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/notice_model.dart';
 import 'package:sadewa_fe/services/api_service.dart';
-import 'package:sadewa_fe/services/storage_service.dart';
 import 'package:intl/intl.dart';
 
 class NoticeController extends GetxController {
   final ApiService _apiService = ApiService();
-  final StorageService _storageService = StorageService();
   final UserController _userController = Get.find<UserController>();
 
   final filteroptions = ['Terbaru', 'Belum Dibaca', 'Sudah Dibaca', 'Semua'].obs;
@@ -17,46 +18,87 @@ class NoticeController extends GetxController {
   var filteredNotices = <Notice>[].obs;
 
   var beingRead = Rxn<Notice>();
+
+  var theresUnreadNotice = false.obs;
+  var noticesNotRead = 0.obs;
   
 
   var isLoading = true.obs;
   var dummyNoticesInject = false;
 
-  // Future<void> fetchNotices() async {
-  //   isLoading.value = true;
-  //   final String authtoken = _userController.userToken.value? : '';
 
-  //   histories.clear();
+  Future<void> fetchNotices() async {
+    isLoading.value = true;
+    final String authtoken = _userController.userToken.value;
 
-  //   try {
-  //     final result = await _apiService.getRequest<Map<String, dynamic>>(
-  //       endpoint: AppUrls.notice,
-  //       parser: (body) => jsonDecode(body),
-  //       onError: (resp) => 'Gagal memuat pesan: ${resp.statusCode}',
-  //       headers: {'Authorization': 'Bearer $authtoken'},
-  //     );
-  //     final jsonData = result['data'];
-  //     final data = jsonData
-  //         .map((item) => Riwayat.fromJson(item))
-  //         .toList();
-  //     for (int i = 0; i < data.length; i++) {
-  //       Riwayat addedRiwayat = data[i];
-  //       addedRiwayat.translateStatuses();
-  //       histories.add(addedRiwayat);
-  //     }
+    notices.clear();
+
+    try {
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: AppUrls.notice,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat pesan: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authtoken'},
+      );
+      final jsonData = result['data'];
+      final data = jsonData
+          .map((item) => Notice.fromJson(item))
+          .toList();
+      for (int i = 0; i < data.length; i++) {
+        Notice addedNotice = data[i];
+        addedNotice.trimContent();
+        notices.add(addedNotice);
+      }
       
-  //     applyFilter(selectedFilter.value);
+      checkUnreadNotices();
+      applyFilter(selectedFilter.value);
 
-  //     // Test
-  //     // print(histories);
+      isLoading.value = false;
+      return;
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Error', e.toString());
+      return;
+    }
+  }
 
-  //     isLoading.value = false;
-  //     return;
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     Get.snackbar('Error', e.toString());
-  //     return;
-  //   }
+  Future<void> noticesHasBeenRead() async {
+    final String authtoken = _userController.userToken.value;
+    final endpoint = AppUrls.noticeRead;
+    final data = {'id': beingRead.value!.id};
+
+    try {
+      final result = await _apiService.postRequest<Map<String, dynamic>>(
+        endpoint: endpoint,
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat pesan: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer $authtoken'},
+        data: data,
+      );
+      if (result['success'] == true) {
+        checkUnreadNotices();
+      }
+      return;
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      return;
+    }
+  }
+
+  void checkUnreadNotices() {
+    int count = 0;
+    for (int i = 0; i < notices.length; i++) {
+      if (notices[i].isRead == false) {
+        count += 1;
+        noticesNotRead.value = count;
+        theresUnreadNotice.value = true;
+      }
+    }
+    if (count == 0) {
+      theresUnreadNotice.value = false;
+      noticesNotRead.value = 0;
+    }
+  }
 
    void applyFilter(String filter) {
     isLoading.value = true;
@@ -124,6 +166,7 @@ class NoticeController extends GetxController {
         title: 'Peringatan Poin Rendah',
         content: 'Anda memiliki poin yang rendah. Anda tidak dapat lagi menikmati benefit bonus mingguan dan bulanan serta tambahan uang lembur. tingkatkan lagi kedisiplinan anda dalam bekerja agar anda dapat kembali meikmati benefit tersebut.',
         date: '2026-04-21',
+        isRead: false
       );
       
       Notice noticemsg2 = Notice(
@@ -131,6 +174,7 @@ class NoticeController extends GetxController {
         title: 'Peringatan Poin Rendah',
         content: 'Anda memiliki poin yang rendah. Anda tidak dapat lagi menikmati benefit bonus mingguan dan bulanan serta tambahan uang lembur. tingkatkan lagi kedisiplinan anda dalam bekerja agar anda dapat kembali meikmati benefit tersebut.',
         date: '2026-04-20',
+        isRead: false
       );
 
       Notice noticemsg3 = Notice(
@@ -138,6 +182,7 @@ class NoticeController extends GetxController {
         title: 'Peringatan Poin Rendah',
         content: 'Anda memiliki poin yang rendah. Anda tidak dapat lagi menikmati benefit bonus mingguan dan bulanan serta tambahan uang lembur. tingkatkan lagi kedisiplinan anda dalam bekerja agar anda dapat kembali meikmati benefit tersebut.',
         date: '2026-04-11',
+        isRead: false
       );
 
       Notice noticemsg4 = Notice(
@@ -145,6 +190,7 @@ class NoticeController extends GetxController {
         title: 'Peringatan Poin Rendah',
         content: 'Anda memiliki poin yang rendah. Anda tidak dapat lagi menikmati benefit bonus mingguan dan bulanan serta tambahan uang lembur. tingkatkan lagi kedisiplinan anda dalam bekerja agar anda dapat kembali meikmati benefit tersebut.',
         date: '2026-04-19',
+        isRead: false
       );
 
       Notice noticemsg5 = Notice(
@@ -152,6 +198,7 @@ class NoticeController extends GetxController {
         title: 'Peringatan Poin Rendah Test',
         content: 'Tests Anda memiliki poin yang rendah. Anda tidak dapat lagi menikmati benefit bonus mingguan dan bulanan serta tambahan uang lembur. tingkatkan lagi kedisiplinan anda dalam bekerja agar anda dapat kembali meikmati benefit tersebut.',
         date: '2026-04-19',
+        isRead: false
       );
 
       notices.add(noticemsg1);

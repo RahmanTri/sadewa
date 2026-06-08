@@ -5,15 +5,29 @@ import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/pages/User/Notice/widgets/notice_card.dart';
 import '../../effect/box_shadow.dart';
 
-class NoticePage extends StatelessWidget {
+class NoticePage extends StatefulWidget {
   const NoticePage({super.key});
 
+  @override
+  State<NoticePage> createState() => _NoticePageState();
+}
+
+class _NoticePageState extends State<NoticePage> {
+  late NoticeController noticeController;
+
+  @override
+  void initState() {
+    super.initState();
+    noticeController = Get.find<NoticeController>();
+    noticeController.fetchNotices();
+  }
+  
   @override
   Widget build(BuildContext context) {
     final noticeController = Get.find<NoticeController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    Future.microtask(() => noticeController.dummyNotices());
+    // Future.microtask(() => noticeController.dummyNotices());
 
     return Scaffold(
       appBar: AppBar(

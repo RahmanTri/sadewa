@@ -51,9 +51,7 @@ class HistoriPoinCard extends StatelessWidget {
                 ),
               ),
               Text(
-                riwayatPoin.statusKehadiran == 'Hadir'
-                    ? '${riwayatPoin.statusKehadiran} | ${riwayatPoin.statusLog}'
-                    : riwayatPoin.statusKehadiran,
+                '${riwayatPoin.sumber} | ${riwayatPoin.statusLog}',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: SDWcolors.textD,
                   fontSize: height * 0.012,

@@ -147,22 +147,22 @@ class _KaryawanPageState extends State<KaryawanPage> {
                 ],
               ),
 
-              //Dev Only
-              ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(Routes.divisi);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: SDWcolors.primary,
-                ),
-                child: Text(
-                  'Divisi',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: SDWcolors.white,
-                    fontSize: height * 0.02,
-                  ),
-                ),
-              ),
+              // //Dev Only
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Get.toNamed(Routes.divisi);
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: SDWcolors.primary,
+              //   ),
+              //   child: Text(
+              //     'Divisi',
+              //     style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              //       color: SDWcolors.white,
+              //       fontSize: height * 0.02,
+              //     ),
+              //   ),
+              // ),
 
               SizedBox(height: 12),
               // Obx(
