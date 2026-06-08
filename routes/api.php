@@ -6,6 +6,7 @@ use App\Http\Controllers\division_controller;
 use App\Http\Controllers\em_log_in_controller;
 use App\Http\Controllers\em_log_out_controller;
 use App\Http\Controllers\employee_controller;
+use App\Http\Controllers\notices_controller;
 use App\Http\Controllers\point_controller;
 use App\Http\Controllers\user_controller;
 use App\Http\Controllers\history_log_controller;
@@ -128,6 +129,10 @@ Route::middleware("auth:sanctum")->group(function () {
 
     //User Change PW
     Route::post('/user/change-pw', [user_controller::class, 'changeUserPassword']);
+
+    //Notices
+    Route::get('/notices/get-data', [notices_controller::class, 'getNotices']);
+    Route::post('/notices/read', [notices_controller::class, 'readNotice']);
 
     //Fetch Pont History
     Route::get('/point/get-history', [point_log_controller::class, 'getData']);

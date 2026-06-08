@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('employee_id');
             $table->time('logout_time');
-            $table->enum('status', ['on_time', 'early']);
+            $table->enum('status', ['on_time', 'early', 'absent']);
             $table->timestamps();
 
             $table->foreign('employee_id')
