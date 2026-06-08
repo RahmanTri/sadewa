@@ -22,4 +22,6 @@ class AppUrls {
   static const String loginByU = "username-login";
   static const String register = "register";
   static const String riwayat = "fetch-history";
+  static const String notice = "notices/get-data";
+  static const String noticeRead = "notices/read";
 }

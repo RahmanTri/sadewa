@@ -126,7 +126,7 @@ class MyPointPage extends StatelessWidget {
                               ),
                               child:
                                   poinController.profilePic.value != 'null' &&
-                                      poinController.profilePic.value != '' 
+                                      poinController.profilePic.value != ''
                                   ? Container(
                                       width: 80,
                                       height: 80,
@@ -642,24 +642,52 @@ class MyPointPage extends StatelessWidget {
                                   ),
                             ),
                             SizedBox(height: height * 0.012),
-                            SizedBox(
-                              width: width * 0.92,
-                              height: height * 0.2,
-                              child: poinController.isLoading.value
-                                  ? Center(child: CircularProgressIndicator())
-                                  : ListView.builder(
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount:
-                                          poinController.historyPoint.length,
-                                      itemBuilder: (context, index) {
-                                        return HistoriPoinCard(
-                                          height: height,
-                                          width: width,
-                                          riwayatPoin: poinController
-                                              .historyPoint[index],
-                                        );
-                                      },
-                                    ),
+                            Obx(
+                              () => SizedBox(
+                                width: width * 0.92,
+                                height: height * 0.2,
+                                child: poinController.isLoading.value
+                                    ? Center(child: CircularProgressIndicator())
+                                    : poinController.historyPoint.isNotEmpty
+                                    ? ListView.builder(
+                                        physics: BouncingScrollPhysics(),
+                                        itemCount:
+                                            poinController.historyPoint.length,
+                                        itemBuilder: (context, index) {
+                                          return HistoriPoinCard(
+                                            height: height,
+                                            width: width,
+                                            riwayatPoin: poinController
+                                                .historyPoint[index],
+                                          );
+                                        },
+                                      )
+                                    : Center(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: width * 0.6,
+                                          height: height * 0.05,
+                                          decoration: BoxDecoration(
+                                            color: SDWcolors.essential
+                                                .withAlpha(50),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Belum ada riwayat perolahan poin',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  color: SDWcolors.textD,
+                                                  fontSize: width * 0.03,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                              ),
                             ),
                           ],
                         ),

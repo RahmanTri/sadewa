@@ -5,7 +5,7 @@ class RiwayatPoin {
   final String tahun;
   final int poinSebelumnya;
   final int poinDidapat;
-  String statusKehadiran = '';
+  String sumber = '';
   String statusLog;
 
   RiwayatPoin({
@@ -16,6 +16,7 @@ class RiwayatPoin {
     required this.poinSebelumnya,
     required this.poinDidapat,
     required this.statusLog,
+    this.sumber = '',
   });
 
   factory RiwayatPoin.fromJson(Map<String, dynamic> json) => RiwayatPoin(
@@ -25,16 +26,9 @@ class RiwayatPoin {
     tahun: json['tahun'],
     poinSebelumnya: json['point_sebelumnya'],
     poinDidapat: json['point_didapat'],
-    statusLog: json['status_kehadiran'],
+    sumber: json['sumber'],
+    statusLog: json['status'],
   );
-
-  void setStatusKehadiran() {
-    if (statusLog != 'Absent') {
-      statusKehadiran = 'Hadir';
-    } else {
-      statusKehadiran = 'Tidak Hadir';
-    }
-  }
 
   void translateStatus() {
     if (statusLog == 'absent') {
