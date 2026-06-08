@@ -27,7 +27,7 @@ class AbsenKeluar {
           : json['status'] == 'on_time'
           ? json['status'] = 'Tepat Waktu'
           : json['status'] == 'early'
-          ? json['status'] = 'Terlalu Dini'
+          ? json['status'] = 'Lebih Awal'
           : json['status'] = 'Tidak Hadir',
     );
   }

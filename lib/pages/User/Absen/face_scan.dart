@@ -37,7 +37,7 @@ class RegistWajah extends StatelessWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final ctx = Get.context;
           if (ctx != null) {
-            Sdwoverlay.showOverlay(
+            SDWoverlay.showOverlay(
               context: (context),
               title: "Anda Berada Diluar Jangkauan Area Divisi",
               iconData: Icons.warning,

@@ -3,7 +3,8 @@ class AbsenMasuk {
   String companyId;
   String namaLengkap;
   String divisi;
-  String waktuMasuk;
+  DateTime rawDate;
+  String stringDate;
   String status;
 
   AbsenMasuk({
@@ -11,7 +12,8 @@ class AbsenMasuk {
     required this.companyId,
     required this.namaLengkap,
     required this.divisi,
-    required this.waktuMasuk,
+    required this.rawDate,
+    required this.stringDate,
     required this.status,
   });
 
@@ -21,7 +23,8 @@ class AbsenMasuk {
       companyId: json['kode_karyawan'],
       namaLengkap: json['nama_karyawan'],
       divisi: json['divisi'],
-      waktuMasuk: json['waktu_masuk'].toString(),
+      rawDate: DateTime.parse(json['waktu_masuk']),
+      stringDate: json['waktu_masuk'].toString(),
       status: json['status'] == 'late'
           ? json['status'] = 'Telat'
           : json['status'] == 'on_time'

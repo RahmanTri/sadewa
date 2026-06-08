@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
       if (homeController.userData.user.value?.dataWajah == null ||
           homeController.userData.user.value!.dataWajah.isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Sdwoverlay.showOverlay(
+          SDWoverlay.showOverlay(
             context: context,
             title: 'Data Wajah Kosong, Silahkan Registrasi Wajah Anda Dahulu!',
             iconData: FontAwesomeIcons.userXmark,

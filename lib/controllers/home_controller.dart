@@ -223,13 +223,12 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
       final karyawanResult = await _apiService.getRequest<Map<String, dynamic>>(
-        endpoint: 'employee',
+        endpoint: 'employee/get-data',
         parser: (body) => jsonDecode(body),
         onError: (resp) => "${resp.statusCode}",
         headers: {'Authorization': 'Bearer ${token.value}'},
       );
       final List<dynamic> karyawanJson = karyawanResult['data'];
-
       final underPointResult = await _apiService
           .getRequest<Map<String, dynamic>>(
             endpoint: 'point/under-point',
@@ -240,7 +239,7 @@ class HomeController extends GetxController {
       final List<dynamic> underPointJson = underPointResult['data'];
 
       final divisionResult = await _apiService.getRequest<Map<String, dynamic>>(
-        endpoint: 'division',
+        endpoint: 'division/get-data',
         parser: (body) => jsonDecode(body),
         onError: (resp) => '${resp.statusCode}',
         headers: {'Authorization': 'Bearer ${token.value}'},
@@ -273,13 +272,12 @@ class HomeController extends GetxController {
       for (int i = 0; i < data.length; i++) {
         AbsenMasuk addedAbsenMasuk = data[i];
 
-        DateTime rawDate = DateTime.parse(addedAbsenMasuk.waktuMasuk).toLocal();
+        DateTime rawDate = addedAbsenMasuk.rawDate.toLocal();
         String formattedDate = DateFormat(
           "d MMM | HH:mm",
           "id_ID",
         ).format(rawDate);
-        addedAbsenMasuk.waktuMasuk = formattedDate;
-
+        addedAbsenMasuk.stringDate = formattedDate;
         absenMasuk.add(addedAbsenMasuk);
         isLoading.value = false;
       }

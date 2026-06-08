@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 
-class Sdwoverlay {
+class SDWoverlay {
   static OverlayEntry? _currentEntry;
 
   static void showOverlay({
@@ -11,7 +11,8 @@ class Sdwoverlay {
     required iconData,
     required double height,
     required double width,
-    required onConfirm,
+    String? subtitle,
+    VoidCallback? onConfirm,
     VoidCallback? onCancel,
   }) {
     _currentEntry?.remove();
@@ -51,15 +52,39 @@ class Sdwoverlay {
                             height: 120,
                             width: width,
                             child: Center(
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                  fontSize: SDWsizes.lg,
-                                  fontWeight: FontWeight.bold,
-                                  color: SDWcolors.textD,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                              child: subtitle != null
+                                  ? Column(
+                                      children: [
+                                        Text(
+                                          title,
+                                          style: TextStyle(
+                                            fontSize: SDWsizes.lg,
+                                            fontWeight: FontWeight.bold,
+                                            color: SDWcolors.textD,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height: 20),
+                                        Text(
+                                          subtitle,
+                                          style: TextStyle(
+                                            fontSize: SDWsizes.lg,
+                                            fontWeight: FontWeight.bold,
+                                            color: SDWcolors.textD,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      title,
+                                      style: TextStyle(
+                                        fontSize: SDWsizes.lg,
+                                        fontWeight: FontWeight.bold,
+                                        color: SDWcolors.textD,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                             ),
                           ),
 
@@ -104,42 +129,43 @@ class Sdwoverlay {
                                       ),
                                     ),
                                   ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent,
-                                  ),
-                                  onPressed: () {
-                                    hide();
-                                    onConfirm();
-                                  },
-                                  child: Container(
-                                    height: height * 0.045,
-                                    width: width * 0.35,
-                                    decoration: BoxDecoration(
-                                      color: SDWcolors.primary,
-                                      borderRadius: BorderRadius.circular(20),
+                                if (onConfirm != null)
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        'Lanjut',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontSize: height * 0.02,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 2,
-                                              foreground: Paint()
-                                                ..style = PaintingStyle.stroke
-                                                ..strokeWidth = 1
-                                                ..color = SDWcolors.textL,
-                                            ),
+                                    onPressed: () {
+                                      hide();
+                                      onConfirm();
+                                    },
+                                    child: Container(
+                                      height: height * 0.045,
+                                      width: width * 0.35,
+                                      decoration: BoxDecoration(
+                                        color: SDWcolors.primary,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Lanjut',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontSize: height * 0.02,
+                                                fontWeight: FontWeight.bold,
+                                                letterSpacing: 2,
+                                                foreground: Paint()
+                                                  ..style = PaintingStyle.stroke
+                                                  ..strokeWidth = 1
+                                                  ..color = SDWcolors.textL,
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                           ),

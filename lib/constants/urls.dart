@@ -8,7 +8,7 @@ class AppUrls {
   static const String imgProfileUrl = '${usedUrl}storage/profile_pics/';
 
   //Platform URL
-  static const String emulator = "http://10.0.2.2/";
+  static const String emulator = "http://10.0.2.2:8000/";
   static const String local = "http://192.168.0.102:8000/";
   static const String physical = "http://192.168.0.30/";
   static const String physical2 = "http://192.168.0.31/";

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 
 import 'package:sadewa_fe/controllers/export_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AdminExportPage extends StatelessWidget {
   AdminExportPage({super.key});
@@ -22,195 +24,62 @@ class AdminExportPage extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topCenter,
-              child: Container(
-                width: width,
-                height: height * 0.18,
-                padding: EdgeInsets.only(left: 10, right: 10),
-                decoration: BoxDecoration(
-                  color: SDWcolors.primary,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: height * 0.025, width: width),
-                    SizedBox(
-                      height: height * 0.07,
-                      width: width,
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: Icon(
-                                FontAwesomeIcons.arrowLeft,
-                                color: SDWcolors.bgL,
-                                fontWeight: FontWeight.bold,
-                                size: width * 0.08,
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              "Cetak Rekap Kehadiran",
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(
-                                    fontSize: width * 0.06,
-                                    color: SDWcolors.bgL,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
+              child: ScreenUtilInit(
+                designSize: Size(width, height),
+                minTextAdapt: true,
+                child: Container(
+                  width: width,
+                  height: height * 0.18,
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: SDWcolors.primary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
                     ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: height,
-                            width: width * 0.25,
-                            child: Center(
-                              child: Container(
-                                height: height * 0.035,
-                                width: width,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: height * 0.025, width: width),
+                      SizedBox(
+                        height: height * 0.07,
+                        width: width,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Icon(
+                                  FontAwesomeIcons.arrowLeft,
                                   color: SDWcolors.bgL,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    isDense: true,
-                                    dropdownColor: SDWcolors.bgL,
-                                    menuWidth: width * 0.256,
-                                    value: exportController
-                                        .monthSelectedFIlter
-                                        .value,
-                                    style: Theme.of(context).textTheme.bodyLarge
-                                        ?.copyWith(
-                                          color: SDWcolors.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                    icon: Transform.rotate(
-                                      angle: 3.14 / -2,
-                                      child: Icon(
-                                        Icons.chevron_left_outlined,
-                                        color: SDWcolors.primary,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    items: exportController.monthFilter.map((
-                                      filter,
-                                    ) {
-                                      return DropdownMenuItem<String>(
-                                        value: filter,
-                                        child: Text(filter),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      if (newValue != null) {
-                                        exportController
-                                            .monthSelectedFIlter
-                                            .value = newValue
-                                            .toString();
-                                      }
-                                    },
-                                  ),
+                                  fontWeight: FontWeight.bold,
+                                  size: width * 0.08,
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: height,
-                            width: width * 0.3,
-                            child: Center(
-                              child: Container(
-                                height: height * 0.035,
-                                width: width,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: SDWcolors.bgL,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      isDense: true,
-                                      dropdownColor: SDWcolors.bgL,
-                                      menuWidth: width * 0.36,
-                                      value: exportController
-                                          .divisionSelectedFilter
-                                          .value,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            color: SDWcolors.primary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                      icon: Transform.rotate(
-                                        angle: 3.14 / -2,
-                                        child: Icon(
-                                          Icons.chevron_left_outlined,
-                                          color: SDWcolors.primary,
-                                          size: 24,
-                                        ),
-                                      ),
-                                      items: exportController.divisionFilter
-                                          .map((filter) {
-                                            return DropdownMenuItem(
-                                              value: filter,
-                                              child: Text(filter),
-                                            );
-                                          })
-                                          .toList(),
-                                      selectedItemBuilder: (context) {
-                                        return exportController.divisionFilter.map((
-                                          filter,
-                                        ) {
-                                          return SizedBox(
-                                            height: height,
-                                            width: width * 0.22,
-                                            child: SingleChildScrollView(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              scrollDirection: Axis.horizontal,
-                                              child: Text(filter),
-                                            ),
-                                          );
-                                        }).toList();
-                                      },
-                                      onChanged: (newValue) {
-                                        if (newValue != null) {
-                                          exportController
-                                              .divisionSelectedFilter
-                                              .value = newValue
-                                              .toString();
-                                        }
-                                      },
+                            Center(
+                              child: Text(
+                                "Cetak Rekap Kehadiran",
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      fontSize: width * 0.06,
+                                      color: SDWcolors.bgL,
                                     ),
-                                  ),
-                                ),
                               ),
                             ),
-                          ),
-
-                          SizedBox(
-                            height: height,
-                            width: width * 0.26,
-                            child: GestureDetector(
-                              onTap: () {},
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: height,
+                              width: width * 0.25,
                               child: Center(
                                 child: Container(
                                   height: height * 0.035,
@@ -222,10 +91,81 @@ class AdminExportPage extends StatelessWidget {
                                       Radius.circular(20),
                                     ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Cetak Semua",
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      isDense: true,
+                                      dropdownColor: SDWcolors.bgL,
+                                      menuWidth: width * 0.256,
+                                      value: exportController
+                                          .monthSelectedFIlter
+                                          .value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: SDWcolors.primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17.sp,
+                                          ),
+                                      icon: Transform.rotate(
+                                        angle: 3.14 / -2,
+                                        child: Icon(
+                                          Icons.chevron_left_outlined,
+                                          color: SDWcolors.primary,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      items: exportController.monthFilter.map((
+                                        filter,
+                                      ) {
+                                        return DropdownMenuItem<String>(
+                                          value: filter,
+                                          child: Text(filter),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newValue) {
+                                        if (newValue != null) {
+                                          exportController
+                                              .monthSelectedFIlter
+                                              .value = newValue
+                                              .toString();
+                                          exportController.applyFilter(
+                                            exportController
+                                                .divisionSelectedFilter
+                                                .value,
+                                            newValue,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height,
+                              width: width * 0.3,
+                              child: Center(
+                                child: Container(
+                                  height: height * 0.035,
+                                  width: width,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: SDWcolors.bgL,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        isDense: true,
+                                        dropdownColor: SDWcolors.bgL,
+                                        menuWidth: width * 0.36,
+                                        value: exportController
+                                            .divisionSelectedFilter
+                                            .value,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge
@@ -233,25 +173,133 @@ class AdminExportPage extends StatelessWidget {
                                               color: SDWcolors.primary,
                                               fontWeight: FontWeight.bold,
                                             ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Icon(
-                                          FontAwesomeIcons.angleRight,
-                                          size: 20,
-                                          color: SDWcolors.primary,
+                                        icon: Transform.rotate(
+                                          angle: 3.14 / -2,
+                                          child: Icon(
+                                            Icons.chevron_left_outlined,
+                                            color: SDWcolors.primary,
+                                            size: 24,
+                                          ),
                                         ),
+                                        items: exportController.divisionFilter
+                                            .map((filter) {
+                                              return DropdownMenuItem(
+                                                value: filter,
+                                                child: Text(filter),
+                                              );
+                                            })
+                                            .toList(),
+                                        selectedItemBuilder: (context) {
+                                          return exportController.divisionFilter
+                                              .map((filter) {
+                                                return SizedBox(
+                                                  height: height,
+                                                  width: width * 0.22,
+                                                  child: SingleChildScrollView(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Text(filter),
+                                                  ),
+                                                );
+                                              })
+                                              .toList();
+                                        },
+                                        onChanged: (newValue) {
+                                          if (newValue != null) {
+                                            exportController
+                                                .divisionSelectedFilter
+                                                .value = newValue
+                                                .toString();
+                                            exportController.applyFilter(
+                                              newValue,
+                                              exportController
+                                                  .monthSelectedFIlter
+                                                  .value,
+                                            );
+                                          }
+                                        },
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+
+                            SizedBox(
+                              height: height,
+                              width: width * 0.26,
+                              child: GestureDetector(
+                                onTap: () {
+                                  ever(exportController.isDownloading, (val) {
+                                    if (val == true) {
+                                      SDWoverlay.showOverlay(
+                                        context: context,
+                                        title: "Mengunduh FIle",
+                                        iconData: FontAwesomeIcons.download,
+                                        height: height,
+                                        width: width,
+                                      );
+                                    } else {
+                                      SDWoverlay.hide();
+                                      SDWoverlay.showOverlay(
+                                        context: context,
+                                        title: "File berhasil di export",
+                                        subtitle:
+                                            "Tersimpan di : ${exportController.downloadDirectory}",
+                                        iconData: FontAwesomeIcons.check,
+                                        height: height,
+                                        width: width,
+                                        onConfirm: () {},
+                                      );
+                                    }
+                                  });
+                                  exportController.exportAll();
+                                },
+
+                                child: Center(
+                                  child: Container(
+                                    height: height * 0.035,
+                                    width: width,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: SDWcolors.bgL,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Cetak Semua",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                color: SDWcolors.primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Icon(
+                                            FontAwesomeIcons.angleRight,
+                                            size: 20,
+                                            color: SDWcolors.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -290,7 +338,7 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  "Nama Divisi",
+                                  exportController.divisionSelectedFilter.value,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -317,7 +365,7 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  "Periode",
+                                  exportController.monthSelectedFIlter.value,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -332,7 +380,7 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerLeft,
                                 child: Text(
-                                  "Jumlah Staff",
+                                  "Jumlah Data",
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -343,7 +391,8 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  "Jumlah Staff",
+                                  exportController.filteredData.length
+                                      .toString(),
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -369,7 +418,33 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  "Jumlah Telat",
+                                  exportController.filteredLate.value,
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(
+                                        color: SDWcolors.textD,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Stack(
+                            children: [
+                              Align(
+                                alignment: AlignmentGeometry.centerLeft,
+                                child: Text(
+                                  "Jumlah Tidak Hadir",
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(
+                                        color: SDWcolors.textD,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              Align(
+                                alignment: AlignmentGeometry.centerRight,
+                                child: Text(
+                                  exportController.filteredAbsent.value,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -383,103 +458,161 @@ class AdminExportPage extends StatelessWidget {
                       ),
                     ),
                     Divider(color: SDWcolors.black, thickness: 2.5, height: 20),
-                    Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: 50,
-                        itemBuilder: (context, index) {
-                          // final item = homeController.absenMasuk[index];
-                          return Column(
-                            children: [
-                              Container(
-                                height: height * 0.055,
-                                width: width,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: SDWcolors.bgD,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      height: height,
-                                      width: width * 0.5,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "item.namaLengkap",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: width * 0.035,
-                                                ),
-                                          ),
-                                          Text(
-                                            "item.namaDivisi",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(
-                                                  fontSize: width * 0.03,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "item.absentDate",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: width * 0.035,
-                                                ),
-                                          ),
-                                          Text(
-                                            "item.absentStatus",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(
-                                                  fontSize: width * 0.03,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    exportController.isLoading.value == true
+                        ? Expanded(
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : exportController.filteredData.isEmpty
+                        ? Expanded(
+                            child: Center(
+                              child: Text(
+                                "Tidak ada data untuk ${exportController.divisionSelectedFilter} pada periode ${exportController.monthSelectedFIlter}",
                               ),
-                              SizedBox(height: height * 0.005),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
+                            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: exportController.filteredData.length,
+                              itemBuilder: (context, index) {
+                                final item =
+                                    exportController.filteredData[index];
+                                return Column(
+                                  children: [
+                                    Container(
+                                      height: height * 0.055,
+                                      width: width,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: SDWcolors.bgD,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            height: height,
+                                            width: width * 0.5,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  item.namaLengkap
+                                                      .split(" ")
+                                                      .take(2)
+                                                      .join(" "),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: width * 0.035,
+                                                      ),
+                                                ),
+                                                Text(
+                                                  item.divisi,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                        fontSize: width * 0.03,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  item.stringDate,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: width * 0.035,
+                                                      ),
+                                                ),
+                                                Text(
+                                                  item.status,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                        fontSize: width * 0.03,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: height * 0.005),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
                     Divider(color: SDWcolors.black, thickness: 2.5, height: 20),
                     SizedBox(
                       width: width,
                       height: height * 0.07,
                       child: Center(
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            if (exportController.monthSelectedFIlter.value ==
+                                    'Periode' &&
+                                exportController.divisionSelectedFilter.value ==
+                                    'Divisi') {
+                              SDWoverlay.showOverlay(
+                                context: context,
+                                title:
+                                    "Silahkan pilih divisi atau periode terlebih dahulu",
+                                iconData: FontAwesomeIcons.exclamation,
+                                height: height,
+                                width: width,
+                                onConfirm: () {},
+                              );
+                            } else {
+                              ever(exportController.isDownloading, (val) {
+                                if (val == true) {
+                                  SDWoverlay.showOverlay(
+                                    context: context,
+                                    title: "Mengunduh FIle",
+                                    iconData: FontAwesomeIcons.download,
+                                    height: height,
+                                    width: width,
+                                  );
+                                } else {
+                                  SDWoverlay.hide();
+                                  SDWoverlay.showOverlay(
+                                    context: context,
+                                    title: "File berhasil di export",
+                                    subtitle:
+                                        "Tersimpan di : ${exportController.downloadDirectory}",
+                                    iconData: FontAwesomeIcons.check,
+                                    height: height,
+                                    width: width,
+                                    onConfirm: () {},
+                                  );
+                                }
+                              });
+                              exportController.customExport();
+                            }
+                          },
                           child: Container(
                             height: height * 0.04,
                             width: width * 0.25,
