@@ -92,9 +92,6 @@ class export_controller extends Controller
             $fileName,
             ['Content-Type' => "aplication/pdf"]
         );
-        // return response()->json([
-        //     'data' => $grouppedData
-        // ]);
     }
 
     public function customRecap(Request $request)
@@ -132,6 +129,7 @@ class export_controller extends Controller
         $validateData = $validator->validate();
 
         $months = [
+            'Periode' => "all",
             'Januari' => 1,
             'Februari' => 2,
             'Maret' => 3,
@@ -149,33 +147,90 @@ class export_controller extends Controller
         $monthName = $validateData['month'];
         $divisionName = $validateData['division'];
         $monthNumber = $months[$monthName];
+        $rawData = [];
+        if ($monthName == 'all') {
+            $rawData = Em_log_in::leftJoin('employee', 'employee_id', 'employee.id')
+                ->join('division', 'employee.division_id', 'division.id')
+                ->select(
+                    [
+                        'employee_log_in.created_at as date',
+                        'employee.company_id',
+                        'employee.name',
+                        'division.division_name',
+                        'employee_log_in.status'
+                    ]
+                )
+                ->where('division_name', '=', $divisionName)
+                ->orderBy('division_name')
+                ->orderBy('date')
+                ->get()
+                ->map(function ($item) {
+                    if ($item->status == 'on_time') {
+                        $item->keterangan = 'Hadir';
+                    } elseif ($item->status == 'late') {
+                        $item->keterangan = 'Hadir Terlambat';
+                    } elseif ($item->status == 'absent') {
+                        $item->keterangan = 'Tidak Hadir';
+                    }
+                    return $item;
+                });
+        }
+        if ($divisionName == 'Divisi') {
+            $rawData = Em_log_in::leftJoin('employee', 'employee_id', 'employee.id')
+                ->join('division', 'employee.division_id', 'division.id')
+                ->select(
+                    [
+                        'employee_log_in.created_at as date',
+                        'employee.company_id',
+                        'employee.name',
+                        'division.division_name',
+                        'employee_log_in.status'
+                    ]
+                )
+                ->whereMonth('employee_log_in.created_at', $monthNumber)
+                ->orderBy('division_name')
+                ->orderBy('date')
+                ->get()
+                ->map(function ($item) {
+                    if ($item->status == 'on_time') {
+                        $item->keterangan = 'Hadir';
+                    } elseif ($item->status == 'late') {
+                        $item->keterangan = 'Hadir Terlambat';
+                    } elseif ($item->status == 'absent') {
+                        $item->keterangan = 'Tidak Hadir';
+                    }
+                    return $item;
+                });
+        } else {
+            $rawData = Em_log_in::leftJoin('employee', 'employee_id', 'employee.id')
+                ->join('division', 'employee.division_id', 'division.id')
+                ->select(
+                    [
+                        'employee_log_in.created_at as date',
+                        'employee.company_id',
+                        'employee.name',
+                        'division.division_name',
+                        'employee_log_in.status'
+                    ]
+                )
+                ->where('division_name', '=', $divisionName)
+                ->whereMonth('employee_log_in.created_at', $monthNumber)
+                ->orderBy('division_name')
+                ->orderBy('date')
+                ->get()
+                ->map(function ($item) {
+                    if ($item->status == 'on_time') {
+                        $item->keterangan = 'Hadir';
+                    } elseif ($item->status == 'late') {
+                        $item->keterangan = 'Hadir Terlambat';
+                    } elseif ($item->status == 'absent') {
+                        $item->keterangan = 'Tidak Hadir';
+                    }
+                    return $item;
+                });
+        }
 
-        $rawData = Em_log_in::leftJoin('employee', 'employee_id', 'employee.id')
-            ->join('division', 'employee.division_id', 'division.id')
-            ->select(
-                [
-                    'employee_log_in.created_at as date',
-                    'employee.company_id',
-                    'employee.name',
-                    'division.division_name',
-                    'employee_log_in.status'
-                ]
-            )
-            ->where('division_name', '=', $divisionName)
-            ->whereMonth('employee_log_in.created_at', $monthNumber)
-            ->orderBy('division_name')
-            ->orderBy('date')
-            ->get()
-            ->map(function ($item) {
-                if ($item->status == 'on_time') {
-                    $item->keterangan = 'Hadir';
-                } elseif ($item->status == 'late') {
-                    $item->keterangan = 'Hadir Terlambat';
-                } elseif ($item->status == 'absent') {
-                    $item->keterangan = 'Tidak Hadir';
-                }
-                return $item;
-            });
+
 
         $grouppedData = $rawData->groupBy(function ($item) {
             return Carbon::parse($item->date)->format('Y');
