@@ -101,7 +101,13 @@ class NoticeCard extends StatelessWidget {
                       notice.title,
                       style: Theme.of(
                         context,
-                      ).textTheme.titleLarge?.copyWith(fontSize: 14),
+                      ).textTheme.bodyLarge?.copyWith(
+                        fontSize: height * 0.02,
+                        color: notice.isRead
+                            ? SDWcolors.textD.withAlpha(150)
+                            : SDWcolors.textD,
+                        fontWeight: FontWeight.bold,
+                        ),
                     ),
                     SizedBox(height: 4),
                     SizedBox(
@@ -111,7 +117,13 @@ class NoticeCard extends StatelessWidget {
                         notice.description,
                         style: Theme.of(
                           context,
-                        ).textTheme.bodyMedium?.copyWith(fontSize: 10),
+                        ).textTheme.bodyMedium?.copyWith(
+                          fontSize: height * 0.012,
+                          color: notice.isRead
+                              ? SDWcolors.textD.withAlpha(150)
+                              : SDWcolors.textD,
+                          fontWeight: FontWeight.normal,
+                          ),
                         maxLines: 2,
                         overflow: TextOverflow.visible,
                       ),
@@ -125,7 +137,13 @@ class NoticeCard extends StatelessWidget {
                         notice.date,
                         style: Theme.of(
                           context,
-                        ).textTheme.bodyMedium?.copyWith(fontSize: 10),
+                        ).textTheme.bodyMedium?.copyWith(
+                          fontSize: height * 0.012,
+                          color: notice.isRead
+                              ? SDWcolors.textD.withAlpha(150)
+                              : SDWcolors.textD,
+                          fontWeight: FontWeight.normal,
+                          ),
                       ),
                     ),
                   ],

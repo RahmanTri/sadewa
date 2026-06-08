@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
+import 'package:sadewa_fe/controllers/notice_controller.dart';
 import '../../Effect/box_shadow.dart';
 import '../../Effect/SDWOverlay.dart';
 import 'widget/header_page.dart';

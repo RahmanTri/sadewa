@@ -10,9 +10,8 @@ class Notice {
   Notice({
     required this.id,
     required this.title,
-    // required this.description,
     required this.content,
-    // required this.isRead,
+    required this.isRead,
     required this.date,
   });
 
@@ -23,6 +22,7 @@ class Notice {
   void trimContent() {
     if (content.length > 71 && !isDescCreated) {
     description = '${content.substring(0, 71)}...';
+    isDescCreated = true;
     }
   }
 
@@ -31,11 +31,10 @@ class Notice {
   factory Notice.fromJson(Map<String, dynamic> json) {
     return Notice(
       id: json['id'],
-      title: json['judul'],
-      // description: json['deskripsi'],
+      title: json['title'],
       content: json['content'],
-      // isRead: json['isRead'],
-      date: json['tanggal'],
+      isRead: (json['is_read'] as int) == 1,
+      date: json['date'],
     );
   }
 }

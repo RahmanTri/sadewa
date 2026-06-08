@@ -115,9 +115,12 @@ class PointController extends GetxController {
     final data = jsonData
         .map((item) => RiwayatPoin.fromJson(item))
         .toList();
+    if (data.isEmpty) {
+      isLoading.value = false;
+      return;
+    }
     for (int i = 0; i < data.length; i++) {
       RiwayatPoin addedRiwayat = data[i];
-      addedRiwayat.setStatusKehadiran();
       addedRiwayat.translateStatus();
       // Get.snackbar('Menambahkan', addedRiwayat.hari.toString());
       historyPoint.add(addedRiwayat);

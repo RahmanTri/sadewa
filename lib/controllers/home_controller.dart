@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
+import 'package:sadewa_fe/controllers/notice_controller.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/models/user_refresh.dart';
 import 'dart:math';
@@ -21,6 +22,7 @@ class HomeController extends GetxController {
   final dataKaryawan = Get.find<KaryawanController>();
   final dataDivisi = Get.find<DivisionController>();
   final ApiService _apiService = ApiService();
+  final NoticeController _noticeController = Get.find<NoticeController>();
   final dataRefresh = Rxn<UserRefresh>();
 
   // final StorageService _storageService = StorageService();
@@ -48,6 +50,7 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
     token.value = userData.userToken.value;
+    _noticeController.fetchNotices();
     _loadGreeting();
     _loadActivityLog();
 

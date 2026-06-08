@@ -2,7 +2,7 @@ class AppUrls {
   AppUrls._();
 
   // Base URL
-  static const String usedUrl = local;
+  static const String usedUrl = physical2;
 
   static const String baseApiUrl = '${usedUrl}api';
   static const String imgProfileUrl = '${usedUrl}storage/profile_pics/';
@@ -22,4 +22,6 @@ class AppUrls {
   static const String loginByU = "username-login";
   static const String register = "register";
   static const String riwayat = "fetch-history";
+  static const String notice = "notices/get-data";
+  static const String noticeRead = "notices/read";
 }

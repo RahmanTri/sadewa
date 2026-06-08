@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sadewa_fe/constants/sdw_colors.dart';
 
 class LoginFieldForm extends StatefulWidget {
   final String? title;
@@ -27,6 +29,9 @@ class LoginFieldForm extends StatefulWidget {
 }
 
 class _LoginFieldFormState extends State<LoginFieldForm> {
+  final height = Get.height;
+  final width = Get.width;
+
   bool isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
@@ -39,6 +44,11 @@ class _LoginFieldFormState extends State<LoginFieldForm> {
           controller: widget.controller,
           obscureText: isPasswordField ? !isPasswordVisible : false,
           keyboardType: widget.inputType,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontSize: height * 0.02,
+            color: SDWcolors.textD,
+            fontWeight: FontWeight.normal,
+            ),
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
             label: Text(widget.inputlabel),
