@@ -130,7 +130,7 @@ class EditProfile extends StatelessWidget {
                   vertical: 20,
                 ),
                 child: Obx(
-                  () => Column(
+                  () => Column(              
                     children: [
                       editProfile(
                         icon: Icons.person,
@@ -160,33 +160,109 @@ class EditProfile extends StatelessWidget {
                       Obx(() {
                         bool editing = userController.isEditing.value;
 
-                        return SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: editing
-                                  ? SDWcolors.primary
-                                  : SDWcolors.primary,
-                            ),
-                            onPressed: () {
-                              if (editing) {
-                                userController.updateUser();
-                                userController.toogleEdit();
-                              } else {
-                                userController.toogleEdit();
-                              }
-                            },
-                            child: Text(
-                              editing ? 'SIMPAN' : 'UBAH',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: SDWcolors.textL,
-                                fontWeight: FontWeight.bold,
+                        if (editing) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(color: SDWcolors.primary, width: 2.3),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(25))
+                                    ),
+                                    onPressed: () {
+                                      userController.toogleEdit();
+                                    }, 
+                                    child: const Text(
+                                      'BATAL',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: SDWcolors.primary,
+                                      ),
+                                    )
+                                  ),
+                                )
                               ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: SDWcolors.primary,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(25))
+                                    ),
+                                    onPressed: () {
+                                      userController.updateUser();
+                                      userController.toogleEdit();
+                                    }, 
+                                    child: const Text(
+                                      'SIMPAN',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: SDWcolors.textL,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ),
+                                )
+                              ),
+                            ],
+                          );
+                        } else {
+                          
+                          return SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: SDWcolors.primary,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(25))
+                              ),
+                              onPressed: () {
+                                userController.toogleEdit();
+                              },
+                              child: const Text(
+                                'UBAH',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: SDWcolors.textL,
+                                ),
+                              )
                             ),
-                          ),
-                        );
+                          );
+                        }
+
+                        // return SizedBox(
+                        //   width: double.infinity,
+                        //   height: 50,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: editing
+                        //           ? SDWcolors.primary
+                        //           : SDWcolors.primary,
+                        //     ),
+                        //     onPressed: () {
+                        //       if (editing) {
+                        //         userController.updateUser();
+                        //         userController.toogleEdit();
+                        //       } else {
+                        //         userController.toogleEdit();
+                        //       }
+                        //     },
+                        //     child: Text(
+                        //       editing ? 'SIMPAN' : 'UBAH',
+                        //       style: const TextStyle(
+                        //         fontSize: 18,
+                        //         color: SDWcolors.textL,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // );
                       }),
                     ],
                   ),

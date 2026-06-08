@@ -11,6 +11,7 @@ import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/edit_karyawan_page.dart
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/karyawan_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_Home/home_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_Export/export_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_profile/profile.dart';
 
 import 'package:sadewa_fe/pages/User/Notice/read_notice_page.dart';
 import 'package:sadewa_fe/pages/User/Poin/my_point_page.dart';
@@ -68,5 +69,6 @@ class AppPages {
     GetPage(name: Routes.addDivisi, page: () => AddDivisiPage()),
     GetPage(name: Routes.adminHome, page: () => AdminHomePage()),
     GetPage(name: Routes.exportPage, page: () => AdminExportPage()),
+    GetPage(name: Routes.adminProfile, page: () => AdminProfile()),
   ];
 }

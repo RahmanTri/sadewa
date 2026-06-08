@@ -47,6 +47,43 @@ class HeaderPage extends StatelessWidget {
               ],
             ),
           ),
+          GestureDetector(
+            onTap:() => Get.toNamed(Routes.adminProfile),
+            child: Container(
+              width: width * 0.22,
+              height: height * 0.22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [SDWboxShadow.shadow],
+                image: DecorationImage(
+                  image: const AssetImage(
+                    '${AppUrls.imgAssets}default-profile.png'
+                  )
+                ),
+                border: Border.all(
+                  color: SDWcolors.bgL,
+                  width: 3,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                )
+              ),
+              child: 
+                homeController.userData.user.value?.fotoProfil != '' && 
+                homeController.userData.user.value?.fotoProfil != 'null'
+                ? Container(
+                  height: width * 0.22,
+                  width: width * 0.22,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
+                      )
+                    ),
+                  ),
+                )
+                : null,
+            ),
+          )
         ],
       ),
     );

@@ -33,4 +33,5 @@ class Routes {
   static const detailDivisi = '/detailDivisi';
   static const addDivisi = '/addDivisi';
   static const exportPage = '/export';
+  static const adminProfile = '/adminProfile';
 }
