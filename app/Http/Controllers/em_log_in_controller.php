@@ -195,28 +195,32 @@ class em_log_in_controller extends Controller
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'added_value' => 2
+                'added_value' => 2,
+                'source' => 'log_in'
             ]);
         } elseif ($Point->negative_streak >= 3) {
             $Point->point_value -= 2;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'added_value' => -2
+                'added_value' => -2,
+                'source' => 'log_in'
             ]);
         } elseif ($Point->positive_streak && $status == "late") {
             $Point->point_value -= 1;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'added_value' => -1
+                'added_value' => -1,
+                'source' => 'log_in'
             ]);
         } else {
             $Point->point_value += 1;
             point_log::create([
                 'employee_id' => $employee->id,
                 'previous_value' => $Point->point_value,
-                'added_value' => 1
+                'added_value' => 1,
+                'source' => 'log_in'
             ]);
         }
 

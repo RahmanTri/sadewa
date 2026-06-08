@@ -168,7 +168,8 @@ class em_log_out_controller extends Controller
 			$log = point_log::create([
 				"employee_id" => $employee->id,
 				"added_value" => 1,
-				"previous_value" => $emPointValue
+				"previous_value" => $emPointValue,
+				"source" => "log_out"
 			]);
 		} else if ($chkStatus == "early") {
 			$emPoint->point_value -= 1;
@@ -176,7 +177,8 @@ class em_log_out_controller extends Controller
 			$log = point_log::create([
 				"employee_id" => $employee->id,
 				"added_value" => -1,
-				"previous_value" => $emPointValue
+				"previous_value" => $emPointValue,
+				"source" => "log_out"
 			]);
 		} else {
 			$emPoint->point_value -= 1;
@@ -184,7 +186,8 @@ class em_log_out_controller extends Controller
 			$log = point_log::create([
 				"employee_id" => $employee->id,
 				"added_value" => -1,
-				"previous_value" => $emPointValue
+				"previous_value" => $emPointValue,
+				"source" => "log_out"
 			]);
 		}
 

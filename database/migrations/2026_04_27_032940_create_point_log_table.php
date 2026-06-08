@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->integer('previous_value');
             $table->integer('added_value');
+            $table->enum('source',['log_in','log_out']);
             $table->timestamps();
         });
     }
