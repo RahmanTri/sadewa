@@ -125,9 +125,10 @@ class DivisionTimePicker {
                                           return DropdownMenuItem<String>(
                                             value: waktu,
                                             child: Container(
+                                              height: height * 0.064,
                                               margin: EdgeInsets.only(
-                                                top: height * 0.004,
-                                                bottom: height * 0.004,
+                                                top: height * 0.002,
+                                                bottom: height * 0.002,
                                               ),
                                               decoration: BoxDecoration(
                                                 borderRadius:
@@ -151,7 +152,7 @@ class DivisionTimePicker {
                                                             height * 0.032,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        height: 1,
+                                                        height: 0.8,
                                                       ),
                                                 ),
                                               ),
@@ -249,9 +250,10 @@ class DivisionTimePicker {
                                           return DropdownMenuItem<String>(
                                             value: waktu,
                                             child: Container(
+                                              height: height * 0.064,
                                               margin: EdgeInsets.only(
-                                                top: height * 0.004,
-                                                bottom: height * 0.004,
+                                                top: height * 0.002,
+                                                bottom: height * 0.002,
                                               ),
                                               decoration: BoxDecoration(
                                                 borderRadius:
@@ -275,7 +277,7 @@ class DivisionTimePicker {
                                                             height * 0.032,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        height: 1,
+                                                        height: 0.8,
                                                       ),
                                                 ),
                                               ),

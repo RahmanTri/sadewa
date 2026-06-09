@@ -9,7 +9,6 @@ import '../../../Effect/box_shadow.dart';
 class Top20Page extends StatelessWidget {
   final double width;
   final double height;
-  final dataLenght = 20;
 
   Top20Page({required this.width, required this.height});
   final lbController = Get.put(LeaderboardController(), permanent: false);
@@ -57,14 +56,13 @@ class Top20Page extends StatelessWidget {
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   physics: BouncingScrollPhysics(),
-                  itemCount: 22,
+                  itemCount: lbController.leaderboard.length + 2,
                   itemBuilder: (context, index) {
-                    final item = lbController.leaderboard[index];
-
-                    if (index >= dataLenght) {
+                    final dataLenght = lbController.leaderboard.length;
+                    if (index + 1 > dataLenght) {
                       return SizedBox(height: height * 0.075, width: width);
                     }
-
+                    final item = lbController.leaderboard[index];
                     return Align(
                       alignment: Alignment.center,
                       child: Container(

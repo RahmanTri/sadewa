@@ -11,12 +11,12 @@ class QuickAction extends StatelessWidget {
   final double width;
   final double height;
   QuickAction({required this.width, required this.height});
-  final noticeController = Get.put(NoticeController());
+  final noticeController = Get.put(NoticeController(), permanent: false);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height * 0.2,
+      height: height * 0.21,
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(

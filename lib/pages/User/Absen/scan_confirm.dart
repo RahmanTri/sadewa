@@ -81,23 +81,33 @@ class AbsenConfirm extends StatelessWidget {
                           color: SDWcolors.essentialD,
                           width: 5,
                         ),
-                      ),
-                      child: Container(
-                        height: height * 0.15,
-                        width: height * 0.15,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: SDWcolors.essentialD,
-                            width: 4,
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              '${AppUrls.imgProfileUrl}${absenConfirm.userData.user.value?.fotoProfil}',
-                            ),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            '${AppUrls.imgAssets}default-profile.png',
                           ),
                         ),
                       ),
+                      child:
+                          absenConfirm.userData.user.value?.fotoProfil !=
+                                  null ||
+                              absenConfirm.userData.user.value?.fotoProfil != ''
+                          ? Container(
+                              height: height * 0.15,
+                              width: height * 0.15,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    '${AppUrls.imgProfileUrl}${absenConfirm.userData.user.value?.fotoProfil}',
+                                  ),
+                                ),
+                                border: Border.all(
+                                  color: SDWcolors.white,
+                                  width: 4,
+                                ),
+                              ),
+                            )
+                          : null,
                     ),
                     Container(
                       height: height * 0.055,

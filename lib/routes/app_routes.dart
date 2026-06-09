@@ -34,4 +34,5 @@ class Routes {
   static const addDivisi = '/addDivisi';
   static const exportPage = '/export';
   static const adminProfile = '/adminProfile';
+  static const underPoint = '/karyawanUnderPoint';
 }

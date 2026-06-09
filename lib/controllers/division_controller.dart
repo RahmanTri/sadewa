@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sadewa_fe/controllers/user_controller.dart';
@@ -112,6 +113,11 @@ class DivisionController extends GetxController {
       );
 
       final jsonData = result['data'];
+
+      if (result['success'] == true) {
+        divisions.clear();
+      }
+
       final divisiFromBE = jsonData
           .map((item) => Divisi.fromJson(item))
           .toList();
@@ -567,6 +573,8 @@ class DivisionController extends GetxController {
 
     selectedAddTime.value = '30';
     selectedAddRange.value = '100';
+    addTime.value = 30;
+    addRange.value = 100;
 
     selectingLocation.value = false;
   }
@@ -753,7 +761,14 @@ class DivisionController extends GetxController {
       setKaryawanFilter();
       applyFilter(selectedFilter.value);
 
-      showDialog(true, 'Berhasil membuat divisi');
+      showDialog(
+        true,
+        'Berhasil membuat divisi',
+        runFunction: () {
+          Get.back();
+          resetAddDivision();
+        },
+      );
     } else {
       showDialog(false, 'Gagal membuat divisi');
     }
@@ -772,13 +787,17 @@ class DivisionController extends GetxController {
     );
 
     if (result['success']) {
-      showDialog(true, 'Berhasil menghapus divisi', runFunction: () {
-        divisions.remove(showedDivisions.value!);
-        setDivisonsAvailable();
-        setKaryawanFilter();
-        applyFilter(selectedFilter.value);
-        Get.back();
-      });
+      showDialog(
+        true,
+        'Berhasil menghapus divisi',
+        runFunction: () {
+          divisions.remove(showedDivisions.value!);
+          setDivisonsAvailable();
+          setKaryawanFilter();
+          applyFilter(selectedFilter.value);
+          Get.back();
+        },
+      );
     } else if (result['has_employee'] == true) {
       showDialog(
         false,

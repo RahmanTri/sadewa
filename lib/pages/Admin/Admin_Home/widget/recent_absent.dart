@@ -9,7 +9,7 @@ class RecentAbsent extends StatelessWidget {
   final double width;
   final double height;
   RecentAbsent({required this.width, required this.height});
-  final homeController = Get.put(HomeController());
+  final homeController = Get.put(HomeController(), permanent: false);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,8 @@ class RecentAbsent extends StatelessWidget {
                                                           .spaceEvenly,
                                                   children: [
                                                     SizedBox(
-                                                      height: height * 0.027,
-                                                      width: width * 0.2,
+                                                      height: height * 0.02,
+                                                      width: width * 0.22,
                                                       child: Align(
                                                         alignment: Alignment
                                                             .centerLeft,
@@ -239,7 +239,7 @@ class RecentAbsent extends StatelessWidget {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     SizedBox(
-                                                      height: height * 0.027,
+                                                      height: height * 0.02,
                                                       width: width * 0.22,
                                                       child: Align(
                                                         alignment: Alignment

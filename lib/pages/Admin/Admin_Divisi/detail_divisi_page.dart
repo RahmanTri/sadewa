@@ -867,7 +867,7 @@ class DetailDivisiPage extends StatelessWidget {
               //Map Box
               Container(
                 width: width * 0.92,
-                height: height * 0.5,
+                height: height * 0.524,
                 padding: EdgeInsets.all(width * 0.02),
                 decoration: BoxDecoration(
                   color: SDWcolors.bgL,

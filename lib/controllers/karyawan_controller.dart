@@ -23,6 +23,7 @@ class KaryawanController extends GetxController {
   var availableDivisionNames = <String>[].obs;
 
   var karyawan = <Karyawan>[].obs;
+  var underPoint = <Karyawan>[].obs;
   var filteredKaryawan = <Karyawan>[].obs;
   var karyawanView = Rxn<Karyawan>();
 
@@ -87,7 +88,6 @@ class KaryawanController extends GetxController {
   Future<void> fetchKaryawan() async {
     karyawan.clear();
     filteredKaryawan.clear();
-
     isLoading.value = true;
     final endpoint = 'employee/get-data';
     final apiToken = Get.find<UserController>().userToken.value;
@@ -98,20 +98,23 @@ class KaryawanController extends GetxController {
         onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $apiToken'},
       );
+      print('berhasil mendapatkan data dari BE');
       final jsonData = result['data'];
       final karyawanFromBE = jsonData
           .map((item) => Karyawan.fromJson(item))
           .toList();
-
+      print('berhasil assign data to list');
       for (int i = 0; i < karyawanFromBE.length; i++) {
         karyawan.add(karyawanFromBE[i]);
       }
+      print('berhasil assign data to models');
       Get.snackbar('Sukses', 'Berhasil mengambil Karyawan');
 
       applyFilter(selectedFilter.value);
       isLoading.value = false;
     } catch (e) {
       Get.snackbar('Terjadi kesalahan', e.toString());
+      print('gagal m elakukan ftech karyawan $e');
       isLoading.value = false;
     }
   }
@@ -297,6 +300,7 @@ class KaryawanController extends GetxController {
       clearForm();
       refreshView();
       goToAddEmployee();
+      fetchKaryawan();
     } catch (e) {
       Get.snackbar('Terjadi kesalahan', e.toString());
       showDialog(false, 'Gagal mendaftarkan karyawan');
@@ -412,8 +416,7 @@ class KaryawanController extends GetxController {
   }
 
   void assignDivNameAdd(String divisionName) {
-    final availableDiv = Get.find<DivisionController>().divisions
-        .toList();
+    final availableDiv = Get.find<DivisionController>().divisions.toList();
 
     for (int i = 0; i < availableDiv.length; i++) {
       if (availableDiv[i].namaDivisi == divisionName &&
@@ -456,7 +459,11 @@ class KaryawanController extends GetxController {
         headers: {'Authorization': 'Bearer $apiToken'},
         data: data,
       );
-      showDialog(true, 'Data karyawan berhasil dihapus', newRoutes: Routes.karyawan);
+      showDialog(
+        true,
+        'Data karyawan berhasil dihapus',
+        newRoutes: Routes.karyawan,
+      );
       processing.value = false;
     } catch (e) {
       showDialog(false, 'Gagal menghapus data karyawan');
@@ -485,7 +492,7 @@ class KaryawanController extends GetxController {
       final reNewKaryawanFromBE = jsonData
           .map((item) => Karyawan.fromJson(item))
           .toList();
-      
+
       karyawan.removeWhere((item) => item.idDivisi == divisionID);
 
       for (int i = 0; i < reNewKaryawanFromBE.length; i++) {
@@ -508,5 +515,16 @@ class KaryawanController extends GetxController {
       }
     }
     return count;
+  }
+
+  Future<void> getUnderPoint() async {
+    isLoading.value = true;
+    try {
+      underPoint.assignAll(karyawan.where((items) => items.pointValue <= 50));
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+      print("Gagal mendapatkan data underPoint");
+    }
   }
 }

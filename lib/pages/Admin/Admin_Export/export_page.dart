@@ -18,6 +18,16 @@ class AdminExportPage extends StatelessWidget {
     final exportController = Get.put(ExportController(), permanent: false);
 
     return Obx(() {
+      String monthView = '';
+      String divisionView = '';
+
+      exportController.monthSelectedFIlter.value == 'Periode'
+          ? monthView = 'Semua Periode'
+          : monthView = exportController.monthSelectedFIlter.value;
+      exportController.divisionSelectedFilter.value == 'Divisi'
+          ? divisionView = 'Semua Divisi'
+          : divisionView = exportController.divisionSelectedFilter.value;
+
       return Scaffold(
         backgroundColor: SDWcolors.bgD,
         body: Column(
@@ -77,25 +87,24 @@ class AdminExportPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(
-                              height: height,
+                            Container(
+                              height: height * 0.035,
                               width: width * 0.25,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: SDWcolors.bgL,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
                               child: Center(
-                                child: Container(
-                                  height: height * 0.035,
-                                  width: width,
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: SDWcolors.bgL,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                  ),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton(
                                       isDense: true,
                                       dropdownColor: SDWcolors.bgL,
-                                      menuWidth: width * 0.256,
+                                      menuWidth: width * 0.36,
                                       value: exportController
                                           .monthSelectedFIlter
                                           .value,
@@ -103,9 +112,9 @@ class AdminExportPage extends StatelessWidget {
                                           .textTheme
                                           .bodyLarge
                                           ?.copyWith(
+                                            fontSize: width * 0.035,
                                             color: SDWcolors.primary,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17.sp,
                                           ),
                                       icon: Transform.rotate(
                                         angle: 3.14 / -2,
@@ -118,11 +127,27 @@ class AdminExportPage extends StatelessWidget {
                                       items: exportController.monthFilter.map((
                                         filter,
                                       ) {
-                                        return DropdownMenuItem<String>(
+                                        return DropdownMenuItem(
                                           value: filter,
                                           child: Text(filter),
                                         );
                                       }).toList(),
+                                      selectedItemBuilder: (context) {
+                                        return exportController.monthFilter.map((
+                                          filter,
+                                        ) {
+                                          return SizedBox(
+                                            height: height,
+                                            width: width * 0.15,
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(filter),
+                                            ),
+                                          );
+                                        }).toList();
+                                      },
                                       onChanged: (newValue) {
                                         if (newValue != null) {
                                           exportController
@@ -130,10 +155,10 @@ class AdminExportPage extends StatelessWidget {
                                               .value = newValue
                                               .toString();
                                           exportController.applyFilter(
+                                            newValue,
                                             exportController
                                                 .divisionSelectedFilter
                                                 .value,
-                                            newValue,
                                           );
                                         }
                                       },
@@ -142,85 +167,82 @@ class AdminExportPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: height,
-                              width: width * 0.3,
-                              child: Center(
-                                child: Container(
-                                  height: height * 0.035,
-                                  width: width,
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: SDWcolors.bgL,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        isDense: true,
-                                        dropdownColor: SDWcolors.bgL,
-                                        menuWidth: width * 0.36,
-                                        value: exportController
-                                            .divisionSelectedFilter
-                                            .value,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                              color: SDWcolors.primary,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                        icon: Transform.rotate(
-                                          angle: 3.14 / -2,
-                                          child: Icon(
-                                            Icons.chevron_left_outlined,
+
+                            Container(
+                              height: height * 0.035,
+                              width: width * 0.33,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: SDWcolors.bgL,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Center(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      isDense: true,
+                                      dropdownColor: SDWcolors.bgL,
+                                      menuWidth: width * 0.36,
+                                      value: exportController
+                                          .divisionSelectedFilter
+                                          .value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontSize: width * 0.035,
                                             color: SDWcolors.primary,
-                                            size: 24,
+                                            fontWeight: FontWeight.bold,
                                           ),
+                                      icon: Transform.rotate(
+                                        angle: 3.14 / -2,
+                                        child: Icon(
+                                          Icons.chevron_left_outlined,
+                                          color: SDWcolors.primary,
+                                          size: 24,
                                         ),
-                                        items: exportController.divisionFilter
-                                            .map((filter) {
-                                              return DropdownMenuItem(
-                                                value: filter,
-                                                child: Text(filter),
-                                              );
-                                            })
-                                            .toList(),
-                                        selectedItemBuilder: (context) {
-                                          return exportController.divisionFilter
-                                              .map((filter) {
-                                                return SizedBox(
-                                                  height: height,
-                                                  width: width * 0.22,
-                                                  child: SingleChildScrollView(
-                                                    physics:
-                                                        const BouncingScrollPhysics(),
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Text(filter),
-                                                  ),
-                                                );
-                                              })
-                                              .toList();
-                                        },
-                                        onChanged: (newValue) {
-                                          if (newValue != null) {
-                                            exportController
-                                                .divisionSelectedFilter
-                                                .value = newValue
-                                                .toString();
-                                            exportController.applyFilter(
-                                              newValue,
-                                              exportController
-                                                  .monthSelectedFIlter
-                                                  .value,
-                                            );
-                                          }
-                                        },
                                       ),
+                                      items: exportController.divisionFilter
+                                          .map((filter) {
+                                            return DropdownMenuItem(
+                                              value: filter,
+                                              child: Text(filter),
+                                            );
+                                          })
+                                          .toList(),
+                                      selectedItemBuilder: (context) {
+                                        return exportController.divisionFilter.map((
+                                          filter,
+                                        ) {
+                                          return SizedBox(
+                                            height: height,
+                                            width: width * 0.22,
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(filter),
+                                            ),
+                                          );
+                                        }).toList();
+                                      },
+                                      onChanged: (newValue) {
+                                        if (newValue != null) {
+                                          exportController
+                                              .divisionSelectedFilter
+                                              .value = newValue
+                                              .toString();
+                                          exportController.applyFilter(
+                                            newValue,
+                                            exportController
+                                                .monthSelectedFIlter
+                                                .value,
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                 ),
@@ -229,7 +251,7 @@ class AdminExportPage extends StatelessWidget {
 
                             SizedBox(
                               height: height,
-                              width: width * 0.26,
+                              width: width * 0.3,
                               child: GestureDetector(
                                 onTap: () {
                                   ever(exportController.isDownloading, (val) {
@@ -262,7 +284,7 @@ class AdminExportPage extends StatelessWidget {
                                   child: Container(
                                     height: height * 0.035,
                                     width: width,
-                                    padding: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(5),
                                     decoration: BoxDecoration(
                                       color: SDWcolors.bgL,
                                       borderRadius: BorderRadius.all(
@@ -270,6 +292,8 @@ class AdminExportPage extends StatelessWidget {
                                       ),
                                     ),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "Cetak Semua",
@@ -277,6 +301,7 @@ class AdminExportPage extends StatelessWidget {
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
+                                                fontSize: width * 0.035,
                                                 color: SDWcolors.primary,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -318,7 +343,7 @@ class AdminExportPage extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: width,
-                      height: height * 0.1,
+                      height: height * 0.12,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -338,7 +363,7 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  exportController.divisionSelectedFilter.value,
+                                  divisionView,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -365,7 +390,7 @@ class AdminExportPage extends StatelessWidget {
                               Align(
                                 alignment: AlignmentGeometry.centerRight,
                                 child: Text(
-                                  exportController.monthSelectedFIlter.value,
+                                  monthView,
                                   style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
                                         color: SDWcolors.textD,
@@ -466,7 +491,7 @@ class AdminExportPage extends StatelessWidget {
                         ? Expanded(
                             child: Center(
                               child: Text(
-                                "Tidak ada data untuk ${exportController.divisionSelectedFilter} pada periode ${exportController.monthSelectedFIlter}",
+                                "Tidak ada data untuk $divisionView pada periode $monthView",
                               ),
                             ),
                           )
@@ -481,7 +506,7 @@ class AdminExportPage extends StatelessWidget {
                                 return Column(
                                   children: [
                                     Container(
-                                      height: height * 0.055,
+                                      height: height * 0.07,
                                       width: width,
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(

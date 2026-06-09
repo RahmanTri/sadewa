@@ -9,6 +9,7 @@ class Karyawan {
   String namaDivisi;
   String fotoProfil;
   String dataWajah;
+  int pointValue;
 
   Karyawan({
     required this.idKaryawan,
@@ -21,6 +22,7 @@ class Karyawan {
     required this.namaDivisi,
     required this.dataWajah,
     this.fotoProfil = '',
+    required this.pointValue,
   });
 
   factory Karyawan.fromJson(Map<String, dynamic> json) {
@@ -33,8 +35,14 @@ class Karyawan {
       noTlp: json['no_tlp'],
       idDivisi: json['id_divisi'],
       namaDivisi: json['nama_divisi'],
-      fotoProfil: json['foto_profil'] == null || json['foto_profil'] == 'null' || json['foto_profil'] == '' ? '' : json['foto_profil'],
+      fotoProfil:
+          json['foto_profil'] == null ||
+              json['foto_profil'] == 'null' ||
+              json['foto_profil'] == ''
+          ? ''
+          : json['foto_profil'],
       dataWajah: json['data_wajah'],
+      pointValue: json['total_point'],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
+import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/controllers/point_controller.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
@@ -12,7 +13,8 @@ class HomeStatistic extends StatelessWidget {
   final double width;
   final double height;
   HomeStatistic({required this.width, required this.height});
-  final homeController = Get.put(HomeController());
+  final homeController = Get.put(HomeController(), permanent: false);
+  final karyawanController = Get.put(KaryawanController(), permanent: false);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,13 @@ class HomeStatistic extends StatelessWidget {
                   child: Container(
                     height: width * 0.29,
                     width: width * 0.29,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: SDWcolors.bgL,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [SDWboxShadow.shadow],
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
+                    child: Stack(
                       children: [
                         Align(
                           alignment: Alignment.topCenter,
@@ -54,28 +55,29 @@ class HomeStatistic extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                         ),
-
-                        SizedBox(
-                          width: width,
-                          height: height * 0.08,
-                          child: Center(
-                            child: Text(
-                              homeController.jumlahKaryawan.toString(),
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: SDWcolors.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: height * 0.06,
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: width,
+                                height: height * 0.07,
+                                child: Center(
+                                  child: Text(
+                                    homeController.jumlahKaryawan.toString(),
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: SDWcolors.primary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: height * 0.06,
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("lihat detail"),
+                                ),
+                              ),
+                              Text("lihat detail"),
+                            ],
                           ),
                         ),
                       ],
@@ -92,14 +94,13 @@ class HomeStatistic extends StatelessWidget {
                   child: Container(
                     height: width * 0.29,
                     width: width * 0.29,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: SDWcolors.bgL,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [SDWboxShadow.shadow],
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
+                    child: Stack(
                       children: [
                         Align(
                           alignment: Alignment.topCenter,
@@ -117,28 +118,30 @@ class HomeStatistic extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                         ),
-
-                        SizedBox(
-                          width: width,
-                          height: height * 0.08,
-                          child: Center(
-                            child: Text(
-                              homeController.jumlahDivisi.toString(),
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: SDWcolors.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: height * 0.06,
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(height: height * 0.015, width: width),
+                              SizedBox(
+                                width: width,
+                                height: height * 0.07,
+                                child: Center(
+                                  child: Text(
+                                    homeController.jumlahDivisi.toString(),
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: SDWcolors.primary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: height * 0.06,
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("lihat detail"),
+                                ),
+                              ),
+                              Text("lihat detail"),
+                            ],
                           ),
                         ),
                       ],
@@ -149,7 +152,10 @@ class HomeStatistic extends StatelessWidget {
           homeController.underPoint.value.isEmpty
               ? Center(child: CircularProgressIndicator())
               : GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    karyawanController.getUnderPoint();
+                    Get.toNamed(Routes.underPoint);
+                  },
                   child: Container(
                     height: width * 0.29,
                     width: width * 0.29,
@@ -159,8 +165,7 @@ class HomeStatistic extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [SDWboxShadow.shadow],
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
+                    child: Stack(
                       children: [
                         Align(
                           alignment: Alignment.topCenter,
@@ -179,27 +184,30 @@ class HomeStatistic extends StatelessWidget {
                           ),
                         ),
 
-                        SizedBox(
-                          width: width,
-                          height: height * 0.08,
-                          child: Center(
-                            child: Text(
-                              homeController.underPoint.toString(),
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: height * 0.06,
+                        Align(
+                          alignment: AlignmentGeometry.bottomCenter,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(height: height * 0.015, width: width),
+                              SizedBox(
+                                width: width,
+                                height: height * 0.07,
+                                child: Center(
+                                  child: Text(
+                                    homeController.underPoint.toString(),
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: height * 0.06,
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("lihat detail"),
+                                ),
+                              ),
+                              Text("lihat detail"),
+                            ],
                           ),
                         ),
                       ],

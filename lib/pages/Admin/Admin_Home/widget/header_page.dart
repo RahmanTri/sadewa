@@ -18,8 +18,8 @@ class HeaderPage extends StatelessWidget {
       () => Row(
         children: [
           Container(
-            margin: const EdgeInsets.only(right: 15),
-            width: width * 0.892,
+            margin: const EdgeInsets.only(right: 10),
+            width: width * 0.67,
             height: height * 0.1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class HeaderPage extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userData.admin.value?.name ?? '',
+                    homeController.userController.admin.value?.name ?? '',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
                       fontWeight: FontWeight.bold,
@@ -47,43 +47,33 @@ class HeaderPage extends StatelessWidget {
               ],
             ),
           ),
-          GestureDetector(
-            onTap:() => Get.toNamed(Routes.adminProfile),
-            child: Container(
-              width: width * 0.22,
-              height: height * 0.22,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [SDWboxShadow.shadow],
-                image: DecorationImage(
-                  image: const AssetImage(
-                    '${AppUrls.imgAssets}default-profile.png'
-                  )
-                ),
-                border: Border.all(
-                  color: SDWcolors.bgL,
-                  width: 3,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                )
-              ),
-              child: 
-                homeController.userData.user.value?.fotoProfil != '' && 
-                homeController.userData.user.value?.fotoProfil != 'null'
-                ? Container(
-                  height: width * 0.22,
-                  width: width * 0.22,
+          SizedBox(
+            width: width * 0.2,
+            height: height * 0.07,
+            child: GestureDetector(
+              onTap: () => Get.toNamed(Routes.adminProfile),
+              child: Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    boxShadow: [SDWboxShadow.shadow],
                     image: DecorationImage(
-                      image: NetworkImage(
-                        '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
-                      )
+                      image: const AssetImage(
+                        '${AppUrls.imgAssets}default-profile.png',
+                      ),
+                    ),
+                    border: Border.all(
+                      color: SDWcolors.bgL,
+                      width: 3,
+                      strokeAlign: BorderSide.strokeAlignInside,
                     ),
                   ),
-                )
-                : null,
+                ),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

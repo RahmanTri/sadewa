@@ -4,6 +4,7 @@ import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/karyawan_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 import '../../effect/box_shadow.dart';
 import 'widgets/karyawan_card.dart';
 
@@ -32,6 +33,7 @@ class _KaryawanPageState extends State<KaryawanPage> {
   @override
   Widget build(BuildContext context) {
     final karyawanController = Get.find<KaryawanController>();
+    final homeController = Get.find<HomeController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     // Future.microtask(() => karyawanController.fetchKaryawan());
@@ -48,7 +50,10 @@ class _KaryawanPageState extends State<KaryawanPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            homeController.loadAdminDashboard();
+            Get.back();
+          },
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),
@@ -163,7 +168,6 @@ class _KaryawanPageState extends State<KaryawanPage> {
               //     ),
               //   ),
               // ),
-
               SizedBox(height: 12),
               // Obx(
               //   () => Text(

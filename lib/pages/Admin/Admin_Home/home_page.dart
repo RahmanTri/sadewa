@@ -64,9 +64,8 @@ class AdminHomePage extends StatelessWidget {
                   HeaderPage(height: height, width: width),
                   HomeStatistic(width: width, height: height),
                   QuickAction(width: width, height: height),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   RecentAbsent(width: width, height: height),
-                  SizedBox(height: 20),
                   Text(
                     "Log Aktivitas",
                     style: TextStyle(

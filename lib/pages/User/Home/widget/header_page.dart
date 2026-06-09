@@ -36,7 +36,7 @@ class HeaderPage extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userData.user.value?.namaLengkap ?? '',
+                    homeController.userController.user.value?.namaLengkap ?? '',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
                       fontWeight: FontWeight.bold,
@@ -67,8 +67,9 @@ class HeaderPage extends StatelessWidget {
                 ),
               ),
               child:
-                  homeController.userData.user.value?.fotoProfil != '' &&
-                      homeController.userData.user.value?.fotoProfil != 'null'
+                  homeController.userController.user.value?.fotoProfil != '' &&
+                      homeController.userController.user.value?.fotoProfil !=
+                          'null'
                   ? Container(
                       height: width * 0.22,
                       width: width * 0.22,
@@ -76,8 +77,9 @@ class HeaderPage extends StatelessWidget {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           image: NetworkImage(
-                            '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
+                            '${AppUrls.imgProfileUrl}${homeController.userController.user.value?.fotoProfil}',
                           ),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     )

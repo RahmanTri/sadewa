@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:sadewa_fe/controllers/user_controller.dart';
-import 'package:sadewa_fe/pages/Profile/widget/profile_menu.dart';
+import 'package:sadewa_fe/pages/user/Profile/widget/profile_menu.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/pages/User/Profile/widget/logout.dart';
 import 'package:sadewa_fe/constants/urls.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sadewa_fe/routes/app_routes.dart';
 
 class AdminProfile extends StatelessWidget {
   const AdminProfile({super.key});
@@ -50,28 +51,28 @@ class AdminProfile extends StatelessWidget {
                 ),
                 Center(
                   child: Obx(() {
-                    final fotoProfil = userController.user.value?.fotoProfil;
-
+                    // final fotoProfil = userController.admin.value?.fotoProfil;
                     ImageProvider image;
+                    image = const AssetImage(
+                      '${AppUrls.imgAssets}default-profile.png',
+                    );
 
-                    if (userController.selectedImagePath.value.isNotEmpty) {
-                      // Jika selectedImagePath tidak kosong, gunakan gambar yang dipilih
-                      image = FileImage(
-                        File(userController.selectedImagePath.value),
-                      );
-                    } else if (fotoProfil != null &&
-                        fotoProfil != '' &&
-                        fotoProfil != 'null') {
-                      // Jika fotoProfil ada, gunakan URL gambar
-                      image = NetworkImage(
-                        '${AppUrls.imgProfileUrl}$fotoProfil',
-                      );
-                    } else {
-                      // Jika fotoProfil tidak ada, gunakan gambar default
-                      image = const AssetImage(
-                        '${AppUrls.imgAssets}default-profile.png',
-                      );
-                    }
+                    // if (userController.selectedImagePath.value.isNotEmpty) {
+                    //   // Jika selectedImagePath tidak kosong, gunakan gambar yang dipilih
+                    //   image = FileImage(
+                    //     File(userController.selectedImagePath.value),
+                    //   );
+                    // } else if (fotoProfil != null &&
+                    //     fotoProfil != '' &&
+                    //     fotoProfil != 'null') {
+                    //   // Jika fotoProfil ada, gunakan URL gambar
+                    //   image = NetworkImage(
+                    //     '${AppUrls.imgProfileUrl}$fotoProfil',
+                    //   );
+                    // } else {
+                    //   // Jika fotoProfil tidak ada, gunakan gambar default
+                    // }
+
                     return Column(
                       children: [
                         CircleAvatar(
@@ -84,13 +85,13 @@ class AdminProfile extends StatelessWidget {
                         ),
                         const SizedBox(height: 22),
                         Text(
-                          userController.user.value!.username.toString(),
+                          userController.admin.value!.name.toString(),
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(color: SDWcolors.textL, fontSize: 20),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          userController.user.value!.role.toString(),
+                          userController.admin.value!.role.toString(),
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(color: SDWcolors.textL, fontSize: 15),
                         ),
@@ -106,16 +107,21 @@ class AdminProfile extends StatelessWidget {
               child: Column(
                 children: [
                   profileMenu(
-                    icon: Icons.edit,
+                    icon: Icons.exit_to_app,
                     title: 'Log Out',
                     onTap: () => logoutDialog(context),
                   ),
-                ]
-              )
-            )
-          ]
-        )
-      )
-    );       
+                  profileMenu(
+                    icon: FontAwesomeIcons.peopleRoof,
+                    title: 'Akun Manajer',
+                    onTap: () => Get.toNamed(Routes.akunManajer),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

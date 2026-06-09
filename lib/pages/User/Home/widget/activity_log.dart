@@ -12,7 +12,6 @@ class ActivityLog extends StatelessWidget {
   const ActivityLog({super.key, required this.width, required this.height});
 
   @override
-
   Widget build(BuildContext context) {
     final homeCOntroller = Get.put(HomeController(), permanent: false);
 
@@ -31,7 +30,7 @@ class ActivityLog extends StatelessWidget {
 
             return Container(
               margin: EdgeInsets.only(bottom: 10),
-              height: height * 0.1,
+              height: height * 0.085,
               width: width,
               child: Row(
                 children: [
@@ -84,22 +83,16 @@ class ActivityLog extends StatelessWidget {
                                   size: height * 0.02,
                                 ),
                                 SizedBox(width: 10),
-                                SizedBox(
-                                  height: height * 0.04,
-                                  width: width * 0.42,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      item["description"],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            color: SDWcolors.textD,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: height * 0.012,
-                                          ),
-                                    ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    item["description"],
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: SDWcolors.textD,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: height * 0.012,
+                                        ),
                                   ),
                                 ),
                               ],

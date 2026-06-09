@@ -25,6 +25,10 @@ class HomePage extends StatelessWidget {
     final homeController = Get.put(HomeController(), permanent: false);
 
     return Obx(() {
+      if (homeController.userController.user.value == null) {
+        return SizedBox();
+      }
+
       if (homeController.isLoading.value) {
         return Scaffold(
           body: Center(
@@ -42,8 +46,8 @@ class HomePage extends StatelessWidget {
         );
       }
 
-      if (homeController.userData.user.value?.dataWajah == null ||
-          homeController.userData.user.value!.dataWajah.isEmpty) {
+      if (homeController.userController.user.value?.dataWajah == null ||
+          homeController.userController.user.value!.dataWajah.isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           SDWoverlay.showOverlay(
             context: context,

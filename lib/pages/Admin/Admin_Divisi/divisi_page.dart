@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_Divisi/widgets/divisions_card.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import '../../effect/box_shadow.dart';
@@ -32,6 +33,7 @@ class _DivisiPageState extends State<DivisiPage> {
   Widget build(BuildContext context) {
     final DivisionController divisionController =
         Get.find<DivisionController>();
+    final homeController = Get.find<HomeController>();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     // Future.microtask(() => karyawanController.fetchKaryawan());
@@ -49,7 +51,10 @@ class _DivisiPageState extends State<DivisiPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            homeController.loadAdminDashboard();
+            Get.back();
+          },
           icon: Icon(Icons.arrow_back),
           color: SDWcolors.white,
         ),

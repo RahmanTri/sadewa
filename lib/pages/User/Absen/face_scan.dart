@@ -21,16 +21,10 @@ class RegistWajah extends StatelessWidget {
       final cam = absenController.cameraController.value;
 
       if (cam == null ||
-          !cam.value.isInitialized ||
-          !absenController.distanceUpdated.value ||
-          absenController.isLoading) {
-        return Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(
-              semanticsLabel: 'Menunggu respons Kamera dan Lokasi ...',
-            ),
-          ),
-        );
+          !cam.value.isInitialized &&
+              !absenController.distanceUpdated.value &&
+              absenController.isLoading) {
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
       }
 
       if (!absenController.isInRadius.value && !absenController.isRegist) {

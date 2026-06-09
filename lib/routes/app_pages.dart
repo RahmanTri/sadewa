@@ -6,6 +6,7 @@ import 'package:sadewa_fe/pages/Admin/Admin_Divisi/detail_divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_Divisi/divisi_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ManajerAkun/manajer_akun_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/tambah_karyawan_page.dart';
+import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/underpoint_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/view_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/edit_karyawan_page.dart';
 import 'package:sadewa_fe/pages/Admin/Admin_ViewKaryawan/karyawan_page.dart';
@@ -70,5 +71,6 @@ class AppPages {
     GetPage(name: Routes.adminHome, page: () => AdminHomePage()),
     GetPage(name: Routes.exportPage, page: () => AdminExportPage()),
     GetPage(name: Routes.adminProfile, page: () => AdminProfile()),
+    GetPage(name: Routes.underPoint, page: () => UnderPoint()),
   ];
 }

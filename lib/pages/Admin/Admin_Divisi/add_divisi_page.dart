@@ -210,6 +210,7 @@ class AddDivisiPage extends StatelessWidget {
                                         ?.copyWith(
                                           color: SDWcolors.error,
                                           fontSize: height * 0.012,
+                                          height: 1,
                                         ),
                                   ),
                                 ),
@@ -401,6 +402,7 @@ class AddDivisiPage extends StatelessWidget {
                                         ?.copyWith(
                                           color: SDWcolors.error,
                                           fontSize: height * 0.012,
+                                          height: 1
                                         ),
                                   ),
                                 ),
@@ -457,6 +459,7 @@ class AddDivisiPage extends StatelessWidget {
                                               color: SDWcolors.textD,
                                               fontSize: height * 0.032,
                                               fontWeight: FontWeight.bold,
+                                              height: 1
                                             ),
                                       ),
                                     ),
@@ -541,6 +544,7 @@ class AddDivisiPage extends StatelessWidget {
                                               color: SDWcolors.textD,
                                               fontSize: height * 0.032,
                                               fontWeight: FontWeight.bold,
+                                              height: 1
                                             ),
                                       ),
                                     ),
@@ -636,6 +640,7 @@ class AddDivisiPage extends StatelessWidget {
                                                     color: SDWcolors.textD,
                                                     fontSize: height * 0.032,
                                                     fontWeight: FontWeight.bold,
+                                                    height: 1
                                                   ),
                                             ),
                                           ),
@@ -741,6 +746,7 @@ class AddDivisiPage extends StatelessWidget {
                                                     color: SDWcolors.textD,
                                                     fontSize: height * 0.032,
                                                     fontWeight: FontWeight.bold,
+                                                    height: 1
                                                   ),
                                             ),
                                           ),
@@ -827,13 +833,13 @@ class AddDivisiPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.005),
 
                       //Map
                       Obx(
                         () => Container(
-                          width: width * 0.7,
-                          height: width * 0.7,
+                          width: width * 0.69,
+                          height: width * 0.69,
                           decoration: BoxDecoration(
                             color: SDWcolors.grey.withAlpha(120),
                           ),

@@ -36,7 +36,13 @@ class DivisiAlertDialog extends StatelessWidget {
         alignment: AlignmentGeometry.center,
         children: [
           GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              Navigator.pop(context);
+
+              if (run != null) {
+                run!();
+              }
+            },
             child: Container(
               width: width,
               height: height,
