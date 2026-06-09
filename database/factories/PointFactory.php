@@ -22,7 +22,8 @@ class PointFactory extends Factory
             "month" => $this->faker->randomElement(["Maret", "April", "Mei"]),
             "employee_id" => array_pop($numbers),
             "point_value" => $this->faker->numberBetween(20, 200),
-            "positive_streak" => 2,
+            "source" => $this->faker->randomElement(["log_in", "log_out"]),
+            "positive_streak" => 0,
             "negative_streak" => 0,
         ];
     }

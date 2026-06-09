@@ -107,7 +107,7 @@ class point_controller extends Controller
 	{
 		$points = point::join('employee', 'employee.id', '=', 'point.employee_id')
 			->join('division', 'division.id', '=', 'employee.division_id')
-			->where('point_value', '<=', '40')
+			->where('point_value', '<=', '50')
 			->select(
 				'employee.id as id',
 				'employee.company_id as kode_karyawan',

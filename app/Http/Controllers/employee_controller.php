@@ -566,8 +566,10 @@ class employee_controller extends Controller
         }
 
         $employeeData = DB::table("employee as em")
+            ->join('point as poin', 'poin.employee_id', '=', 'em.id')
             ->join('division as dv', 'dv.id', '=', 'em.division_id')
             ->join('users as user', 'user.id', '=', 'em.user_id')
+
             ->select(
                 'em.id as id_karyawan',
                 'user.id as id_user',
@@ -578,7 +580,8 @@ class employee_controller extends Controller
                 'dv.id as id_divisi',
                 'dv.division_name as nama_divisi',
                 'em.profile_pic as foto_profil',
-                'em.face_data as data_wajah'
+                'em.face_data as data_wajah',
+                'poin.point_value as total_point'
             )
             ->orderBy('nama_lengkap', 'asc')
             ->get()
@@ -1136,7 +1139,8 @@ class employee_controller extends Controller
         ], 200);
     }
 
-    public function getEmbyDiv() {
+    public function getEmbyDiv()
+    {
         $user = Auth::user();
 
         if (!$user) {
@@ -1155,11 +1159,11 @@ class employee_controller extends Controller
 
         $validator = Validator::make(request()->all(), [
             "division_id" => "required|exists:division,id",
-        ],[
+        ], [
             "division_id.required" => "ID Divisi harus diisi!",
             "division_id.exists" => "ID Divisi tidak valid!",
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 "success" => false,

@@ -12,3 +12,5 @@ Artisan::command('inspire', function () {
 Schedule::command('update:daily-reset')->dailyAt('15:00')->timezone('Asia/Jakarta');
 
 Schedule::command('create:autoAbsen')->everyMinute()->timezone('Asia/Jakarta');
+
+Schedule::command('create:createNotice')->dailyAt('14:39')->timezone('Asia/Jakarta');

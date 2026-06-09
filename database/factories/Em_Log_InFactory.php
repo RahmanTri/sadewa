@@ -20,11 +20,9 @@ class Em_Log_inFactory extends Factory
 
         return [
             "employee_id" => array_pop($numbers),
-            // "employee_id" => 1,
             "login_time" => $this->faker->randomElement(["09:00:00", "08:00:00", "07:45:00", "07:15:00"]),
             "status" => $this->faker->randomElement(["late", "on_time", "absent"]),
             "created_at" => $this->faker->dateTimeBetween('-60 day', 'now'),
-            // "created_at" => $this->faker->unique()->dateTimeBetween('-7 day', 'now')
         ];
     }
 }

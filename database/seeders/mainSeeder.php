@@ -144,12 +144,12 @@ class mainSeeder extends Seeder
         //     "password" => Hash::make("employee123")
         // ]);
 
-        // User::create([
-        //     "role" => "admin",
-        //     "username" => "admin01",
-        //     "email" => "admin01@gmail.com",
-        //     "password" => Hash::make("admin12345")
-        // ]);
+        User::create([
+            "role" => "admin",
+            "username" => "admin01",
+            "email" => "admin01@gmail.com",
+            "password" => Hash::make("admin12345")
+        ]);
 
         // User::factory()->count(50)->create();
 
@@ -236,7 +236,7 @@ class mainSeeder extends Seeder
 
         // Employee::factory()->count(50)->create();
 
-        Em_log_in::factory()->count(50)->create();
+        // Em_log_in::factory()->count(50)->create();
 
         // Em_log_out::factory()->count(50)->create();
 

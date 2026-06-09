@@ -230,7 +230,7 @@ class division_controller extends Controller
         ;
 
         return response()->json([
-            "Success" => true,
+            "success" => true,
             "message" => "Sukses mengambil data",
             "data" => $divisions,
         ], 200);

@@ -21,7 +21,7 @@ class Em_Log_OutFactory extends Factory
         return [
             "employee_id" => array_pop($numbers),
             "logout_time" => $this->faker->randomElement(["16:00:00", "15:00:00", "18:45:00", "17:15:00"]),
-            "status" => $this->faker->randomElement(["on_time", "early"])
+            "status" => $this->faker->randomElement(["on_time", "early", "absent"])
         ];
     }
 }
