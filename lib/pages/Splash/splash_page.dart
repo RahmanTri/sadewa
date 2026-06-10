@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/splash_controller.dart';
 import '../../controllers/auth_controller.dart';
 import '../../constants/sdw_colors.dart';
 import '../../constants/sdw_sizes.dart';
@@ -12,29 +13,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final AuthController authController = Get.find<AuthController>();
-
-  @override
-  void initState() {
-    super.initState();
-    _checkAuth();
-  }
-
-  void _checkAuth() async {
-    try {
-      await Future.wait([
-        authController.loadRememberMe(),
-        Future.delayed(Duration(seconds: 2)),
-      ]);
-    } catch (e) {
-      print("Error Auto Login");
-    }
-
-    if (authController.token.value.isNotEmpty) {
-      Get.offAllNamed('/home');
-    } else {
-      Get.offAllNamed('/login');
-    }
-  }
+  final SplashController splashController = Get.put<SplashController>(SplashController());
 
   @override
   Widget build(BuildContext context) {

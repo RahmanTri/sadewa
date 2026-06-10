@@ -41,22 +41,25 @@ class AuthController extends GetxController {
         emailUsername.text.isNotEmpty && password.text.isNotEmpty;
   }
 
-  Future<void> loadRememberMe() async {
+  Future<bool> loadRememberMe() async {
     final remembered = await _storageService.getRemember() ?? false;
     if (remembered) {
       final userCreds = await _storageService.getUserCredential();
-      try {
-        isLoading.value = true;
-        login(userCreds['emailUsername']!, userCreds['password']!);
-        isLoading.value = false;
-      } catch (e) {
-        isLoading.value = false;
+
+      final loginRemember = await login(userCreds['emailUsername']!, userCreds['password']!);
+      if (loginRemember) {
+        return true;
+      } else {
+        return false;
       }
+    } else {
+      return false;
     }
   }
 
   Future<bool> login(String emailUsername, String password) async {
     isLoading.value = true;
+
     var loginEndpoint = AppUrls.loginByU;
     var loginData = {'username': emailUsername, 'password': password};
     if (emailUsername.contains('@') && emailUsername.contains('.')) {
@@ -66,7 +69,7 @@ class AuthController extends GetxController {
     try {
       // print(loginData);
       // print(loginEndpoint);
-
+      Get.snackbar('Mencoba Login', 'Email: $emailUsername, Password: $password');
       final result = await _apiService.postRequest<Map<String, dynamic>>(
         endpoint: loginEndpoint,
         data: loginData,
@@ -87,10 +90,16 @@ class AuthController extends GetxController {
       // final embeddingsData = result['user']['embeddings'] ?? <List<double>>[];
       // await _storageService.saveEmbeddings(embeddingsData);
       // embeddings.value = embeddingsData;
+      final savedRememberMe = await _storageService.getRemember() ?? false;
+      if (savedRememberMe) {
+        rememberMe.value = savedRememberMe;
+      }
 
       //If remember me is checked
       if (rememberMe.value) {
         await _storageService.setRememberMe(true, emailUsername, password);
+      } else {
+        await _storageService.saveRemember(rememberMe.value);
       }
 
       isLoading.value = false;
@@ -133,7 +142,7 @@ class AuthController extends GetxController {
       return true;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Login gagal', e.toString());
+      Get.snackbar('Login gagal (login)', e.toString());
       // print("Error Login: $e");
       return false;
     }
@@ -160,14 +169,14 @@ class AuthController extends GetxController {
     // print(emailUsername.text.trim()+password.text.trim());
   }
 
-  void logOut() async {
-    try {
-      await _storageService.logOut();
-      Get.offAllNamed(Routes.login);
-    } catch (e) {
-      print("Gagal logout: $e");
-    }
-  }
+  // void logOut() async {
+  //   try {
+  //     await _storageService.logOut();
+  //     Get.offAllNamed(Routes.login);
+  //   } catch (e) {
+  //     print("Gagal logout: $e");
+  //   }
+  // }
 
   Future<void> devAutoLogin() async {
     isLoading.value = true;

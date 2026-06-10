@@ -128,8 +128,11 @@ class LoginPage extends StatelessWidget {
                                 scale: 0.72,
                                 child: Checkbox(
                                   value: authController.rememberMe.value,
-                                  onChanged: (val) =>
-                                      authController.rememberMe.value = val!,
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      authController.rememberMe.value = val;
+                                    }
+                                  },
                                   activeColor: SDWcolors.primary,
                                 ),
                               ),
