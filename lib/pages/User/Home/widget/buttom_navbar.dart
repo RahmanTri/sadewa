@@ -184,10 +184,8 @@ class ButtomNavbar extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: GestureDetector(
               onTap: () {
-                if (homeController.userController.user.value?.loggedIn ==
-                        true &&
-                    homeController.userController.user.value?.loggedOut ==
-                        true) {
+                if (homeController.userData.user.value?.loggedIn == true &&
+                    homeController.userData.user.value?.loggedOut == true) {
                   SDWoverlay.showOverlay(
                     context: context,
                     title: "Anda Sudah Melakukan Absensi",

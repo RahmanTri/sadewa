@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sadewa_fe/controllers/absen_confirm_controller.dart';
+import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/urls.dart';
@@ -17,7 +18,7 @@ class AbsenConfirm extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final absenConfirm = Get.put(AbsenConfirmController());
-    final homeController = Get.put(HomeController());
+    // final userController = Get.put(UserController());
 
     return Obx(() {
       return Scaffold(
@@ -54,8 +55,8 @@ class AbsenConfirm extends StatelessWidget {
                     child: Text(
                       absenConfirm.isRegist
                           ? 'Konfirmasi Registrasi'
-                          : homeController.dataRefresh.value!.loggedIn == false
-                          ?  'Konfirmasi Absen Masuk'
+                          : absenConfirm.userData.user.value!.loggedIn == false
+                          ? 'Konfirmasi Absen Masuk'
                           : 'Konfirmasi Absen Keluar',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
@@ -463,15 +464,14 @@ class AbsenConfirm extends StatelessWidget {
                           "Registrasi Berhasil",
                           "Data wajah anda berhasil disimpan!",
                         );
-                      } else if (homeController.dataRefresh.value!.loggedIn == false) {
-                        // homeController.refreshuserController();
+                      } else if (absenConfirm.userData.user.value!.loggedIn ==
+                          false) {
                         absenConfirm.absenLogin();
                         Get.snackbar(
                           "Absen masuk Berhasil",
                           "Anda berhasil absen untuk hari ini!",
                         );
                       } else {
-                        // homeController.refreshuserController();
                         absenConfirm.absenLogout();
                         Get.snackbar(
                           "Absen keluar Berhasil",
