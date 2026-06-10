@@ -82,13 +82,13 @@ class ProfilePage extends StatelessWidget {
                         ),
                         const SizedBox(height: 22),
                         Text(
-                          userController.user.value!.username.toString(),
+                          userController.user.value?.username.toString() ?? '',
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(color: SDWcolors.textL, fontSize: 20),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          userController.user.value!.namaDivisi.toString(),
+                          userController.user.value?.namaDivisi.toString() ?? '',
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(color: SDWcolors.textL, fontSize: 15),
                         ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/pages/user/Profile/widget/profile_menu.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
@@ -85,13 +84,13 @@ class AdminProfile extends StatelessWidget {
                         ),
                         const SizedBox(height: 22),
                         Text(
-                          userController.admin.value!.name.toString(),
+                          userController.admin.value?.name.toString() ?? '',
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(color: SDWcolors.textL, fontSize: 20),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          userController.admin.value!.role.toString(),
+                          userController.admin.value?.role.toString() ?? '',
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(color: SDWcolors.textL, fontSize: 15),
                         ),

@@ -20,7 +20,7 @@ import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
 class FaceScanController extends GetxController {
   final StorageService _storageService = StorageService();
   final ApiService _apiService = ApiService();
-  final userData = Get.put(UserController());
+  final userData = Get.find<UserController>();
   final statusText = ''.obs;
   final token = ''.obs;
 

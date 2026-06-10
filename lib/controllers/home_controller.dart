@@ -18,7 +18,7 @@ import 'package:sadewa_fe/models/absenMasuk_model.dart';
 import 'package:sadewa_fe/models/absenKeluar_model.dart';
 
 class HomeController extends GetxController {
-  final userData = Get.put(UserController());
+  final userData = Get.find<UserController>();
   final karyawanController = Get.find<KaryawanController>();
   final divisiController = Get.find<DivisionController>();
   final ApiService _apiService = ApiService();

@@ -16,8 +16,7 @@ class SplashController extends GetxController {
     try {
       final bool result = await platform.invokeMethod('isMockLocation');
       return result;
-    } on PlatformException catch (e) {
-      Get.snackbar('Error', e.toString());
+    } on Error {
       return false;
     }
   }
