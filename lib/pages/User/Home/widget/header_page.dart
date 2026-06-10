@@ -48,7 +48,7 @@ class HeaderPage extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {Get.toNamed(Routes.profile);},
+            onTap: () => Get.toNamed(Routes.profile),
             child: Container(
               width: width * 0.22,
               height: width * 0.22,
