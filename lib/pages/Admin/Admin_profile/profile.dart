@@ -84,13 +84,13 @@ class AdminProfile extends StatelessWidget {
                         ),
                         const SizedBox(height: 22),
                         Text(
-                          userController.admin.value!.name.toString(),
+                          userController.admin.value?.name.toString() ?? '',
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(color: SDWcolors.textL, fontSize: 20),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          userController.admin.value!.role.toString(),
+                          userController.admin.value?.role.toString() ?? '',
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(color: SDWcolors.textL, fontSize: 15),
                         ),

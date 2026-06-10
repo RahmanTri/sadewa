@@ -15,7 +15,7 @@ class AbsenConfirmController extends GetxController {
   final ApiService _apiService = ApiService();
   final StorageService _storageService = StorageService();
   final scanResult = Get.find<FaceScanController>();
-  final userData = Get.put(UserController());
+  final userData = Get.find<UserController>();
 
   final bool _isLoading = false;
   final statusText = "".obs;
