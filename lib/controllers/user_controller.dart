@@ -557,6 +557,7 @@ class UserController extends GetxController {
   }
 
   void logOutCurrentUser() {
+    print("logout dimulai");
     final AuthController authController = Get.find<AuthController>();
     Get.delete<HomeController>();
     user.value = null;
@@ -566,5 +567,24 @@ class UserController extends GetxController {
     _storageService.logOut();
     Get.offAllNamed(Routes.login);
     authController.rememberMe.value = false;
+    print("logout berhasil dijalankan");
+  }
+
+  Future<void> refreshUserData() async {
+    print("fungsi refresh user di panggil");
+    try {
+      final result = await _apiService.getRequest<Map<String, dynamic>>(
+        endpoint: 'user/fetch',
+        parser: (body) => jsonDecode(body),
+        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        headers: {'Authorization': 'Bearer ${userToken.value}'},
+      );
+      final Map<String, dynamic> jsonData =
+          result['refreshed_userData'] as Map<String, dynamic>;
+      user.value = User.fromJson(jsonData);
+      print("Berhasil Refresh data user");
+    } catch (e) {
+      print("Gagal Mendapatkan User Data: $e");
+    }
   }
 }

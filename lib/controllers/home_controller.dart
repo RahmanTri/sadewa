@@ -18,12 +18,12 @@ import 'package:sadewa_fe/models/absenMasuk_model.dart';
 import 'package:sadewa_fe/models/absenKeluar_model.dart';
 
 class HomeController extends GetxController {
-  final userController = Get.find<UserController>();
+  final userData = Get.put(UserController());
   final karyawanController = Get.find<KaryawanController>();
   final divisiController = Get.find<DivisionController>();
   final ApiService _apiService = ApiService();
   final NoticeController _noticeController = Get.find<NoticeController>();
-  final dataRefresh = Rxn<UserRefresh>();
+  // final dataRefresh = Rxn<UserRefresh>();
 
   var absenMasuk = <AbsenMasuk>[].obs;
   var absenKeluar = <AbsenKeluar>[].obs;
@@ -48,12 +48,11 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
     try {
-      token.value = userController.userToken.value;
+      token.value = userData.userToken.value;
       _loadGreeting();
       await _loadActivityLog();
 
-      if (userController.user.value?.role == 'employee') {
-        await refreshUserData();
+      if (userData.user.value?.role == 'employee') {
         _noticeController.fetchNotices();
         await _loadLatestLogin();
         _loadAbsenText();
@@ -100,9 +99,9 @@ class HomeController extends GetxController {
 
     try {
       print(
-        "data refresh untuk point n absen : ${dataRefresh.value?.loggedIn}",
+        "data refresh untuk point n absen : ${userData.user.value?.loggedIn}",
       );
-      if (dataRefresh.value?.loggedIn == true) {
+      if (userData.user.value?.loggedIn == true) {
         absentText.value = 'Anda Sudah Absen Hari Ini!';
         absenMessage.value = messageData[randomIndex];
         changeAbsentIcons(true);
@@ -119,7 +118,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> _loadPointText() async {
-    final point = dataRefresh.value?.poin;
+    final point = userData.user.value?.poin;
 
     if (point! <= 50) {
       pointTextColor.value = SDWcolors.error;
@@ -334,23 +333,23 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> refreshUserData() async {
-    isLoading.value = true;
-    try {
-      final result = await _apiService.getRequest<Map<String, dynamic>>(
-        endpoint: 'user/fetch',
-        parser: (body) => jsonDecode(body),
-        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
-        headers: {'Authorization': 'Bearer ${token.value}'},
-      );
-      final List<dynamic> jsonData = result['refreshed_userData'];
-      dataRefresh.value = UserRefresh.fromJson(jsonData[0]);
-      print("hasil data refresh login :  ${dataRefresh.value}");
-      print("Berhasil Refresh data user");
-      isLoading.value = false;
-    } catch (e) {
-      print("Gagal Mendapatkan User Data: $e");
-      isLoading.value = false;
-    }
-  }
+  // Future<void> refreshUserData() async {
+  //   isLoading.value = true;
+  //   try {
+  //     final result = await _apiService.getRequest<Map<String, dynamic>>(
+  //       endpoint: 'user/fetch',
+  //       parser: (body) => jsonDecode(body),
+  //       onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+  //       headers: {'Authorization': 'Bearer ${token.value}'},
+  //     );
+  //     final List<dynamic> jsonData = result['refreshed_userData'];
+  //     dataRefresh.value = UserRefresh.fromJson(jsonData[0]);
+  //     print("hasil data refresh login :  ${dataRefresh.value}");
+  //     print("Berhasil Refresh data user");
+  //     isLoading.value = false;
+  //   } catch (e) {
+  //     print("Gagal Mendapatkan User Data: $e");
+  //     isLoading.value = false;
+  //   }
+  // }
 }

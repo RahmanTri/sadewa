@@ -50,7 +50,6 @@ class ProfilePage extends StatelessWidget {
                 Center(
                   child: Obx(() {
                     final fotoProfil = userController.user.value?.fotoProfil;
-
                     ImageProvider image;
 
                     if (userController.selectedImagePath.value.isNotEmpty) {

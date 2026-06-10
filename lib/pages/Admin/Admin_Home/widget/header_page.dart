@@ -36,7 +36,7 @@ class HeaderPage extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userController.admin.value?.name ?? '',
+                    homeController.userData.admin.value?.name ?? '',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
                       fontWeight: FontWeight.bold,

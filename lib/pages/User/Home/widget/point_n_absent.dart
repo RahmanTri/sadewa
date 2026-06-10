@@ -21,12 +21,13 @@ class PointAbsent extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              if (homeController.userController.user.value?.loggedIn == true &&
-                  homeController.userController.user.value?.loggedOut == true) {
+              if (homeController.userData.user.value?.loggedIn == true &&
+                  homeController.userData.user.value?.loggedOut == true) {
                 SDWoverlay.showOverlay(
                   context: context,
                   title: "Anda Sudah Melakukan Absensi",
-                  subtitle: "Anda tidak dapat melakukan absensi 2x pada hari yang sama",
+                  subtitle:
+                      "Anda tidak dapat melakukan absensi 2x pada hari yang sama",
                   iconData: FontAwesomeIcons.check,
                   height: height,
                   width: width,
@@ -111,8 +112,7 @@ class PointAbsent extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    homeController.dataRefresh.value?.poin.toString() ??
-                        '',
+                    homeController.userData.user.value?.poin.toString() ?? '',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: homeController.pointTextColor.value,
                       fontWeight: FontWeight.w900,

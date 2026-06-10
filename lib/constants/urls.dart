@@ -2,7 +2,7 @@ class AppUrls {
   AppUrls._();
 
   // Base URL
-  static const String usedUrl = ngrok;
+  static const String usedUrl = localPhone;
 
   static const String baseApiUrl = '${usedUrl}api';
   static const String imgProfileUrl = '${usedUrl}storage/profile_pics/';
@@ -13,6 +13,7 @@ class AppUrls {
   static const String physical = "http://192.168.0.30/";
   static const String physical2 = "http://192.168.0.31/";
   static const String ngrok = "https://shaunda-unpolitic-maeve.ngrok-free.dev/";
+  static const String localPhone = "http://10.57.107.148:8000/";
 
   //ImageAssets
   static const String imgAssets = "assets/images/";

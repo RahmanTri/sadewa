@@ -36,7 +36,7 @@ class HeaderPage extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    homeController.userController.user.value?.namaLengkap ?? '',
+                    homeController.userData.user.value?.namaLengkap ?? '',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: SDWcolors.white,
                       fontWeight: FontWeight.bold,
@@ -49,6 +49,9 @@ class HeaderPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Get.toNamed(Routes.profile),
+            // onTap: () {
+            //   homeController.userData.refreshUserData();
+            // },
             child: Container(
               width: width * 0.22,
               height: width * 0.22,
@@ -67,9 +70,8 @@ class HeaderPage extends StatelessWidget {
                 ),
               ),
               child:
-                  homeController.userController.user.value?.fotoProfil != '' &&
-                      homeController.userController.user.value?.fotoProfil !=
-                          'null'
+                  homeController.userData.user.value?.fotoProfil != '' &&
+                      homeController.userData.user.value?.fotoProfil != 'null'
                   ? Container(
                       height: width * 0.22,
                       width: width * 0.22,
@@ -77,7 +79,7 @@ class HeaderPage extends StatelessWidget {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           image: NetworkImage(
-                            '${AppUrls.imgProfileUrl}${homeController.userController.user.value?.fotoProfil}',
+                            '${AppUrls.imgProfileUrl}${homeController.userData.user.value?.fotoProfil}',
                           ),
                           fit: BoxFit.cover,
                         ),
