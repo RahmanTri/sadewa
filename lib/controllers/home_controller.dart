@@ -58,10 +58,11 @@ class HomeController extends GetxController {
         _loadLatestLogin();
         _loadAbsenText();
         _loadPointText();
+      } else {
+        loadAdminDashboard();
+        _loadMasuk();
+        _loadKeluar();
       }
-      loadAdminDashboard();
-      _loadMasuk();
-      _loadKeluar();
       isLoading.value = false;
     } catch (e) {
       isLoading.value = true;

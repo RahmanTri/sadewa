@@ -54,11 +54,11 @@ class FaceScanController extends GetxController {
     isAbsen = userData.user.value?.loggedIn ?? false;
     token.value = await _storageService.getToken() ?? '';
     cameras = await availableCameras();
+    await _loadLocation();
     _faceDetector = FaceDetector(
       options: FaceDetectorOptions(performanceMode: FaceDetectorMode.fast),
     );
     await _loadModel();
-    await _loadLocation();
     await _initCamera();
   }
 
@@ -125,10 +125,7 @@ class FaceScanController extends GetxController {
         isRegist = false;
         try {
           isInRadius.value = await radiusProvider(divLat, divLng, divRadius);
-          Get.snackbar(
-            "Berhasil set isInRadius",
-            "isInRadius status : $isInRadius",
-          );
+          print("Berhasil set in radius : $isInRadius");
         } catch (e) {
           print("Gagal Kalkulasi lokasi : $e");
         }

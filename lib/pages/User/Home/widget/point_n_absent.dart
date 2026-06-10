@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 
@@ -19,7 +21,20 @@ class PointAbsent extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.faceScan);
+              if (homeController.userController.user.value?.loggedIn == true &&
+                  homeController.userController.user.value?.loggedOut == true) {
+                SDWoverlay.showOverlay(
+                  context: context,
+                  title: "Anda Sudah Melakukan Absensi",
+                  subtitle: "Anda tidak dapat melakukan absensi 2x pada hari yang sama",
+                  iconData: FontAwesomeIcons.check,
+                  height: height,
+                  width: width,
+                  onConfirm: () {},
+                );
+              } else {
+                Get.toNamed(Routes.faceScan);
+              }
             },
             child: Container(
               margin: const EdgeInsets.only(top: 20),
@@ -96,7 +111,8 @@ class PointAbsent extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    homeController.userController.user.value?.poin.toString() ?? '',
+                    homeController.userController.user.value?.poin.toString() ??
+                        '',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: homeController.pointTextColor.value,
                       fontWeight: FontWeight.w900,
