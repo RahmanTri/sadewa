@@ -21,7 +21,6 @@ class RegistWajah extends StatelessWidget {
       final height = MediaQuery.of(context).size.height;
       final width = MediaQuery.of(context).size.width;
       final cam = absenController.cameraController.value;
-
       if (cam == null ||
           !cam.value.isInitialized && !absenController.distanceUpdated.value ||
           absenController.isLoading) {
@@ -55,6 +54,7 @@ class RegistWajah extends StatelessWidget {
           }
         });
       }
+
       return Scaffold(
         backgroundColor: SDWcolors.bgD,
         body: Stack(
@@ -98,16 +98,33 @@ class RegistWajah extends StatelessWidget {
               ),
             ),
 
-            // Camera Box
-            Container(
-              margin: EdgeInsets.only(left: 40, right: 40, top: height * 0.1),
-              height: height * 0.5,
-              width: width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: CameraPreview(cam),
-            ),
+            absenController.isImageProcessed.value
+                ? Container(
+                    margin: EdgeInsets.only(
+                      left: 40,
+                      right: 40,
+                      top: height * 0.1,
+                    ),
+                    height: height * 0.5,
+                    width: width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(
+                    margin: EdgeInsets.only(
+                      left: 40,
+                      right: 40,
+                      top: height * 0.1,
+                    ),
+                    height: height * 0.5,
+                    width: width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CameraPreview(cam),
+                  ),
 
             // Text Wrapper
             Container(

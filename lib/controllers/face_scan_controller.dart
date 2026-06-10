@@ -44,6 +44,7 @@ class FaceScanController extends GetxController {
   final isInRadius = false.obs;
   bool isLoading = false;
   var cosineValue = ''.obs;
+  var isImageProcessed = false.obs;
 
   late List<CameraDescription> cameras;
   final cameraController = Rxn<CameraController>();
@@ -303,8 +304,8 @@ class FaceScanController extends GetxController {
 
                 if (countdown == 0) {
                   timer.cancel();
-
                   try {
+                    isImageProcessed.value = true;
                     embeddingResult = await _processFace(faces.first, image);
                     closeCamera();
                     print('Data wajah: $embeddingResult');
@@ -315,6 +316,7 @@ class FaceScanController extends GetxController {
                     _isCapturing = false;
                     _isCounting = false;
                     isLoading = false;
+                    isImageProcessed.value = false;
                   }
                 }
               });
@@ -323,10 +325,10 @@ class FaceScanController extends GetxController {
             embeddingResult = await _processFace(faces.first, image);
             double maxSimilarity = 0.0;
             const threshold = 0.78;
-
             try {
               double sim = cosineSimilarity(embeddingResult!, userEmbeddings);
               if (sim > maxSimilarity && sim > threshold) {
+                isImageProcessed.value = true;
                 Get.offAllNamed(Routes.absenConfirm);
                 closeCamera();
               } else {
@@ -400,7 +402,6 @@ class FaceScanController extends GetxController {
   }
 
   Future<void> closeCamera() async {
-    _isDispose = true;
     final _cameraController = cameraController.value;
     _timer?.cancel();
     _timer = null;
@@ -414,6 +415,7 @@ class FaceScanController extends GetxController {
       }
       try {
         await _cameraController?.dispose();
+        _isDispose = true;
         print("Berhasil dispose Kamera");
       } catch (e) {
         print('Gagal Dispose Camera: $e');
@@ -427,11 +429,12 @@ class FaceScanController extends GetxController {
     _timer?.cancel();
     _timer = null;
     closeCamera();
-
     _isCapturing = false;
     _isCounting = false;
     distanceUpdated.value = false;
     isLoading = false;
+    _isDispose = false;
+    isImageProcessed.value = false;
     super.onClose();
   }
 }

@@ -92,7 +92,7 @@ class AbsenConfirm extends StatelessWidget {
                       ),
                       child:
                           absenConfirm.userData.user.value?.fotoProfil !=
-                                  null ||
+                                  null &&
                               absenConfirm.userData.user.value?.fotoProfil != ''
                           ? Container(
                               height: height * 0.15,
