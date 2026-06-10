@@ -21,6 +21,13 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+//Ping
+Route::get('/ping', function () {
+    return response()->json([
+        'message' => 'Laravel OK'
+    ]);
+});
+
 //AUTH
 Route::post('/register', [auth_controller::class, 'register']);
 Route::post('/email-login', [auth_controller::class, 'loginByEmail']);

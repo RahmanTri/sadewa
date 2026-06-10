@@ -566,9 +566,9 @@ class employee_controller extends Controller
         }
 
         $employeeData = DB::table("employee as em")
-            ->join('point as poin', 'poin.employee_id', '=', 'em.id')
             ->join('division as dv', 'dv.id', '=', 'em.division_id')
             ->join('users as user', 'user.id', '=', 'em.user_id')
+            ->leftJoin('point as poin', 'poin.employee_id', '=', 'em.id')
 
             ->select(
                 'em.id as id_karyawan',
@@ -590,6 +590,9 @@ class employee_controller extends Controller
                     $item->data_wajah = 'Terdaftar';
                 } else {
                     $item->data_wajah = 'Belum Terdaftar';
+                }
+                if ($item->total_point == null) {
+                    $item->total_point = 0;
                 }
                 return $item;
 

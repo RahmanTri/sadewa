@@ -89,9 +89,9 @@ class history_log_controller extends Controller
                     $tanggal = Carbon::parse($item->date)->locale('id');
                     return [
                         'hari' => $tanggal->translatedFormat('l'),
-                        'tanggal' => $tanggal->format('d'),
-                        'bulan' => $tanggal->format('F'),
-                        'tahun' => $tanggal->format('Y'),
+                        'tanggal' => $tanggal->translatedFormat('d'),
+                        'bulan' => $tanggal->translatedFormat('F'),
+                        'tahun' => $tanggal->translatedFormat('Y'),
                         'waktu_masuk' => $item->waktu_masuk,
                         'status_masuk' => $item->status_masuk,
                         'waktu_keluar' => $item->waktu_keluar,
