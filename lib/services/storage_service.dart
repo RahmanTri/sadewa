@@ -66,16 +66,6 @@ class StorageService {
     return prefs.getString(_userRoleKey);
   }
 
-  // Future<List<double>> getEmbeddings() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   String? embeddingJson = pref.getString(_faceEmbeddings);
-  //   if (embeddingJson != null) {
-  //     return jsonDecode(embeddingJson);
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
   // Delete data
   Future<void> deleteEmailUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -121,8 +111,8 @@ class StorageService {
 
   // GetUserCredential
   Future<Map<String, String>> getUserCredential() async {
-    String emailUsername = getEmailUsername().toString();
-    String password = getPassword().toString();
+    String emailUsername = await getEmailUsername() ?? '';
+    String password = await getPassword() ?? '';
     return {'emailUsername': emailUsername, 'password': password};
   }
 

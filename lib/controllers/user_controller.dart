@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadewa_fe/controllers/auth_controller.dart';
 import 'dart:async';
 import 'package:sadewa_fe/models/admin_model.dart';
 import 'package:sadewa_fe/pages/User/Profile/changepw_succes.dart';
@@ -556,6 +557,7 @@ class UserController extends GetxController {
   }
 
   void logOutCurrentUser() {
+    final AuthController authController = Get.find<AuthController>();
     Get.delete<HomeController>();
     user.value = null;
     admin.value = null;
@@ -563,6 +565,6 @@ class UserController extends GetxController {
     userToken.value = '';
     _storageService.logOut();
     Get.offAllNamed(Routes.login);
-    print("Berhasil Logout");
+    authController.rememberMe.value = false;
   }
 }

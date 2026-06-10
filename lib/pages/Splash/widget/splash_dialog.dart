@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
-import 'package:sadewa_fe/controllers/division_controller.dart';
-
-// Unused Class
 
 class SplashDialog extends StatelessWidget {
   final String message;
@@ -23,9 +21,6 @@ class SplashDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DivisionController divisionController =
-        Get.find<DivisionController>();
-
     return Material(
       color: SDWcolors.transparent,
       child: Stack(
@@ -33,7 +28,7 @@ class SplashDialog extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              SystemNavigator.pop();
 
               if (run != null) {
                 run!();
@@ -107,10 +102,9 @@ class SplashDialog extends StatelessWidget {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                SystemNavigator.pop();
                                 if (goTo != '') {
                                   Get.offAllNamed(goTo);
-                                  divisionController.fetchDivisions();
                                 }
                                 if (run != null) {
                                   run!();
@@ -153,8 +147,8 @@ class SplashDialog extends StatelessWidget {
                   margin: EdgeInsets.all(height * 0.012),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: SDWcolors.transparent,
-                    border: Border.all(color: SDWcolors.white, width: 4),
+                    color: SDWcolors.white,
+                    border: Border.all(color: SDWcolors.red, width: 4),
                   ),
                   child: Center(
                     child: Icon(
