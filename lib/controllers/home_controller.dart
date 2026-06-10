@@ -50,18 +50,18 @@ class HomeController extends GetxController {
     try {
       token.value = userController.userToken.value;
       _loadGreeting();
-      _loadActivityLog();
+      await _loadActivityLog();
 
       if (userController.user.value?.role == 'employee') {
-        _refreshuserController();
+        await _refreshUserData();
         _noticeController.fetchNotices();
-        _loadLatestLogin();
+        await _loadLatestLogin();
         _loadAbsenText();
         _loadPointText();
       } else {
-        loadAdminDashboard();
-        _loadMasuk();
-        _loadKeluar();
+        await loadAdminDashboard();
+        await _loadMasuk();
+        await _loadKeluar();
       }
       isLoading.value = false;
     } catch (e) {
@@ -99,6 +99,9 @@ class HomeController extends GetxController {
     }
 
     try {
+      print(
+        "data refresh untuk point n absen : ${dataRefresh.value?.loggedIn}",
+      );
       if (dataRefresh.value?.loggedIn == true) {
         absentText.value = 'Anda Sudah Absen Hari Ini!';
         absenMessage.value = messageData[randomIndex];
@@ -331,7 +334,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> _refreshuserController() async {
+  Future<void> _refreshUserData() async {
     isLoading.value = true;
     try {
       final result = await _apiService.getRequest<Map<String, dynamic>>(
@@ -340,8 +343,9 @@ class HomeController extends GetxController {
         onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer ${token.value}'},
       );
-      final List<dynamic> jsonData = result['refreshed_userController'];
+      final List<dynamic> jsonData = result['refreshed_userData'];
       dataRefresh.value = UserRefresh.fromJson(jsonData[0]);
+      print("hasil data refresh login :  ${dataRefresh.value}");
       print("Berhasil Refresh data user");
       isLoading.value = false;
     } catch (e) {

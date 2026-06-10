@@ -42,8 +42,8 @@ class FaceScanController extends GetxController {
   bool _isDispose = false;
   final distanceUpdated = false.obs;
   final isInRadius = false.obs;
-  bool isAbsen = false;
   bool isLoading = false;
+  var cosineValue = ''.obs;
 
   late List<CameraDescription> cameras;
   final cameraController = Rxn<CameraController>();
@@ -51,7 +51,6 @@ class FaceScanController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    isAbsen = userData.user.value?.loggedIn ?? false;
     token.value = await _storageService.getToken() ?? '';
     cameras = await availableCameras();
     await _loadLocation();
@@ -140,6 +139,7 @@ class FaceScanController extends GetxController {
             _getEmbedding(image, userEmbeddings);
           } else {
             if (isInRadius.value) {
+              print("IsInRadius controller => ${isInRadius.value.toString()}");
               _getEmbedding(image, userEmbeddings);
             } else {}
           }
@@ -322,7 +322,7 @@ class FaceScanController extends GetxController {
           } else {
             embeddingResult = await _processFace(faces.first, image);
             double maxSimilarity = 0.0;
-            const threshold = 0.85;
+            const threshold = 0.78;
 
             try {
               double sim = cosineSimilarity(embeddingResult!, userEmbeddings);

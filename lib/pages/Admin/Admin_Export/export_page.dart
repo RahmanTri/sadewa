@@ -611,6 +611,16 @@ class AdminExportPage extends StatelessWidget {
                                 width: width,
                                 onConfirm: () {},
                               );
+                            } else if (exportController.filteredData.isEmpty) {
+                              SDWoverlay.showOverlay(
+                                context: context,
+                                title:
+                                    "Data kosong, silahkan pilih Divisi dan Periode yg valid",
+                                iconData: FontAwesomeIcons.download,
+                                height: height,
+                                width: width,
+                                onConfirm: () {},
+                              );
                             } else {
                               ever(exportController.isDownloading, (val) {
                                 if (val == true) {

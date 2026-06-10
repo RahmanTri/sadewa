@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/urls.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 
 class AbsenConfirm extends StatelessWidget {
   const AbsenConfirm({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class AbsenConfirm extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final absenConfirm = Get.put(AbsenConfirmController());
+    final homeController = Get.put(HomeController());
 
     return Obx(() {
       return Scaffold(
@@ -462,12 +464,14 @@ class AbsenConfirm extends StatelessWidget {
                           "Data wajah anda berhasil disimpan!",
                         );
                       } else if (!absenConfirm.isAbsen) {
+                        // homeController.refreshuserController();
                         absenConfirm.absenLogin();
                         Get.snackbar(
                           "Absen masuk Berhasil",
                           "Anda berhasil absen untuk hari ini!",
                         );
                       } else {
+                        // homeController.refreshuserController();
                         absenConfirm.absenLogout();
                         Get.snackbar(
                           "Absen keluar Berhasil",

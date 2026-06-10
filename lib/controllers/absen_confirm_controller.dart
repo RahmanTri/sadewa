@@ -73,7 +73,6 @@ class AbsenConfirmController extends GetxController {
         onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
-
       Get.offAllNamed(Routes.home);
     } catch (e) {
       print(e);
@@ -90,10 +89,9 @@ class AbsenConfirmController extends GetxController {
         endpoint: 'em-log/chkout',
         data: {'time': formattedTime},
         parser: (body) => jsonDecode(body),
-        onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
+        onError: (resp) => 'Gagal checkout: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
-
       Get.offAllNamed(Routes.home);
     } catch (e) {
       print(e);

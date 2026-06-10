@@ -4,6 +4,8 @@ import 'package:sadewa_fe/constants/sdw_sizes.dart';
 import 'package:sadewa_fe/pages/Effect/box_shadow.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class ButtomNavbar extends StatelessWidget {
@@ -13,6 +15,7 @@ class ButtomNavbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.put(HomeController());
     return SizedBox(
       width: width,
       height: height * 0.14,
@@ -181,7 +184,23 @@ class ButtomNavbar extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.faceScan);
+                if (homeController.userController.user.value?.loggedIn ==
+                        true &&
+                    homeController.userController.user.value?.loggedOut ==
+                        true) {
+                  SDWoverlay.showOverlay(
+                    context: context,
+                    title: "Anda Sudah Melakukan Absensi",
+                    subtitle:
+                        "Anda tidak dapat melakukan absensi 2x pada hari yang sama",
+                    iconData: FontAwesomeIcons.check,
+                    height: height,
+                    width: width,
+                    onConfirm: () {},
+                  );
+                } else {
+                  Get.toNamed(Routes.faceScan);
+                }
               },
               child: Column(
                 children: [

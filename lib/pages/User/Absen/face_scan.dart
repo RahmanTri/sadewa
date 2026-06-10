@@ -21,10 +21,21 @@ class RegistWajah extends StatelessWidget {
       final cam = absenController.cameraController.value;
 
       if (cam == null ||
-          !cam.value.isInitialized &&
-              !absenController.distanceUpdated.value &&
-              absenController.isLoading) {
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
+          !cam.value.isInitialized && !absenController.distanceUpdated.value ||
+          absenController.isLoading) {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text('Sedang menunggu informasi lokasi dan kammera...'),
+              ],
+            ),
+          ),
+        );
       }
 
       if (!absenController.isInRadius.value && !absenController.isRegist) {
@@ -47,12 +58,12 @@ class RegistWajah extends StatelessWidget {
         body: Stack(
           children: [
             // Header
-            Container(
+            SizedBox(
               height: height * 0.13,
               width: width,
               child: Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: height * 0.13,
                     child: IconButton(
                       onPressed: () {
@@ -71,7 +82,7 @@ class RegistWajah extends StatelessWidget {
                     child: Text(
                       absenController.isRegist
                           ? 'Registrasi Wajah'
-                          : absenController.isAbsen
+                          : absenController.userData.user.value!.loggedIn
                           ? 'Absen Keluar'
                           : 'Absen Masuk',
                       style: TextStyle(
