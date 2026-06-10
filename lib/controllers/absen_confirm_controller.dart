@@ -9,6 +9,7 @@ import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 
 class AbsenConfirmController extends GetxController {
   final ApiService _apiService = ApiService();
@@ -16,6 +17,7 @@ class AbsenConfirmController extends GetxController {
 
   final userData = Get.find<UserController>();
   final scanResult = Get.find<FaceScanController>();
+  final homeController = Get.put(HomeController());
 
   final bool _isLoading = false;
   final statusText = "".obs;
@@ -31,7 +33,7 @@ class AbsenConfirmController extends GetxController {
   void onInit() async {
     super.onInit();
     _loadDateNow();
-    isAbsen = userData.user.value?.loggedIn ?? false;
+    isAbsen = homeController.dataRefresh.value!.loggedIn;
     token.value = await _storageService.getToken() ?? '';
     isRegist = scanResult.isRegist;
     _embeddingResult = scanResult.embeddingResult;
@@ -73,6 +75,7 @@ class AbsenConfirmController extends GetxController {
         onError: (resp) => 'Gagal memuat riwayat: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
+      homeController.refreshUserData();
       Get.offAllNamed(Routes.home);
     } catch (e) {
       print(e);
@@ -92,9 +95,10 @@ class AbsenConfirmController extends GetxController {
         onError: (resp) => 'Gagal checkout: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
+      homeController.refreshUserData();
       Get.offAllNamed(Routes.home);
     } catch (e) {
-      print(e);
+      print("gagal checkout: $e");
     }
   }
 

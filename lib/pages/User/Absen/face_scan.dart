@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
 import 'package:sadewa_fe/constants/sdw_sizes.dart';
+import 'package:sadewa_fe/controllers/home_controller.dart';
 // import '../Effect/box_shadow.dart';
 import '../../Effect/SDWOverlay.dart';
 import 'package:sadewa_fe/controllers/face_scan_controller.dart';
@@ -12,6 +13,7 @@ import 'package:sadewa_fe/routes/app_routes.dart';
 class RegistWajah extends StatelessWidget {
   RegistWajah({Key? key});
   final absenController = Get.put(FaceScanController());
+  final homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class RegistWajah extends StatelessWidget {
                     child: Text(
                       absenController.isRegist
                           ? 'Registrasi Wajah'
-                          : absenController.userData.user.value!.loggedIn
+                          : homeController.dataRefresh.value!.loggedIn
                           ? 'Absen Keluar'
                           : 'Absen Masuk',
                       style: TextStyle(

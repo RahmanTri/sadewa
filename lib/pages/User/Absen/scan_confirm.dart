@@ -54,8 +54,8 @@ class AbsenConfirm extends StatelessWidget {
                     child: Text(
                       absenConfirm.isRegist
                           ? 'Konfirmasi Registrasi'
-                          : !absenConfirm.isAbsen
-                          ? 'Konfirmasi Absen Masuk'
+                          : homeController.dataRefresh.value!.loggedIn == false
+                          ?  'Konfirmasi Absen Masuk'
                           : 'Konfirmasi Absen Keluar',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
@@ -463,7 +463,7 @@ class AbsenConfirm extends StatelessWidget {
                           "Registrasi Berhasil",
                           "Data wajah anda berhasil disimpan!",
                         );
-                      } else if (!absenConfirm.isAbsen) {
+                      } else if (homeController.dataRefresh.value!.loggedIn == false) {
                         // homeController.refreshuserController();
                         absenConfirm.absenLogin();
                         Get.snackbar(

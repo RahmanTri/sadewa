@@ -111,7 +111,7 @@ class PointAbsent extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    homeController.userController.user.value?.poin.toString() ??
+                    homeController.dataRefresh.value?.poin.toString() ??
                         '',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: homeController.pointTextColor.value,

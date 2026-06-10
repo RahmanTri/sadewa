@@ -53,7 +53,7 @@ class HomeController extends GetxController {
       await _loadActivityLog();
 
       if (userController.user.value?.role == 'employee') {
-        await _refreshUserData();
+        await refreshUserData();
         _noticeController.fetchNotices();
         await _loadLatestLogin();
         _loadAbsenText();
@@ -334,7 +334,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> _refreshUserData() async {
+  Future<void> refreshUserData() async {
     isLoading.value = true;
     try {
       final result = await _apiService.getRequest<Map<String, dynamic>>(
