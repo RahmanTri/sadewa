@@ -14,9 +14,10 @@ class point_log extends Model
         'employee_id',
         'previous_value',
         'added_value',
+        'source'
     ];
 
-    public $timestamp =  true;
+    public $timestamp = true;
 
     public function employee()
     {

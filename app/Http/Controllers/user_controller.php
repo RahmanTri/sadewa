@@ -45,23 +45,32 @@ class user_controller extends Controller
             ], 401);
         }
 
-        $data = User::where('id', $user->id)->first()
+        $data = User::where('users.id', $user->id)
             ->join('employee', 'employee.user_id', '=', 'users.id')
             ->join('division', 'division.id', '=', 'employee.division_id')
             ->join('point', 'point.employee_id', '=', 'employee.id')
             ->select(
                 'users.id as user_id',
+                'users.username as username',
                 'users.email as email',
+                'users.role as role',
+                'employee.company_id as id_perusahaan',
                 'employee.name as nama_lengkap',
                 'employee.phone_number as no_telp',
-                'employee.profile_pic as foto_profil',
                 'employee.division_id as id_divisi',
-                'point.point_value as poin',
                 'division.division_name as nama_divisi',
+                'employee.face_data as data_wajah',
+                'employee.profile_pic as foto_profil',
+                'point.point_value as poin',
                 'employee.logged_in as logged_in',
                 'employee.logged_out as logged_out',
             )
             ->get()
+            ->map(function ($item) {
+                $item->data_wajah = json_decode($item->data_wajah);
+                return $item;
+            })
+            ->first()
         ;
 
         return response()->json([
@@ -72,6 +81,8 @@ class user_controller extends Controller
 
 
     }
+
+
 
     public function getLatestLogin()
     {
@@ -123,7 +134,7 @@ class user_controller extends Controller
         ], 200);
 
     }
-    
+
     public function getUsers()
     {
         $user = Auth::user();
@@ -333,7 +344,7 @@ class user_controller extends Controller
             'email' => $validatedData['email'],
             'role' => $validatedData['role'],
         ]);
-        
+
         return response()->json([
             "success" => true,
             "message" => "Berhasil mendaftar!",
