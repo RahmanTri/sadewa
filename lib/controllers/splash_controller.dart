@@ -46,16 +46,16 @@ class SplashController extends GetxController {
 
   Future<void> checkIsLoacationMocked() async {
     final test1 = await checkMockLocation();
-    Get.snackbar('Hasil Test 1', test1.toString());
+    // Get.snackbar('Hasil Test 1', test1.toString());
     final test2 = await checkMockLocation2();
-    Get.snackbar('Hasil Test 2', test2.toString());
+    // Get.snackbar('Hasil Test 2', test2.toString());
 
     if (test1 || test2) {
       showDialog(message: 'Penggunaan lokasi palsu terdeteksi');
     } else {
       // await Future.delayed(const Duration(seconds: 3));
       final rememberMeSaved = await _storageService.getRemember() ?? false;
-      Get.snackbar('Remember Me Tersimpan', 'Remember Me: $rememberMeSaved');
+      // Get.snackbar('Remember Me Tersimpan', 'Remember Me: $rememberMeSaved');
       if (rememberMeSaved) {
         final tryAutoLog = await authController.loadRememberMe();
         if (!tryAutoLog) {

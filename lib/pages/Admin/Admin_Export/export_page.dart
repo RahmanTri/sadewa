@@ -149,18 +149,16 @@ class AdminExportPage extends StatelessWidget {
                                         }).toList();
                                       },
                                       onChanged: (newValue) {
-                                        if (newValue != null) {
+                                        exportController
+                                            .monthSelectedFIlter
+                                            .value = newValue
+                                            .toString();
+                                        exportController.applyFilter(
                                           exportController
-                                              .monthSelectedFIlter
-                                              .value = newValue
-                                              .toString();
-                                          exportController.applyFilter(
-                                            newValue,
-                                            exportController
-                                                .divisionSelectedFilter
-                                                .value,
-                                          );
-                                        }
+                                              .divisionSelectedFilter
+                                              .value,
+                                          newValue!,
+                                        );
                                       },
                                     ),
                                   ),
@@ -230,18 +228,16 @@ class AdminExportPage extends StatelessWidget {
                                         }).toList();
                                       },
                                       onChanged: (newValue) {
-                                        if (newValue != null) {
+                                        exportController
+                                            .divisionSelectedFilter
+                                            .value = newValue
+                                            .toString();
+                                        exportController.applyFilter(
+                                          newValue!,
                                           exportController
-                                              .divisionSelectedFilter
-                                              .value = newValue
-                                              .toString();
-                                          exportController.applyFilter(
-                                            newValue,
-                                            exportController
-                                                .monthSelectedFIlter
-                                                .value,
-                                          );
-                                        }
+                                              .monthSelectedFIlter
+                                              .value,
+                                        );
                                       },
                                     ),
                                   ),
