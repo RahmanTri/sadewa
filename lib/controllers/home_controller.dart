@@ -67,6 +67,10 @@ class HomeController extends GetxController {
       isLoading.value = true;
       print("Ada kegagalan memulai sistem $e");
     }
+    divisiController.fetchDivisions();
+    if (userData.isAdmin.value == true) {
+      karyawanController.fetchKaryawan();
+    }
   }
 
   Future<void> _loadGreeting() async {

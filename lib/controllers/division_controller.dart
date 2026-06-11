@@ -127,9 +127,7 @@ class DivisionController extends GetxController {
 
       setDivisonsAvailable();
 
-      for (int i = 0; i < availableDivisions.length; i++) {
-        _karyawanController.filterOptions.add(availableDivisions[i]);
-      }
+      setKaryawanFilter();
 
       isLoading.value = false;
     } catch (e) {
