@@ -460,23 +460,11 @@ class AbsenConfirm extends StatelessWidget {
                     onPressed: () {
                       if (absenConfirm.isRegist) {
                         absenConfirm.registFaceData();
-                        Get.snackbar(
-                          "Registrasi Berhasil",
-                          "Data wajah anda berhasil disimpan!",
-                        );
                       } else if (absenConfirm.userData.user.value!.loggedIn ==
                           false) {
                         absenConfirm.absenLogin();
-                        Get.snackbar(
-                          "Absen masuk Berhasil",
-                          "Anda berhasil absen untuk hari ini!",
-                        );
                       } else {
                         absenConfirm.absenLogout();
-                        Get.snackbar(
-                          "Absen keluar Berhasil",
-                          "Anda berhasil absen untuk hari ini!",
-                        );
                       }
                     },
                     child: Container(
