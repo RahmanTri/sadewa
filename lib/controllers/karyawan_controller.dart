@@ -86,8 +86,6 @@ class KaryawanController extends GetxController {
   }
 
   Future<void> fetchKaryawan() async {
-    karyawan.clear();
-    filteredKaryawan.clear();
     isLoading.value = true;
     final endpoint = 'employee/get-data';
     final apiToken = Get.find<UserController>().userToken.value;
@@ -98,6 +96,10 @@ class KaryawanController extends GetxController {
         onError: (resp) => 'Terjadi kesalahan: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $apiToken'},
       );
+      if (result['success'] == true) {
+        karyawan.clear();
+        filteredKaryawan.clear();
+      }
       print('berhasil mendapatkan data dari BE');
       final jsonData = result['data'];
       final karyawanFromBE = jsonData
@@ -294,10 +296,8 @@ class KaryawanController extends GetxController {
         data: data,
       );
       showDialog(true, 'Berhasil mendaftarkan karyawan');
-      clearForm();
       refreshView();
       goToAddEmployee();
-      fetchKaryawan();
     } catch (e) {
       showDialog(false, 'Gagal mendaftarkan karyawan');
     }
