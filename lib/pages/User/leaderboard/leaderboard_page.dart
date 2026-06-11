@@ -43,7 +43,7 @@ class LeaderboardPage extends StatelessWidget {
                 SizedBox(height: height * 0.04, width: width),
                 HeaderPage(width: width, height: height),
                 Expanded(
-                  child: lbController.leaderboard.length <= 3
+                  child: lbController.leaderboard.length < 3
                       ? Center(
                           child: Column(
                             children: [

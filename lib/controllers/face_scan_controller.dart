@@ -16,6 +16,7 @@ import 'package:sadewa_fe/controllers/user_controller.dart';
 import 'package:sadewa_fe/routes/app_routes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sadewa_fe/pages/Effect/SDWOverlay.dart';
+import 'package:flutter/services.dart';
 
 class FaceScanController extends GetxController {
   final StorageService _storageService = StorageService();
@@ -23,6 +24,7 @@ class FaceScanController extends GetxController {
   final userData = Get.find<UserController>();
   final statusText = ''.obs;
   final token = ''.obs;
+  static const platform = MethodChannel('mock_location_channel');
 
   double divLat = 0.0;
   double divLng = 0.0;
@@ -42,6 +44,7 @@ class FaceScanController extends GetxController {
   bool _isDispose = false;
   final distanceUpdated = false.obs;
   final isInRadius = false.obs;
+  final isMocked = false.obs;
   bool isLoading = false;
   var cosineValue = ''.obs;
   var isImageProcessed = false.obs;
@@ -124,6 +127,7 @@ class FaceScanController extends GetxController {
       } else {
         isRegist = false;
         try {
+          isMocked.value = await mainMockCheck();
           isInRadius.value = await radiusProvider(divLat, divLng, divRadius);
           print("Berhasil set in radius : $isInRadius");
         } catch (e) {
@@ -139,7 +143,7 @@ class FaceScanController extends GetxController {
           if (isRegist) {
             _getEmbedding(image, userEmbeddings);
           } else {
-            if (isInRadius.value) {
+            if (isInRadius.value && !isMocked.value) {
               print("IsInRadius controller => ${isInRadius.value.toString()}");
               _getEmbedding(image, userEmbeddings);
             } else {}
@@ -422,6 +426,48 @@ class FaceScanController extends GetxController {
       }
     }
     cameraController.value = null;
+  }
+
+  Future<bool> checkMockLocation1() async {
+    try {
+      final bool result = await platform.invokeMethod('isMockLocation');
+      return result;
+    } on Error {
+      return false;
+    }
+  }
+
+  Future<bool> checkMockLocation2() async {
+    LocationPermission permission;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      } else if (permission == LocationPermission.deniedForever) {
+        return false;
+      }
+    }
+
+    final location = await Geolocator.getCurrentPosition();
+
+    if (location.isMocked) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> mainMockCheck() async {
+    final test1 = await checkMockLocation1();
+    final test2 = await checkMockLocation2();
+
+    if (test1 || test2) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

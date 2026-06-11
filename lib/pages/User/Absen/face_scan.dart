@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/constants/sdw_colors.dart';
@@ -37,6 +38,22 @@ class RegistWajah extends StatelessWidget {
             ),
           ),
         );
+      }
+
+      if (absenController.isMocked.value && !absenController.isRegist) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final ctx = Get.context;
+          if (ctx != null) {
+            SDWoverlay.showOverlay(
+              context: (context),
+              title: "Anda terdeteksi menggunakan penyamar lokasi",
+              iconData: Icons.warning,
+              height: Get.height,
+              width: Get.width,
+              onConfirm: () => SystemNavigator.pop(),
+            );
+          }
+        });
       }
 
       if (!absenController.isInRadius.value && !absenController.isRegist) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/face_scan_controller.dart';
@@ -64,7 +65,6 @@ class AbsenConfirmController extends GetxController {
     final authToken = token.value;
     final now = DateTime.now();
     final formattedTime = DateFormat('HH:mm:ss').format(now);
-
     try {
       final result = await _apiService.postRequest<Map<String, dynamic>>(
         endpoint: 'em-log/chkin',
@@ -118,5 +118,15 @@ class AbsenConfirmController extends GetxController {
     final tanggal = DateFormat('dd MMMM yyyy', 'id_ID').format(now);
     final jam = DateFormat('HH:mm').format(now);
     dateNow.value = '$hari, $tanggal | $jam';
+  }
+
+  void loginChecker() {
+    if (isRegist) {
+      registFaceData();
+    } else if (userData.user.value!.loggedIn == false) {
+      absenLogin();
+    } else {
+      absenLogout();
+    }
   }
 }

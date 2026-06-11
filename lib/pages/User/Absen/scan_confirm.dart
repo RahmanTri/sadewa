@@ -458,14 +458,7 @@ class AbsenConfirm extends StatelessWidget {
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      if (absenConfirm.isRegist) {
-                        absenConfirm.registFaceData();
-                      } else if (absenConfirm.userData.user.value!.loggedIn ==
-                          false) {
-                        absenConfirm.absenLogin();
-                      } else {
-                        absenConfirm.absenLogout();
-                      }
+                      absenConfirm.loginChecker();
                     },
                     child: Container(
                       height: 50,
