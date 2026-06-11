@@ -1,63 +1,79 @@
-plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id("dev.flutter.flutter-gradle-plugin")
-}
+    import java.util.Properties
+    import java.io.FileInputStream
 
-android {
-    namespace = "com.example.sadewa_fe"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    plugins {
+        id("com.android.application")
+        id("kotlin-android")
+        id("dev.flutter.flutter-gradle-plugin")
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    val keystorePropertiesFile = rootProject.file("key.properties")
+    val keystoreProperties = Properties()
+    println("PATH = ${keystorePropertiesFile.absolutePath}")
+    println("EXISTS = ${keystorePropertiesFile.exists()}")
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.sadewa_fe"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
+    android {
+        namespace = "com.example.sadewa_fe"
+        compileSdk = flutter.compileSdkVersion
+        ndkVersion = flutter.ndkVersion
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
+
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_17.toString()
+        }
+
+        defaultConfig {
+            applicationId = "com.example.sadewa_fe"
+            minSdk = flutter.minSdkVersion
+            targetSdk = flutter.targetSdkVersion
+            versionCode = flutter.versionCode
+            versionName = flutter.versionName
+        }
+
+        signingConfigs {
+            create("release") {
+                val storeFilePath = keystoreProperties["storeFile"] as? String
+                val storePasswordProp = keystoreProperties["storePassword"] as? String
+                val keyAliasProp = keystoreProperties["keyAlias"] as? String
+                val keyPasswordProp = keystoreProperties["keyPassword"] as? String
+
+                println("storeFile=$storeFilePath")
+                println("storePassword=$storePasswordProp")
+                println("keyAlias=$keyAliasProp")
+                println("keyPassword=$keyPasswordProp")
+
+                if (storeFilePath != null && storePasswordProp != null && keyAliasProp != null && keyPasswordProp != null) {
+                    storeFile = file(storeFilePath)
+                    storePassword = storePasswordProp
+                    keyAlias = keyAliasProp
+                    keyPassword = keyPasswordProp
+                } else {
+                    throw GradleException("Missing keystore properties, check android/key.properties")
+                }
+            }
+        }
+
+        buildTypes {
+            getByName("release") {
+                signingConfig = signingConfigs.getByName("release")
+                isMinifyEnabled = false
+                isShrinkResources = false
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+                )
+            }
         }
     }
-}
 
-flutter {
-    source = "../.."
-}
+    flutter {
+        source = "../.."
+    }
 
-signingConfigs {
-    release {
-        if (project.hasProperty('keyProperties')) {
-            storeFile file(keyProperties['storeFile'])
-            storePassword keyProperties['storePassword']
-            keyAlias keyProperties['keyAlias']
-            keyPassword keyProperties['keyPassword']
-        }
-    }
-}
-buildTypes {
-    release {
-        signingConfig signingConfigs.release
-        minifyEnabled true
-        shrinkResources true
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-}

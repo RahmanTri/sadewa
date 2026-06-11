@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:sadewa_fe/controllers/division_controller.dart';
 import 'package:sadewa_fe/controllers/home_controller.dart';
@@ -191,6 +191,11 @@ class ExportController extends GetxController {
 
   Future<void> exportAll() async {
     isDownloading.value = true;
+    final rawDate = DateTime.now();
+    final formattedDate = DateFormat(
+      "EEEE-dd-MMMM-yyyy_HH.mm",
+      "id_ID",
+    ).format(rawDate);
     final authToken = token.value;
     final baseUrl = AppUrls.baseApiUrl;
     try {
@@ -204,7 +209,9 @@ class ExportController extends GetxController {
           if (!await dir.exists()) {
             await dir.create(recursive: true);
           }
-          final file = File('${dir.path}/Recap Semua Divisi.pdf');
+          final file = File(
+            '${dir.path}/Recap Semua Divisi_$formattedDate.pdf',
+          );
           await file.writeAsBytes(response.bodyBytes);
           print("Berhasil exprort all");
           downloadDirectory.value = dir.path.toString();
@@ -225,7 +232,12 @@ class ExportController extends GetxController {
     final baseUrl = AppUrls.baseApiUrl;
     final month = monthSelectedFIlter.value;
     final division = divisionSelectedFilter.value;
-    
+    final rawDate = DateTime.now();
+    final formattedDate = DateFormat(
+      "EEEE-dd-MMMM-yyyy_HH.mm",
+      "id_ID",
+    ).format(rawDate);
+
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/export/custom'),
@@ -241,7 +253,9 @@ class ExportController extends GetxController {
           if (!await dir.exists()) {
             await dir.create(recursive: true);
           }
-          final file = File('${dir.path}/$division-$month.pdf');
+          final file = File(
+            '${dir.path}/$division-$month _ $formattedDate.pdf',
+          );
           await file.writeAsBytes(response.bodyBytes);
           print("Berhasil exprort all");
           downloadDirectory.value = dir.path.toString();

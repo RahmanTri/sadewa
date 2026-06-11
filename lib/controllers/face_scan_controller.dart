@@ -324,7 +324,7 @@ class FaceScanController extends GetxController {
           } else {
             embeddingResult = await _processFace(faces.first, image);
             double maxSimilarity = 0.0;
-            const threshold = 0.78;
+            const threshold = 0.8;
             try {
               double sim = cosineSimilarity(embeddingResult!, userEmbeddings);
               if (sim > maxSimilarity && sim > threshold) {
