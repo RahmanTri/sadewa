@@ -65,9 +65,8 @@ class AkunController extends GetxController {
         accounts.add(accountsFromBE[i]);
       }
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
+      isLoading.value = false;
     } finally {
-      Get.snackbar('Sukses', 'Berhasil mengambil Akun');
       applyFilter(selectedFilter.value);
       isLoading.value = false;
     }
@@ -102,8 +101,6 @@ class AkunController extends GetxController {
     email.text = editedAccount.value!.email;
     selectedRole.value = editedAccount.value!.role;
     password.text = '';
-
-    Get.snackbar('Mengedit', 'Akun : ${account.username}');
   }
 
   Future<void> updateAccount() async {

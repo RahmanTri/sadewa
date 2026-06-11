@@ -108,12 +108,10 @@ class KaryawanController extends GetxController {
         karyawan.add(karyawanFromBE[i]);
       }
       print('berhasil assign data to models');
-      Get.snackbar('Sukses', 'Berhasil mengambil Karyawan');
 
       applyFilter(selectedFilter.value);
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
       print('gagal m elakukan ftech karyawan $e');
       isLoading.value = false;
     }
@@ -232,7 +230,6 @@ class KaryawanController extends GetxController {
       showDialog(true, 'Berhasil mengupdate data karyawan');
       processing.value = false;
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
       showDialog(false, 'Gagal mengupdate data karyawan');
       processing.value = false;
     } finally {
@@ -302,7 +299,6 @@ class KaryawanController extends GetxController {
       goToAddEmployee();
       fetchKaryawan();
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
       showDialog(false, 'Gagal mendaftarkan karyawan');
     }
   }

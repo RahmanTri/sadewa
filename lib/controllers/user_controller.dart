@@ -84,8 +84,6 @@ class UserController extends GetxController {
     } else {
       user.value = User.fromJson(userData);
     }
-    // Get.snackbar('Berhasil Cok', user.value?.dataWajah.toString() ?? '');
-
     isLoading.value = false;
   }
 
@@ -170,11 +168,8 @@ class UserController extends GetxController {
 
         user.refresh();
       }
-
-      Get.snackbar('Berhasil', 'Data profil telah diperbarui');
       isEditing.value = false;
     } catch (e) {
-      Get.snackbar('error', 'Terjadi kesalahan: $e');
       isLoading.value = false;
     } finally {
       isLoading.value = false;
@@ -199,7 +194,7 @@ class UserController extends GetxController {
         await cropImage(pickedFile.path);
       }
     } catch (e) {
-      Get.snackbar('error', 'Gagal mengambil gambar: $e');
+      print(e);
     }
   }
 
@@ -251,11 +246,9 @@ class UserController extends GetxController {
         }
 
         Get.snackbar('Berhasil', 'Foto profil telah diperbarui');
-      } else {
-        Get.snackbar('Gagal', 'Gagal mengunggah foto ke server');
       }
     } catch (e) {
-      Get.snackbar('error', 'Terjadi kesalahan: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -327,11 +320,9 @@ class UserController extends GetxController {
         }
 
         Get.snackbar('Berhasil', 'Foto profil telah dihapus');
-      } else {
-        Get.snackbar('Gagal', 'Gagal menghapus foto ke server');
       }
     } catch (e) {
-      Get.snackbar('error', 'Terjadi kesalahan: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -381,7 +372,7 @@ class UserController extends GetxController {
 
       Get.off(() => const PasswordChangeSuccess());
     } catch (e) {
-      Get.snackbar('Error', 'Gagal mengubah password: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -426,7 +417,7 @@ class UserController extends GetxController {
 
       Get.offAllNamed('/verifyOtp');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -507,7 +498,7 @@ class UserController extends GetxController {
 
       Get.offAllNamed('/login');
     } catch (e) {
-      Get.snackbar('Error', 'Gagal mengubah password: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -550,7 +541,7 @@ class UserController extends GetxController {
 
       startTimer();
     } catch (e) {
-      Get.snackbar('Error', 'Gagal mengirim ulang kode OTP: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }

@@ -69,7 +69,6 @@ class AuthController extends GetxController {
     try {
       // print(loginData);
       // print(loginEndpoint);
-      Get.snackbar('Mencoba Login', 'Email: $emailUsername, Password: $password');
       final result = await _apiService.postRequest<Map<String, dynamic>>(
         endpoint: loginEndpoint,
         data: loginData,
@@ -131,18 +130,13 @@ class AuthController extends GetxController {
         // Get.offNamed(Routes.adminHome);
         Get.offAllNamed(Routes.adminHome);
         //Test Only
-        Get.snackbar('Anda Adalah Admin', 'Anda Dipindahkan ke halaman view');
-      } else {
-        Get.snackbar('Error', 'Anda belum memiliki role');
       }
-
       // Test
       // print(result);
 
       return true;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Login gagal (login)', e.toString());
       // print("Error Login: $e");
       return false;
     }
@@ -163,7 +157,6 @@ class AuthController extends GetxController {
       return;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Login gagal', e.toString());
       return;
     }
     // print(emailUsername.text.trim()+password.text.trim());
@@ -178,24 +171,24 @@ class AuthController extends GetxController {
   //   }
   // }
 
-  Future<void> devAutoLogin() async {
-    isLoading.value = true;
-    final username = 'employee01';
-    final password = 'employee123';
+  // Future<void> devAutoLogin() async {
+  //   isLoading.value = true;
+  //   final username = 'employee01';
+  //   final password = 'employee123';
 
-    try {
-      final success = await login(username, password);
-      if (!success) {
-        Get.snackbar('Login gagal', 'Ada yang Keliru');
-        isLoading.value = false;
-      }
-      return;
-    } catch (e) {
-      isLoading.value = false;
-      Get.snackbar('Login gagal', e.toString());
-      return;
-    }
-  }
+  //   try {
+  //     final success = await login(username, password);
+  //     if (!success) {
+  //       Get.snackbar('Login gagal', 'Ada yang Keliru');
+  //       isLoading.value = false;
+  //     }
+  //     return;
+  //   } catch (e) {
+  //     isLoading.value = false;
+  //     Get.snackbar('Login gagal', e.toString());
+  //     return;
+  //   }
+  // }
 
   @override
   void onClose() {

@@ -131,10 +131,9 @@ class DivisionController extends GetxController {
         _karyawanController.filterOptions.add(availableDivisions[i]);
       }
 
-      Get.snackbar('Berhasil', 'Data divisi berhasil dimuat');
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar('Error', 'Terjadi kesalahan: $e');
+
       isLoading.value = false;
     } finally {
       applyFilter(selectedFilter.value);
@@ -371,7 +370,6 @@ class DivisionController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      Get.snackbar('Error', 'Terjadi kesalahan: $e');
       isLoading.value = false;
     }
   }
@@ -393,11 +391,11 @@ class DivisionController extends GetxController {
         refreshViewed();
       } else {
         showDialog(false, 'Lokasi gagal disimpan');
+        isLoading.value = false;
       }
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
+      isLoading.value = false;
     }
-    //Bugs Found UNFINISHED
   }
 
   void editJamKeluar() {

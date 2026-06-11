@@ -74,7 +74,6 @@ class RiwayatController extends GetxController {
       return;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Error', e.toString());
       return;
     }
   }

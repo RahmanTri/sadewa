@@ -57,7 +57,6 @@ class NoticeController extends GetxController {
       return;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Error', e.toString());
       return;
     }
   }
@@ -80,7 +79,6 @@ class NoticeController extends GetxController {
       }
       return;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
       return;
     }
   }
