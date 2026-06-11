@@ -47,9 +47,34 @@ class LeaderboardPage extends StatelessWidget {
                 Expanded(
                   child: Top20Page(width: width, height: height),
                 ),
+                // lbController.leaderboard.length <= 3
+                //     ? Center(
+                //         child: Column(
+                //           children: [
+                //             Image(
+                //               image: AssetImage(
+                //                 'assets/images/blank-page-img.png',
+                //               ),
+                //               height: height * 0.5,
+                //               width: width * 0.4,
+                //             ),
+                //             Text(
+                //               'Peringkat tersedia untuk lebih dari 3 karyawan',
+                //               style: Theme.of(context).textTheme.bodyMedium
+                //                   ?.copyWith(
+                //                     color: SDWcolors.textD,
+                //                     fontWeight: FontWeight.bold,
+                //                   ),
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                // Column(children: [
+
+                //   ],
+                // ),
               ],
             ),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: FooterPage(width: width, height: height),

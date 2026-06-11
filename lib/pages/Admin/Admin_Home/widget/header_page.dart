@@ -52,23 +52,21 @@ class HeaderPage extends StatelessWidget {
             height: height * 0.07,
             child: GestureDetector(
               onTap: () => Get.toNamed(Routes.adminProfile),
-              child: Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [SDWboxShadow.shadow],
-                    image: DecorationImage(
-                      image: const AssetImage(
-                        '${AppUrls.imgAssets}default-profile.png',
-                      ),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [SDWboxShadow.shadow],
+                  image: DecorationImage(
+                    image: const AssetImage(
+                      '${AppUrls.imgAssets}default-profile.png',
                     ),
-                    border: Border.all(
-                      color: SDWcolors.bgL,
-                      width: 3,
-                      strokeAlign: BorderSide.strokeAlignInside,
-                    ),
+                  ),
+                  border: Border.all(
+                    color: SDWcolors.bgL,
+                    width: 3,
+                    strokeAlign: BorderSide.strokeAlignInside,
                   ),
                 ),
               ),
