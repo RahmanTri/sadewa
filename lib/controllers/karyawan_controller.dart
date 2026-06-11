@@ -296,7 +296,7 @@ class KaryawanController extends GetxController {
         data: data,
       );
       showDialog(true, 'Berhasil mendaftarkan karyawan');
-      refreshView();
+      fetchKaryawan();
       goToAddEmployee();
     } catch (e) {
       showDialog(false, 'Gagal mendaftarkan karyawan');
