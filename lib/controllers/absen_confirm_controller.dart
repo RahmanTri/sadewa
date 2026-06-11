@@ -74,9 +74,13 @@ class AbsenConfirmController extends GetxController {
         headers: {'Authorization': 'Bearer $authToken'},
       );
       userData.refreshUserData();
+      Get.snackbar(
+        "Berhasil Check-In",
+        "Anda berhasil check-in untuk hari ini",
+      );
       Get.offAllNamed(Routes.home);
     } catch (e) {
-      print(e);
+      Get.snackbar("Gagal Check-In", "$e");
     }
   }
 
@@ -93,11 +97,16 @@ class AbsenConfirmController extends GetxController {
         onError: (resp) => 'Gagal checkout: ${resp.statusCode}',
         headers: {'Authorization': 'Bearer $authToken'},
       );
+      Get.snackbar(
+        "Berhasil Check-Out",
+        "Anda berhasil check-out untuk hari ini",
+      );
       userData.refreshUserData();
       print("berhasil chekout");
       Get.offAllNamed(Routes.home);
     } catch (e) {
       print("gagal checkout: $e");
+      Get.snackbar("Gagal Check-Out", "$e");
     }
   }
 
