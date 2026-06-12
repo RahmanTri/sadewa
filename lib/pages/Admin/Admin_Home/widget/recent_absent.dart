@@ -49,138 +49,154 @@ class RecentAbsent extends StatelessWidget {
                                   ?.copyWith(fontWeight: FontWeight.w300),
                             ),
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: homeController.absenMasuk.length,
-                              itemBuilder: (context, index) {
-                                final item = homeController.absenMasuk[index];
-                                return Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: SizedBox(
-                                        width: width * 0.46,
-                                        height: height * 0.053,
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                height: height,
-                                                width: width,
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: SDWcolors.bgL,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  boxShadow: [
-                                                    SDWboxShadow.shadow,
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: height * 0.02,
-                                                      width: width * 0.22,
-                                                      child: Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Text(
-                                                          item.namaLengkap
-                                                              .split(" ")
-                                                              .take(2)
-                                                              .join(" "),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.sp,
-                                                                  ),
-                                                          maxLines: 2,
+                          if (homeController.absenMasuk.isEmpty)
+                            Expanded(
+                              child: Center(child: Text("Tidak ada data")),
+                            )
+                          else
+                            Expanded(
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                physics: BouncingScrollPhysics(),
+                                itemCount: homeController.absenMasuk.length,
+                                itemBuilder: (context, index) {
+                                  final item = homeController.absenMasuk[index];
+                                  return Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: SizedBox(
+                                          width: width * 0.46,
+                                          height: height * 0.053,
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Container(
+                                                  height: height,
+                                                  width: width,
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: SDWcolors.bgL,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15,
+                                                        ),
+                                                    boxShadow: [
+                                                      SDWboxShadow.shadow,
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: height * 0.02,
+                                                        width: width * 0.22,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            item.namaLengkap
+                                                                .split(" ")
+                                                                .take(2)
+                                                                .join(" "),
+                                                            style:
+                                                                Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .textTheme
+                                                                    .titleMedium
+                                                                    ?.copyWith(
+                                                                      fontSize:
+                                                                          15.sp,
+                                                                    ),
+                                                            maxLines: 2,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        item.divisi,
+                                                      Expanded(
+                                                        child: Text(
+                                                          item.divisi,
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .titleSmall
+                                                              ?.copyWith(
+                                                                fontSize: 13.sp,
+                                                                color: SDWcolors
+                                                                    .primary,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Container(
+                                                  height: height,
+                                                  width: width * 0.23,
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: SDWcolors.primary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15,
+                                                        ),
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Text(
+                                                        item.stringDate,
                                                         style: Theme.of(context)
                                                             .textTheme
-                                                            .titleSmall
+                                                            .bodySmall
                                                             ?.copyWith(
-                                                              fontSize: 13.sp,
                                                               color: SDWcolors
-                                                                  .primary,
+                                                                  .white,
+                                                              fontSize:
+                                                                  height *
+                                                                  0.013,
                                                             ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                height: height,
-                                                width: width * 0.23,
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: SDWcolors.primary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Text(
-                                                      item.stringDate,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.copyWith(
-                                                            color:
-                                                                SDWcolors.white,
-                                                            fontSize:
-                                                                height * 0.013,
-                                                          ),
-                                                    ),
 
-                                                    Text(
-                                                      item.status,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium
-                                                          ?.copyWith(
-                                                            color: SDWcolors
-                                                                .success,
-                                                            fontSize:
-                                                                height * 0.015,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        item.status,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              color: SDWcolors
+                                                                  .success,
+                                                              fontSize:
+                                                                  height *
+                                                                  0.015,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: height * 0.005),
-                                  ],
-                                );
-                              },
+                                      SizedBox(height: height * 0.005),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -204,134 +220,151 @@ class RecentAbsent extends StatelessWidget {
                                   ?.copyWith(fontWeight: FontWeight.w300),
                             ),
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: homeController.absenKeluar.length,
-                              itemBuilder: (context, index) {
-                                final item = homeController.absenKeluar[index];
-                                return Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: SizedBox(
-                                        width: width * 0.46,
-                                        height: height * 0.053,
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                height: height,
-                                                width: width,
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: SDWcolors.bgL,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  boxShadow: [
-                                                    SDWboxShadow.shadow,
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: height * 0.02,
-                                                      width: width * 0.22,
-                                                      child: Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Text(
-                                                          item.namaLengkap
-                                                              .split(" ")
-                                                              .take(2)
-                                                              .join(" "),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.sp,
-                                                                  ),
+                          if (homeController.absenKeluar.isEmpty)
+                            Expanded(
+                              child: Center(child: Text("Tidak ada data")),
+                            )
+                          else
+                            Expanded(
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                physics: BouncingScrollPhysics(),
+                                itemCount: homeController.absenKeluar.length,
+                                itemBuilder: (context, index) {
+                                  final item =
+                                      homeController.absenKeluar[index];
+                                  return Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: SizedBox(
+                                          width: width * 0.46,
+                                          height: height * 0.053,
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Container(
+                                                  height: height,
+                                                  width: width,
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: SDWcolors.bgL,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15,
+                                                        ),
+                                                    boxShadow: [
+                                                      SDWboxShadow.shadow,
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: height * 0.02,
+                                                        width: width * 0.22,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                            item.namaLengkap
+                                                                .split(" ")
+                                                                .take(2)
+                                                                .join(" "),
+                                                            style:
+                                                                Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .textTheme
+                                                                    .titleMedium
+                                                                    ?.copyWith(
+                                                                      fontSize:
+                                                                          15.sp,
+                                                                    ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        item.divisi,
+                                                      Expanded(
+                                                        child: Text(
+                                                          item.divisi,
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .titleSmall
+                                                              ?.copyWith(
+                                                                fontSize: 13.sp,
+                                                                color: SDWcolors
+                                                                    .primary,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Container(
+                                                  height: height,
+                                                  width: width * 0.23,
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: SDWcolors.primary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15,
+                                                        ),
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Text(
+                                                        item.waktuKeluar,
                                                         style: Theme.of(context)
                                                             .textTheme
-                                                            .titleSmall
+                                                            .bodySmall
                                                             ?.copyWith(
-                                                              fontSize: 13.sp,
                                                               color: SDWcolors
-                                                                  .primary,
+                                                                  .white,
+                                                              fontSize:
+                                                                  height *
+                                                                  0.013,
                                                             ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Container(
-                                                height: height,
-                                                width: width * 0.23,
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  color: SDWcolors.primary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Text(
-                                                      item.waktuKeluar,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.copyWith(
-                                                            color:
-                                                                SDWcolors.white,
-                                                            fontSize:
-                                                                height * 0.013,
-                                                          ),
-                                                    ),
 
-                                                    Text(
-                                                      item.status,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium
-                                                          ?.copyWith(
-                                                            color: SDWcolors
-                                                                .success,
-                                                            fontSize:
-                                                                height * 0.015,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        item.status,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              color: SDWcolors
+                                                                  .success,
+                                                              fontSize:
+                                                                  height *
+                                                                  0.015,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: height * 0.005),
-                                  ],
-                                );
-                              },
+                                      SizedBox(height: height * 0.005),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
