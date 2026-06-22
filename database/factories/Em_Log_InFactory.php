@@ -14,7 +14,7 @@ class Em_Log_inFactory extends Factory
         static $numbers;
 
         if ($numbers == null) {
-            $numbers = range(2, 50);
+            $numbers = range(2, 100);
             shuffle($numbers);
         }
 
@@ -22,7 +22,7 @@ class Em_Log_inFactory extends Factory
             "employee_id" => array_pop($numbers),
             "login_time" => $this->faker->randomElement(["09:00:00", "08:00:00", "07:45:00", "07:15:00"]),
             "status" => $this->faker->randomElement(["late", "on_time", "absent"]),
-            "created_at" => $this->faker->dateTimeBetween('-60 day', 'now'),
+            "created_at" => $this->faker->dateTimeBetween('-90 day', 'now'),
         ];
     }
 }

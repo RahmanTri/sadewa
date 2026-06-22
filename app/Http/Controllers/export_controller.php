@@ -68,6 +68,20 @@ class export_controller extends Controller
         })->map(function ($yearGroup) {
             return $yearGroup->groupBy(function ($item) {
                 return Carbon::parse($item->date)->translatedFormat('F');
+            })->map(function ($monthGroup) {
+                $jumlahData = $monthGroup->count();
+                $jumlahTelat = $monthGroup->where('status', 'late')->count();
+                $jumlahTidakHadir = $monthGroup->where('status', 'absent')->count();
+                $divisi = $monthGroup->pluck('division_name')->unique()->values();
+                return [
+                    'summary' => [
+                        'jumlah_data' => $jumlahData,
+                        'jumlah_telat' => $jumlahTelat,
+                        'jumlah_tidak_hadir' => $jumlahTidakHadir,
+                        'divisi' => $divisi
+                    ],
+                    'records' => $monthGroup->values()
+                ];
             });
         });
 
@@ -92,6 +106,10 @@ class export_controller extends Controller
             $fileName,
             ['Content-Type' => "aplication/pdf"]
         );
+
+        // return response()->json([
+        //     'data' => $grouppedData
+        // ]);
     }
 
     public function customRecap(Request $request)

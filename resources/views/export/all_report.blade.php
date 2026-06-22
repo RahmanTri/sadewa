@@ -236,6 +236,16 @@
             vertical-align: middle;
             margin-right: 3px;
         }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+
+        .summary-row span:first-child {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -287,6 +297,22 @@
 
             @foreach ($months as $month => $datas)
                 <h3>Rekapan Bulan : {{ $month }}</h3>
+                <div class="summary-row">
+                    <span>Nama Divisi :</span>
+                    <span>{{ implode(', ', $datas['summary']['divisi']->toArray()) }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Jumlah Data :</span>
+                    <span>{{ $datas['summary']['jumlah_data'] }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Jumlah Telat :</span>
+                    <span>{{ $datas['summary']['jumlah_telat'] }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Jumlah Tidak Hadir :</span>
+                    <span>{{ $datas['summary']['jumlah_tidak_hadir'] }}</span>
+                </div>
                 <br\>
                     <table>
                         <thead>
@@ -301,7 +327,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($datas as $i => $emp)
+                            @foreach ($datas['records'] as $i => $emp)
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
                                     <td>{{ Carbon\Carbon::parse($emp['date'])->translatedFormat('d F Y') }}</td>

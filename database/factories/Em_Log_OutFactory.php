@@ -14,7 +14,7 @@ class Em_Log_OutFactory extends Factory
         static $numbers;
 
         if ($numbers == null) {
-            $numbers = range(1, 50);
+            $numbers = range(2, 100);
             shuffle($numbers);
         }
 
